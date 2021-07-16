@@ -3,9 +3,9 @@ package test
 import (
 	dbx "github.com/go-ozzo/ozzo-dbx"
 	_ "github.com/lib/pq" // initialize posgresql for test
-	"github.com/qiangxue/go-rest-api/internal/config"
-	"github.com/qiangxue/go-rest-api/pkg/dbcontext"
-	"github.com/qiangxue/go-rest-api/pkg/log"
+	"github.com/chancetudor/dubzone-api/internal/config"
+	"github.com/chancetudor/dubzone-api/pkg/dbcontext"
+	"github.com/chancetudor/dubzone-api/pkg/log"
 	"path"
 	"runtime"
 	"testing"
