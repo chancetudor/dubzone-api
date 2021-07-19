@@ -2,9 +2,9 @@
 package accesslog
 
 import (
+	"github.com/chancetudor/dubzone-api/pkg/log"
 	routing "github.com/go-ozzo/ozzo-routing/v2"
 	"github.com/go-ozzo/ozzo-routing/v2/access"
-	"github.com/chancetudor/dubzone-api/pkg/log"
 	"net/http"
 	"time"
 )
