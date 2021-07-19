@@ -1,0 +1,37 @@
+{
+    "_id": "60f484f0b49d87b7fce92fa4",
+    "weaponname": "XM4",
+    "gamefrom": "CW",
+    "rpm": 721,
+	"bulletvelocity": 1175,
+	"damageprofile": {
+		"closerange": {
+			"maxdistance": 22,
+			"minstk": 6,
+			"maxstk": 9,
+			"minttk": 416,
+			"maxttk": 666
+		},
+		"farrange": {
+			"mindistancefar": 23,
+			"minstkfar": 7,
+			"maxstkfar": 10,
+			"minttkfar": 499,
+			"maxttkfar": 749
+		}
+	},
+	"loadouts": [
+		{
+			"category": "Sniper Support",
+			"muzzle": "Agency Suppressor",
+			"barrel": "",
+			"laser": "",
+			"optic": "Reflex",
+			"stock": "Raider",
+			"underbarrel": "",
+			"ammo": "45/60 Mag",
+			"reargrip": "Serpent/Airborne",
+			"perk": ""
+		}
+	]
+}
