@@ -33,14 +33,14 @@ func InitRouter(r *mux.Router) {
 	* deleting loadout
 	 */
 	/*
-	r.HandleFunc("/weapon", CreateWeaponEndpoint).Methods("POST")
-	r.HandleFunc("/weapon", ReadWeaponEndpoint).Methods("GET")
-	r.HandleFunc("/weapon", UpdateWeaponEndpoint).Methods("PUT")
-	r.HandleFunc("/weapon", DeleteWeaponEndpoint).Methods("DELETE")
-	r.HandleFunc("/dmgprofile", CreateDamageProfileEndpoint).Methods("POST")
-	r.HandleFunc("/dmgprofile", ReadDamageProfileEndpoint).Methods("GET")
-	r.HandleFunc("/dmgprofile", UpdateDamageProfileEndpoint).Methods("PUT")
-	r.HandleFunc("/dmgprofile", DeleteDamageProfileEndpoint).Methods("DELETE")
+	r.HandleFunc("/weapon/{weaponname}", CreateWeaponEndpoint).Methods("POST")
+	r.HandleFunc("/weapon/{weaponname}", ReadWeaponEndpoint).Methods("GET")
+	r.HandleFunc("/weapon/{weaponname}", UpdateWeaponEndpoint).Methods("PUT")
+	r.HandleFunc("/weapon/{weaponname}", DeleteWeaponEndpoint).Methods("DELETE")
+	r.HandleFunc("/dmgprofile/{weaponname}", CreateDamageProfileEndpoint).Methods("POST")
+	r.HandleFunc("/dmgprofile/{weaponname}", ReadDamageProfileEndpoint).Methods("GET")
+	r.HandleFunc("/dmgprofile/{weaponname}", UpdateDamageProfileEndpoint).Methods("PUT")
+	r.HandleFunc("/dmgprofile/{weaponname}", DeleteDamageProfileEndpoint).Methods("DELETE")
 	r.HandleFunc("/loadout", CreateLoadoutEndpoint).Methods("POST")
 	r.HandleFunc("/loadout", ReadLoadoutEndpoint).Methods("GET")
 	r.HandleFunc("/loadout", UpdateLoadoutEndpoint).Methods("PUT")
