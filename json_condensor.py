@@ -16,32 +16,16 @@ class Weapon:
     def __repr__(self):
         return "Weapon Name: {} From Game: {} RPM: {} Bullet Velocity: {} Close Range Damage Profile: {} " \
                 "Mid-range Damage Profile: {} Loadouts: {}".format(
-                    str(self.weaponname), str(self.game_from), str(self.rpm), str(self.bullet_velocity),
+                    str(self.weapon_name), str(self.game_from), str(self.rpm), str(self.bullet_velocity),
                     self.close_dmg_profile, self.mid_dmg_profile, self.far_dmg_profile, self.loadouts
                     )
 
     def __str__(self):
         return "Weapon Name: {} From Game: {} RPM: {} Bullet Velocity: {} Close Range Damage Profile: {} " \
                     "Mid-range Damage Profile: {} Loadouts: {}".format(
-                        str(self.weaponname), str(self.game_from), str(self.rpm), str(self.bullet_velocity),
+                        str(self.weapon_name), str(self.game_from), str(self.rpm), str(self.bullet_velocity),
                         self.close_dmg_profile, self.mid_dmg_profile, self.far_dmg_profile, self.loadouts
                         )
-
-    @property
-    def weapon_name(self):
-        return self.weapon_name
-    
-    @weapon_name.setter
-    def weapon_name(self, value):
-        self.weapon_name = value
-
-    @property
-    def loadouts(self):
-        return self.loadouts
-
-    @loadouts.setter
-    def list(self, value):
-        self.loadouts.append(value)
 
 
 class DamageProfile:
@@ -105,10 +89,10 @@ if __name__ == "__main__":
 
     for weapon in weapons:
         w = Weapon(
-            weapon['weaponname'],
-            weapon['gamefrom'],
-            weapon['rpm'],
-            weapon['bulletvelocity'],
+            str(weapon['weaponname']).upper(),
+            str(weapon['gamefrom']),
+            int(weapon['rpm']),
+            int(weapon['bulletvelocity']),
             CloseRange(
                 0,
                 weapon['MaxDist Close'],
@@ -142,19 +126,20 @@ if __name__ == "__main__":
 
     for loadout in loadouts:
         l = Loadout(
-            loadout['Weapon'],
-            loadout['Type'],
-            loadout['Muzzle'],
-            loadout['Barrel'],
-            loadout['Laser'],
-            loadout['Optic'],
-            loadout['Stock'],
-            loadout['Underbarrel'],
-            loadout['Ammunition'],
-            loadout['Rear Grip'],
-            loadout['Perk'],
+            str(loadout['Weapon']).upper(),
+            str(loadout['Type']).upper(),
+            str(loadout['Muzzle']),
+            str(loadout['Barrel']),
+            str(loadout['Laser']),
+            str(loadout['Optic']),
+            str(loadout['Stock']),
+            str(loadout['Underbarrel']),
+            str(loadout['Ammunition']),
+            str(loadout['Rear Grip']),
+            str(loadout['Perk']),
         )
         condensed_weapons[l.weapon].loadouts.append(l)
 
     for weapon in condensed_weapons:
         print(weapon)
+        print(condensed_weapons[weapon].loadouts)
