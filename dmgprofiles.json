@@ -1,9 +1,9 @@
 [
 	{
-		"Weapon": "XM4",
-		"Game": "CW",
-		"RPM": 721,
-		"BV": 1175,
+		"weaponname": "XM4",
+		"gamefrom": "CW",
+		"rpm": 721,
+		"bulletvelocity": 1175,
 		"MaxDist Close": 22,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -22,10 +22,10 @@
 		"TTK Max Far": 749
 	},
 	{
-		"Weapon": "KRIG",
-		"Game": "CW",
-		"RPM": 652,
-		"BV": 1135,
+		"weaponname": "KRIG",
+		"gamefrom": "CW",
+		"rpm": 652,
+		"bulletvelocity": 1135,
 		"MaxDist Close": 38,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -44,10 +44,10 @@
 		"TTK Max Far": 828
 	},
 	{
-		"Weapon": "AK47",
-		"Game": "CW",
-		"RPM": 600,
-		"BV": 1180,
+		"weaponname": "AK47 CW",
+		"gamefrom": "CW",
+		"rpm": 600,
+		"bulletvelocity": 1180,
 		"MaxDist Close": 25,
 		"STK Min Close": 5,
 		"STK Max Close": 7,
@@ -66,10 +66,10 @@
 		"TTK Max Far": 700
 	},
 	{
-		"Weapon": "GRAU",
-		"Game": "MW",
-		"RPM": 730,
-		"BV": 1300,
+		"weaponname": "GRAU",
+		"gamefrom": "MW",
+		"rpm": 730,
+		"bulletvelocity": 1300,
 		"MaxDist Close": 31,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -88,10 +88,10 @@
 		"TTK Max Far": 822
 	},
 	{
-		"Weapon": "AMAX",
-		"Game": "MW",
-		"RPM": 630,
-		"BV": 960,
+		"weaponname": "AMAX",
+		"gamefrom": "MW",
+		"rpm": 630,
+		"bulletvelocity": 960,
 		"MaxDist Close": 24,
 		"STK Min Close": 5,
 		"STK Max Close": 8,
@@ -110,10 +110,10 @@
 		"TTK Max Far": 762
 	},
 	{
-		"Weapon": "RAM",
-		"Game": "MW",
-		"RPM": 856,
-		"BV": 1340,
+		"weaponname": "RAM",
+		"gamefrom": "MW",
+		"rpm": 856,
+		"bulletvelocity": 1340,
 		"MaxDist Close": 28,
 		"STK Min Close": 7,
 		"STK Max Close": 10,
@@ -132,10 +132,10 @@
 		"TTK Max Far": 701
 	},
 	{
-		"Weapon": "M4A1",
-		"Game": "MW",
-		"RPM": 809,
-		"BV": 1260,
+		"weaponname": "M4A1",
+		"gamefrom": "MW",
+		"rpm": 809,
+		"bulletvelocity": 1260,
 		"MaxDist Close": 29,
 		"STK Min Close": 7,
 		"STK Max Close": 10,
@@ -154,10 +154,10 @@
 		"TTK Max Far": 742
 	},
 	{
-		"Weapon": "STONER",
-		"Game": "CW",
-		"RPM": 719,
-		"BV": 1180,
+		"weaponname": "STONER",
+		"gamefrom": "CW",
+		"rpm": 719,
+		"bulletvelocity": 1180,
 		"MaxDist Close": 40,
 		"STK Min Close": 6,
 		"STK Max Close": 8,
@@ -176,10 +176,10 @@
 		"TTK Max Far": 728
 	},
 	{
-		"Weapon": "GROZA",
-		"Game": "CW",
-		"RPM": 754,
-		"BV": 0,
+		"weaponname": "GROZA",
+		"gamefrom": "CW",
+		"rpm": 754,
+		"bulletvelocity": 0,
 		"MaxDist Close": 29,
 		"STK Min Close": 7,
 		"STK Max Close": 10,
@@ -198,10 +198,10 @@
 		"TTK Max Far": 796
 	},
 	{
-		"Weapon": "M13",
-		"Game": "MW",
-		"RPM": 891,
-		"BV": 0,
+		"weaponname": "M13",
+		"gamefrom": "MW",
+		"rpm": 891,
+		"bulletvelocity": 0,
 		"MaxDist Close": 37,
 		"STK Min Close": 7,
 		"STK Max Close": 11,
@@ -220,10 +220,10 @@
 		"TTK Max Far": 808
 	},
 	{
-		"Weapon": "FFAR",
-		"Game": "CW",
-		"RPM": 900,
-		"BV": 0,
+		"weaponname": "FFAR",
+		"gamefrom": "CW",
+		"rpm": 900,
+		"bulletvelocity": 0,
 		"MaxDist Close": 31,
 		"STK Min Close": 8,
 		"STK Max Close": 10,
@@ -242,10 +242,10 @@
 		"TTK Max Far": 667
 	},
 	{
-		"Weapon": "SCAR",
-		"Game": "MW",
-		"RPM": 573,
-		"BV": 0,
+		"weaponname": "SCAR",
+		"gamefrom": "MW",
+		"rpm": 573,
+		"bulletvelocity": 0,
 		"MaxDist Close": 33,
 		"STK Min Close": 5,
 		"STK Max Close": 8,
@@ -264,10 +264,10 @@
 		"TTK Max Far": 733
 	},
 	{
-		"Weapon": "AK47",
-		"Game": "MW",
-		"RPM": 545,
-		"BV": 0,
+		"weaponname": "AK47 MW",
+		"gamefrom": "MW",
+		"rpm": 545,
+		"bulletvelocity": 0,
 		"MaxDist Close": 27,
 		"STK Min Close": 5,
 		"STK Max Close": 8,
@@ -286,10 +286,10 @@
 		"TTK Max Far": 771
 	},
 	{
-		"Weapon": "M60",
-		"Game": "CW",
-		"RPM": 515,
-		"BV": 0,
+		"weaponname": "M60",
+		"gamefrom": "CW",
+		"rpm": 515,
+		"bulletvelocity": 0,
 		"MaxDist Close": 42,
 		"STK Min Close": 5,
 		"STK Max Close": 7,
@@ -308,10 +308,10 @@
 		"TTK Max Far": 866
 	},
 	{
-		"Weapon": "FINN ADVERSE",
-		"Game": "MW",
-		"RPM": 995,
-		"BV": 0,
+		"weaponname": "FINN ADVERSE",
+		"gamefrom": "MW",
+		"rpm": 995,
+		"bulletvelocity": 0,
 		"MaxDist Close": 30,
 		"STK Min Close": 9,
 		"STK Max Close": 12,
@@ -330,10 +330,10 @@
 		"TTK Max Far": 663
 	},
 	{
-		"Weapon": "FAL",
-		"Game": "MW",
-		"RPM": 470,
-		"BV": 0,
+		"weaponname": "FAL",
+		"gamefrom": "MW",
+		"rpm": 470,
+		"bulletvelocity": 0,
 		"MaxDist Close": 21,
 		"STK Min Close": 4,
 		"STK Max Close": 6,
@@ -352,10 +352,10 @@
 		"TTK Max Far": 638
 	},
 	{
-		"Weapon": "MG82",
-		"Game": "CW",
-		"RPM": 916,
-		"BV": 0,
+		"weaponname": "MG82",
+		"gamefrom": "CW",
+		"rpm": 916,
+		"bulletvelocity": 0,
 		"MaxDist Close": 30,
 		"STK Min Close": 8,
 		"STK Max Close": 10,
@@ -374,10 +374,10 @@
 		"TTK Max Far": 715
 	},
 	{
-		"Weapon": "FINN",
-		"Game": "MW",
-		"RPM": 630,
-		"BV": 0,
+		"weaponname": "FINN",
+		"gamefrom": "MW",
+		"rpm": 630,
+		"bulletvelocity": 0,
 		"MaxDist Close": 30,
 		"STK Min Close": 7,
 		"STK Max Close": 9,
@@ -396,10 +396,10 @@
 		"TTK Max Far": 1108
 	},
 	{
-		"Weapon": "HOLGER",
-		"Game": "MW",
-		"RPM": 704,
-		"BV": 0,
+		"weaponname": "HOLGER",
+		"gamefrom": "MW",
+		"rpm": 704,
+		"bulletvelocity": 0,
 		"MaxDist Close": 48,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -418,10 +418,10 @@
 		"TTK Max Far": 852
 	},
 	{
-		"Weapon": "FR 5.56",
-		"Game": "MW",
-		"RPM": 475,
-		"BV": 0,
+		"weaponname": "FR 5.56",
+		"gamefrom": "MW",
+		"rpm": 475,
+		"bulletvelocity": 0,
 		"MaxDist Close": 80,
 		"STK Min Close": 4,
 		"STK Max Close": 7,
@@ -440,10 +440,10 @@
 		"TTK Max Far": 0
 	},
 	{
-		"Weapon": "QBZ",
-		"Game": "CW",
-		"RPM": 679,
-		"BV": 0,
+		"weaponname": "QBZ",
+		"gamefrom": "CW",
+		"rpm": 679,
+		"bulletvelocity": 0,
 		"MaxDist Close": 31,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -462,10 +462,10 @@
 		"TTK Max Far": 884
 	},
 	{
-		"Weapon": "AS VAL",
-		"Game": "MW",
-		"RPM": 885,
-		"BV": 0,
+		"weaponname": "AS VAL",
+		"gamefrom": "MW",
+		"rpm": 885,
+		"bulletvelocity": 0,
 		"MaxDist Close": 32,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -484,10 +484,10 @@
 		"TTK Max Far": 678
 	},
 	{
-		"Weapon": "PKM",
-		"Game": "MW",
-		"RPM": 750,
-		"BV": 0,
+		"weaponname": "PKM",
+		"gamefrom": "MW",
+		"rpm": 750,
+		"bulletvelocity": 0,
 		"MaxDist Close": 39,
 		"STK Min Close": 6,
 		"STK Max Close": 8,
@@ -506,10 +506,10 @@
 		"TTK Max Far": 640
 	},
 	{
-		"Weapon": "SA87",
-		"Game": "MW",
-		"RPM": 600,
-		"BV": 966,
+		"weaponname": "SA87",
+		"gamefrom": "MW",
+		"rpm": 600,
+		"bulletvelocity": 966,
 		"MaxDist Close": 48,
 		"STK Min Close": 5,
 		"STK Max Close": 8,
@@ -528,10 +528,10 @@
 		"TTK Max Far": 800
 	},
 	{
-		"Weapon": "BRUEN",
-		"Game": "MW",
-		"RPM": 752,
-		"BV": 1100,
+		"weaponname": "BRUEN",
+		"gamefrom": "MW",
+		"rpm": 752,
+		"bulletvelocity": 1100,
 		"MaxDist Close": 26,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -550,10 +550,10 @@
 		"TTK Max Far": 688
 	},
 	{
-		"Weapon": "FARA",
-		"Game": "CW",
-		"RPM": 790,
-		"BV": 1155,
+		"weaponname": "FARA",
+		"gamefrom": "CW",
+		"rpm": 790,
+		"bulletvelocity": 1155,
 		"MaxDist Close": 27,
 		"STK Min Close": 7,
 		"STK Max Close": 9,
@@ -572,10 +572,10 @@
 		"TTK Max Far": 684
 	},
 	{
-		"Weapon": "C58",
-		"Game": "CW",
-		"RPM": 550,
-		"BV": 0,
+		"weaponname": "C58",
+		"gamefrom": "CW",
+		"rpm": 550,
+		"bulletvelocity": 0,
 		"MaxDist Close": 30,
 		"STK Min Close": 5,
 		"STK Max Close": 7,
@@ -594,10 +594,10 @@
 		"TTK Max Far": 764
 	},
 	{
-		"Weapon": "M91",
-		"Game": "MW",
-		"RPM": 666,
-		"BV": 0,
+		"weaponname": "M91",
+		"gamefrom": "MW",
+		"rpm": 666,
+		"bulletvelocity": 0,
 		"MaxDist Close": 29,
 		"STK Min Close": 6,
 		"STK Max Close": 8,
@@ -616,10 +616,10 @@
 		"TTK Max Far": 781
 	},
 	{
-		"Weapon": "MG34",
-		"Game": "MW",
-		"RPM": 878,
-		"BV": 0,
+		"weaponname": "MG34",
+		"gamefrom": "MW",
+		"rpm": 878,
+		"bulletvelocity": 0,
 		"MaxDist Close": 33,
 		"STK Min Close": 7,
 		"STK Max Close": 9,
@@ -638,10 +638,10 @@
 		"TTK Max Far": 675
 	},
 	{
-		"Weapon": "KILO",
-		"Game": "MW",
-		"RPM": 751,
-		"BV": 0,
+		"weaponname": "KILO",
+		"gamefrom": "MW",
+		"rpm": 751,
+		"bulletvelocity": 0,
 		"MaxDist Close": 31,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -660,10 +660,10 @@
 		"TTK Max Far": 1039
 	},
 	{
-		"Weapon": "ODEN",
-		"Game": "MW",
-		"RPM": 413,
-		"BV": 0,
+		"weaponname": "ODEN",
+		"gamefrom": "MW",
+		"rpm": 413,
+		"bulletvelocity": 0,
 		"MaxDist Close": 42,
 		"STK Min Close": 4,
 		"STK Max Close": 6,
@@ -682,10 +682,10 @@
 		"TTK Max Far": 872
 	},
 	{
-		"Weapon": "AN94",
-		"Game": "MW",
-		"RPM": 570,
-		"BV": 0,
+		"weaponname": "AN94",
+		"gamefrom": "MW",
+		"rpm": 570,
+		"bulletvelocity": 0,
 		"MaxDist Close": 22,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -704,10 +704,10 @@
 		"TTK Max Far": 1053
 	},
 	{
-		"Weapon": "RPD",
-		"Game": "CW",
-		"RPM": 652,
-		"BV": 0,
+		"weaponname": "RPD",
+		"gamefrom": "CW",
+		"rpm": 652,
+		"bulletvelocity": 0,
 		"MaxDist Close": 39,
 		"STK Min Close": 6,
 		"STK Max Close": 8,
@@ -726,10 +726,10 @@
 		"TTK Max Far": 736
 	},
 	{
-		"Weapon": "BULLFROG",
-		"Game": "CW",
-		"RPM": 751,
-		"BV": 0,
+		"weaponname": "BULLFROG",
+		"gamefrom": "CW",
+		"rpm": 751,
+		"bulletvelocity": 0,
 		"MaxDist Close": 14,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -748,10 +748,10 @@
 		"TTK Max Far": 879
 	},
 	{
-		"Weapon": "PPSH",
-		"Game": "CW",
-		"RPM": 908,
-		"BV": 0,
+		"weaponname": "PPSH",
+		"gamefrom": "CW",
+		"rpm": 908,
+		"bulletvelocity": 0,
 		"MaxDist Close": 17,
 		"STK Min Close": 8,
 		"STK Max Close": 11,
@@ -770,10 +770,10 @@
 		"TTK Max Far": 727
 	},
 	{
-		"Weapon": "MP5",
-		"Game": "CW",
-		"RPM": 854,
-		"BV": 0,
+		"weaponname": "MP5 CW",
+		"gamefrom": "CW",
+		"rpm": 854,
+		"bulletvelocity": 0,
 		"MaxDist Close": 9,
 		"STK Min Close": 6,
 		"STK Max Close": 10,
@@ -792,10 +792,10 @@
 		"TTK Max Far": 773
 	},
 	{
-		"Weapon": "MP5",
-		"Game": "MW",
-		"RPM": 798,
-		"BV": 0,
+		"weaponname": "MP5 MW",
+		"gamefrom": "MW",
+		"rpm": 798,
+		"bulletvelocity": 0,
 		"MaxDist Close": 9,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -814,10 +814,10 @@
 		"TTK Max Far": 977
 	},
 	{
-		"Weapon": "FENNEC",
-		"Game": "MW",
-		"RPM": 1085,
-		"BV": 0,
+		"weaponname": "FENNEC",
+		"gamefrom": "MW",
+		"rpm": 1085,
+		"bulletvelocity": 0,
 		"MaxDist Close": 13,
 		"STK Min Close": 7,
 		"STK Max Close": 12,
@@ -836,10 +836,10 @@
 		"TTK Max Far": 774
 	},
 	{
-		"Weapon": "P90",
-		"Game": "MW",
-		"RPM": 905,
-		"BV": 0,
+		"weaponname": "P90",
+		"gamefrom": "MW",
+		"rpm": 905,
+		"bulletvelocity": 0,
 		"MaxDist Close": 13,
 		"STK Min Close": 7,
 		"STK Max Close": 12,
@@ -858,10 +858,10 @@
 		"TTK Max Far": 862
 	},
 	{
-		"Weapon": "UZI",
-		"Game": "MW",
-		"RPM": 603,
-		"BV": 0,
+		"weaponname": "UZI",
+		"gamefrom": "MW",
+		"rpm": 603,
+		"bulletvelocity": 0,
 		"MaxDist Close": 15,
 		"STK Min Close": 5,
 		"STK Max Close": 9,
@@ -880,10 +880,10 @@
 		"TTK Max Far": 1045
 	},
 	{
-		"Weapon": "STRIKER 45",
-		"Game": "MW",
-		"RPM": 605,
-		"BV": 0,
+		"weaponname": "STRIKER 45",
+		"gamefrom": "MW",
+		"rpm": 605,
+		"bulletvelocity": 0,
 		"MaxDist Close": 23,
 		"STK Min Close": 5,
 		"STK Max Close": 9,
@@ -902,10 +902,10 @@
 		"TTK Max Far": 1091
 	},
 	{
-		"Weapon": "AUG",
-		"Game": "MW",
-		"RPM": 739,
-		"BV": 0,
+		"weaponname": "AUG MW",
+		"gamefrom": "MW",
+		"rpm": 739,
+		"bulletvelocity": 0,
 		"MaxDist Close": 12,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -924,10 +924,10 @@
 		"TTK Max Far": 812
 	},
 	{
-		"Weapon": "OTs 9",
-		"Game": "CW",
-		"RPM": 850,
-		"BV": 0,
+		"weaponname": "OTs 9",
+		"gamefrom": "CW",
+		"rpm": 850,
+		"bulletvelocity": 0,
 		"MaxDist Close": 10,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
@@ -946,10 +946,10 @@
 		"TTK Max Far": 918
 	},
 	{
-		"Weapon": "AKIMBO M19",
-		"Game": "MW",
-		"RPM": 900,
-		"BV": 0,
+		"weaponname": "M19",
+		"gamefrom": "MW",
+		"rpm": 900,
+		"bulletvelocity": 0,
 		"MaxDist Close": 10,
 		"STK Min Close": 4,
 		"STK Max Close": 8,
@@ -968,10 +968,10 @@
 		"TTK Max Far": 533
 	},
 	{
-		"Weapon": "FA SYKOV",
-		"Game": "MW",
-		"RPM": 870,
-		"BV": 0,
+		"weaponname": "SYKOV",
+		"gamefrom": "MW",
+		"rpm": 870,
+		"bulletvelocity": 0,
 		"MaxDist Close": 10,
 		"STK Min Close": 8,
 		"STK Max Close": 10,
@@ -990,10 +990,10 @@
 		"TTK Max Far": 897
 	},
 	{
-		"Weapon": "NAIL GUN",
-		"Game": "CW",
-		"RPM": 514,
-		"BV": 0,
+		"weaponname": "NAIL GUN",
+		"gamefrom": "CW",
+		"rpm": 514,
+		"bulletvelocity": 0,
 		"MaxDist Close": 10,
 		"STK Min Close": 4,
 		"STK Max Close": 6,
@@ -1012,10 +1012,10 @@
 		"TTK Max Far": 700
 	},
 	{
-		"Weapon": "KSP",
-		"Game": "CW",
-		"RPM": 510,
-		"BV": 0,
+		"weaponname": "KSP",
+		"gamefrom": "CW",
+		"rpm": 510,
+		"bulletvelocity": 0,
 		"MaxDist Close": 13,
 		"STK Min Close": 5,
 		"STK Max Close": 7,
@@ -1034,10 +1034,10 @@
 		"TTK Max Far": 941
 	},
 	{
-		"Weapon": "MILANO",
-		"Game": "MW",
-		"RPM": 576,
-		"BV": 750,
+		"weaponname": "MILANO",
+		"gamefrom": "MW",
+		"rpm": 576,
+		"bulletvelocity": 750,
 		"MaxDist Close": 20,
 		"STK Min Close": 6,
 		"STK Max Close": 7,
@@ -1056,10 +1056,10 @@
 		"TTK Max Far": 883
 	},
 	{
-		"Weapon": "PP BIZON",
-		"Game": "MW",
-		"RPM": 654,
-		"BV": 0,
+		"weaponname": "PP BIZON",
+		"gamefrom": "MW",
+		"rpm": 654,
+		"bulletvelocity": 0,
 		"MaxDist Close": 13,
 		"STK Min Close": 5,
 		"STK Max Close": 9,
@@ -1078,10 +1078,10 @@
 		"TTK Max Far": 1193
 	},
 	{
-		"Weapon": "ISO",
-		"Game": "MW",
-		"RPM": 882,
-		"BV": 0,
+		"weaponname": "ISO",
+		"gamefrom": "MW",
+		"rpm": 882,
+		"bulletvelocity": 0,
 		"MaxDist Close": 18,
 		"STK Min Close": 7,
 		"STK Max Close": 12,
@@ -1100,10 +1100,10 @@
 		"TTK Max Far": 884
 	},
 	{
-		"Weapon": "LC10",
-		"Game": "CW",
-		"RPM": 790,
-		"BV": 0,
+		"weaponname": "LC10",
+		"gamefrom": "CW",
+		"rpm": 790,
+		"bulletvelocity": 0,
 		"MaxDist Close": 20,
 		"STK Min Close": 7,
 		"STK Max Close": 11,
@@ -1122,10 +1122,10 @@
 		"TTK Max Far": 835
 	},
 	{
-		"Weapon": "MAC 10",
-		"Game": "CW",
-		"RPM": 1110,
-		"BV": 0,
+		"weaponname": "MAC10",
+		"gamefrom": "CW",
+		"rpm": 1110,
+		"bulletvelocity": 0,
 		"MaxDist Close": 15,
 		"STK Min Close": 10,
 		"STK Max Close": 13,
@@ -1144,10 +1144,10 @@
 		"TTK Max Far": 757
 	},
 	{
-		"Weapon": "MP7",
-		"Game": "MW",
-		"RPM": 950,
-		"BV": 0,
+		"weaponname": "MP7",
+		"gamefrom": "MW",
+		"rpm": 950,
+		"bulletvelocity": 0,
 		"MaxDist Close": 11,
 		"STK Min Close": 7,
 		"STK Max Close": 12,
@@ -1166,10 +1166,10 @@
 		"TTK Max Far": 821
 	},
 	{
-		"Weapon": "AK74u",
-		"Game": "CW",
-		"RPM": 696,
-		"BV": 0,
+		"weaponname": "AK74u",
+		"gamefrom": "CW",
+		"rpm": 696,
+		"bulletvelocity": 0,
 		"MaxDist Close": 13,
 		"STK Min Close": 6,
 		"STK Max Close": 9,
