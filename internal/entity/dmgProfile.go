@@ -1,29 +1,30 @@
 package entity
 
-// DamageProfile models the close and far-range time and shots to kill
+// DamageProfile models the close-, mid-, and far-range time and shots to kill
 type DamageProfile struct {
 	CloseRange struct {
 		// just max distance here because min distance = 0
-		MaxDistance 	int 	`json:"maxdistance,omitempty" bson:"maxdistance,omitempty"`
-		MinShotsToKill 	int		`json:"minstk,omitempty" bson:"minstk,omitempty"`
-		MaxShotsToKill 	int 	`json:"maxstk,omitempty" bson:"maxstk,omitempty"`
-		MinTimeToKill 	int 	`json:"minttk,omitempty" bson:"minttk,omitempty"`
-		MaxTimeToKill 	int 	`json:"maxttk,omitempty" bson:"maxttk,omitempty"`
-	} `json:"closerange,omitempty" bson:"closerange,omitempty"`
+		MaxDistance 	int 	`json:"max_distance,omitempty" bson:"max_distance,omitempty"`
+		MinShotsToKill 	int		`json:"min_stk,omitempty" bson:"min_stk,omitempty"`
+		MaxShotsToKill 	int 	`json:"max_stk,omitempty" bson:"max_stk,omitempty"`
+		MinTimeToKill 	int 	`json:"min_ttk,omitempty" bson:"min_ttk,omitempty"`
+		MaxTimeToKill 	int 	`json:"max_ttk,omitempty" bson:"max_ttk,omitempty"`
+	} 							`json:"close_range,omitempty" bson:"close_range,omitempty"`
 	MidRange struct {
-		MinDistance 	int 	`json:"mindistancemid,omitempty" bson:"mindistancemid,omitempty"`
-		MaxDistance 	int 	`json:"maxdistancemid,omitempty" bson:"maxdistancemid,omitempty"`
-		MinShotsToKill 	int		`json:"minstkmid,omitempty" bson:"minstkmid,omitempty"`
-		MaxShotsToKill 	int 	`json:"maxstkmid,omitempty" bson:"maxstkmid,omitempty"`
-		MinTimeToKill 	int 	`json:"minttkmid,omitempty" bson:"minttkmid,omitempty"`
-		MaxTimeToKill 	int 	`json:"maxttkmid,omitempty" bson:"maxttkmid,omitempty"`
-	} `json:"midrange,omitempty" bson:"midrange,omitempty"`
+		// min distance and max distance to define a true "mid" range
+		MinDistance 	int 	`json:"min_distance,omitempty" bson:"min_distance,omitempty"`
+		MaxDistance 	int 	`json:"max_distance,omitempty" bson:"max_distance,omitempty"`
+		MinShotsToKill 	int		`json:"min_stk,omitempty" bson:"min_stk,omitempty"`
+		MaxShotsToKill 	int 	`json:"max_stk,omitempty" bson:"max_stk,omitempty"`
+		MinTimeToKill 	int 	`json:"min_ttk,omitempty" bson:"min_ttk,omitempty"`
+		MaxTimeToKill 	int 	`json:"max_ttk,omitempty" bson:"max_tkk,omitempty"`
+	} 							`json:"mid_range,omitempty" bson:"mid_range,omitempty"`
 	FarRange struct {
 		// just min distance here because max distance = infinity (theoretically)
-		MinDistance		int		`json:"mindistancefar,omitempty" bson:"mindistancefar,omitempty"`
-		MinShotsToKill 	int		`json:"minstkfar,omitempty" bson:"minstkfar,omitempty"`
-		MaxShotsToKill 	int 	`json:"maxstkfar,omitempty" bson:"maxstkfar,omitempty"`
-		MinTimeToKill 	int 	`json:"minttkfar,omitempty" bson:"minttkfar,omitempty"`
-		MaxTimeToKill 	int 	`json:"maxttkfar,omitempty" bson:"maxttkfar,omitempty"`
-	} `json:"farrange,omitempty" bson:"farrange,omitempty"`
+		MinDistance		int		`json:"min_distance,omitempty" bson:"min_distance,omitempty"`
+		MinShotsToKill 	int		`json:"min_stk,omitempty" bson:"min_stk,omitempty"`
+		MaxShotsToKill 	int 	`json:"max_stk,omitempty" bson:"max_stk,omitempty"`
+		MinTimeToKill 	int 	`json:"min_ttk,omitempty" bson:"min_ttk,omitempty"`
+		MaxTimeToKill 	int 	`json:"max_ttk,omitempty" bson:"max_ttk,omitempty"`
+	} 							`json:"far_range,omitempty" bson:"far_range,omitempty"`
 }

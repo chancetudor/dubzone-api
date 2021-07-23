@@ -13,12 +13,11 @@ import (
 
 func NewClient() *mongo.Client {
 	log.Println("Creating new client: " + "func NewClient()")
-	mongoAuth := auth.New()
+	mongoAuth := auth.NewAuth()
 	clientOptions := options.Client().
-		ApplyURI("mongodb+srv://" + mongoAuth.Username + ":" + mongoAuth.Password +
-			"@warzonedata.xbbkl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+		ApplyURI(mongoAuth.URI)
 	// TODO change timeout
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, clientOptions)
 	// TODO custom error handling
