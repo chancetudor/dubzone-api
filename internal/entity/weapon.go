@@ -1,16 +1,16 @@
 package entity
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	p "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Weapon represents an Warzone weapon.
 type Weapon struct {
-	ID				primitive.ObjectID	`json:"_id,omitempty" bson:"_id,omitempty"`
-	WeaponName		string				`json:"weaponname,omitempty" bson:"weaponname,omitempty"`
-	GameFrom		string 				`json:"gamefrom,omitempty" bson:"gamefrom,omitempty"`
+	ID				p.ObjectID			`json:"_id,omitempty" bson:"_id,omitempty"`
+	WeaponName		string				`json:"weapon_name,omitempty" bson:"weapon_name,omitempty"`
+	GameFrom		string 				`json:"game_from,omitempty" bson:"game_from,omitempty"`
 	RPM 			int 				`json:"rpm,omitempty" bson:"rpm,omitempty"`
-	BulletVelocity	int					`json:"bulletvelocity,omitempty" bson:"bulletvelocity,omitempty"`
-	DamageProfile 	DamageProfile		`json:"damageprofile,omitempty" bson:"damageprofile,omitempty"`
+	BulletVelocity	int					`json:"bullet_velocity,omitempty" bson:"bullet_velocity,omitempty"`
+	DamageProfile 	DamageProfile		`json:"damage_profile,omitempty" bson:"damage_profile,omitempty"`
 	Loadouts		[]Loadout			`json:"loadouts,omitempty" bson:"loadouts,omitempty"`
 }

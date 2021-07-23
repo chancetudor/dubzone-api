@@ -7,12 +7,13 @@ import (
 )
 
 type MongoAuth struct {
-	Username string
-	Password string
+	URI 		string
+	Database 	string
 }
 
-func New() *MongoAuth {
-	log.Println("Retrieving auth info: " + "func auth.New()")
+// NewAuth Creates a new MongoAuth struct, containing the username and password necessary to connect to a MongoDB client
+func NewAuth() *MongoAuth {
+	log.Println("Retrieving auth info: " + "func auth.NewAuth()")
 	err := godotenv.Load("./config/dev.env")
 	// TODO custom error handling
 	if err != nil {
@@ -20,7 +21,7 @@ func New() *MongoAuth {
 	}
 
 	return &MongoAuth {
-		Username: os.Getenv("USERNAME"),
-		Password: os.Getenv("PASSWORD"),
+		URI: 	os.Getenv("MONGO_URI"),
+		Database: 	os.Getenv("DATABASE"),
 	}
 }

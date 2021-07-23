@@ -9,14 +9,16 @@ import (
 // The API file ties together the router and client
 
 type API struct {
-	Router *mux.Router
-	Client *mongo.Client
+	Router 		*mux.Router
+	Client 		*mongo.Client
 }
+
+
 
 func New() *API {
 	log.Println("Creating new API struct: " + "func api.New()")
 	return &API {
-		Router: NewRouter(),
-		Client: NewClient(),
+		Router: 		NewRouter(),
+		Client: 		NewClient(),
 	}
 }
