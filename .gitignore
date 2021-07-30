@@ -23,5 +23,11 @@ testdata/postgres
 # PID file generated to support live reload
 .pid
 
+# .json data files
+loadouts.json
+weaponsList.json
+extraLoadouts.json
+dmgProfiles.json
+
 # Env variables
 *.env

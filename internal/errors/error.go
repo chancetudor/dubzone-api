@@ -2,11 +2,11 @@ package errors
 
 // Error is the type that implements the error interface.
 type Error struct {
-	Message		string 		`json:"message"`
-	Code		int			`json:"code"`
-	Name		string		`json:"name"`
-	Error		error		`json:"-"`
-	Validation	[]string	`json:"validation,omitempty"`
+	Message    string   `json:"message"`
+	Code       int      `json:"code"`
+	Name       string   `json:"name"`
+	Error      error    `json:"-"`
+	Validation []string `json:"validation,omitempty"`
 }
 
 func BindError() *Error {
