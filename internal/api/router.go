@@ -4,14 +4,12 @@ package api
 
 import (
 	"github.com/gorilla/mux"
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 func NewRouter() *mux.Router {
 	log.Println("Creating new router: " + "func NewRouter()")
 	r := mux.NewRouter().StrictSlash(true)
-	//r.Queries()
-	//initRouter(r)
 
 	return r
 }
