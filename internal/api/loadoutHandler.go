@@ -3,10 +3,8 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/chancetudor/dubzone-api/internal/auth"
 	"github.com/chancetudor/dubzone-api/internal/models"
-	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,31 +15,25 @@ import (
 
 const CollectionName = "Loadouts"
 
-// Loadout endpoints live here TODO FINISH
+/* Loadout endpoints live here
+* functionality for
+	* Creating a single loadout
+	* Reading loadouts given a category
+	* Reading loadouts given a weapon name
+*/
 
-// CreateLoadoutEndpoint creates a single new loadout,
-// either with a weaponname variable pointing to the weapon in the DB that needs a new loadout
-// or creating a new loadout independent of a weapon
+// CreateLoadoutEndpoint creates a single new loadout in the loadouts collection
 func CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
-	// TODO custom error handling with logging
 	response.Header().Add("content-type", "application/json")
-	vars := mux.Vars(request)
-	// then a loadout is being created for a specific supplied weapon name
-	if len(vars) != 0 {
-		// TODO separate function?
-		// search DB for matching weapon name
-		// insert a new loadout in the []Loadouts struct for that weapon
-		weaponName := vars["weaponname"]
-		fmt.Println(weaponName)
-	}
 	var loadout models.Loadout
 	// decode JSON request payload into Loadout
 	err := json.NewDecoder(request.Body).Decode(&loadout)
+	// capitalize weapon name to match DB schema
+	loadout.Weapon = strings.ToUpper(loadout.Weapon)
 	if err != nil {
 		log.WithFields(log.Fields{
-			"func": "CreateLoadoutEndpoint()",
+			"func":  "CreateLoadoutEndpoint()",
 			"event": "Decoding JSON to loadout struct",
-			"line": 38,
 		}).Fatal(err)
 	}
 	// client is used to connect to MongoDB directly
@@ -49,15 +41,15 @@ func CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) 
 	var db = auth.NewAuth().Database
 	collection := client.Database(db).Collection(CollectionName)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer client.Disconnect(ctx)
 	defer cancel()
 	_, err = collection.InsertOne(ctx, loadout)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
 		log.WithFields(log.Fields{
-			"func": "CreateLoadoutEndpoint()",
+			"func":  "CreateLoadoutEndpoint()",
 			"event": "Inserting into collection",
-			"line": 52,
 		}).Error(err)
 		return
 	}
@@ -66,148 +58,73 @@ func CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) 
 		response.WriteHeader(http.StatusBadRequest)
 		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
 		log.WithFields(log.Fields{
-			"func": "CreateLoadoutEndpoint()",
+			"func":  "CreateLoadoutEndpoint()",
 			"event": "Encoding a weapon name as a response",
-			"line": 64,
 		}).Error(err)
 		return
 	}
 	response.Write([]byte(`{"message": "Weapon added"}`))
 }
 
-func ReadLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
-	// TODO custom error handling with logging
-	response.Header().Add("content-type", "application/json")
-	// client is used to connect to MongoDB directly
-	var client = NewClient()
-	var db = auth.NewAuth().Database
-	collection := client.Database(db).Collection(CollectionName)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	var loadout models.Loadout
-	vars := mux.Vars(request)
-	weaponName := strings.Title(vars["weaponname"])
-	err := collection.FindOne(ctx, models.Loadout{Weapon: weaponName}).Decode(&loadout)
-	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		log.WithFields(log.Fields{
-			"func": "ReadLoadoutEndpoint()",
-			"event": "Finding a weapon in DB",
-			"line": 90,
-		}).Error(err)
-		return
-	}
-	err = json.NewEncoder(response).Encode(loadout)
-	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		log.WithFields(log.Fields{
-			"func": "ReadLoadoutEndpoint()",
-			"event": "Encoding loadout JSON response",
-			"line": 101,
-		}).Error(err)
-		return
-	}
-}
-
-func UpdateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
-
-}
-
-func DeleteLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
-
-}
-
+// ReadLoadoutsEndpoint returns loadouts for a category, for a weapon name,
+// or returns all loadouts if category / weapon name are not provided
 func ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
-	vars := mux.Vars(request)
+	params := request.URL.Query()
+	// category and weapon are optional query parameters and are stored
+	// in the database in Uppercase, so we capitalize the query params
+	category := strings.Title(params.Get("category"))
+	weapon := strings.ToTitle(params.Get("weapon"))
 	var loadouts []models.Loadout
-	// return all loadouts for matching category
-	if len(vars) != 0 {
-		// search DB for matching category
-		category := strings.Title(vars["category"])
-		loadouts = readManyLoadouts(category)
-		err := json.NewEncoder(response).Encode(loadouts)
-		if err != nil {
-			response.WriteHeader(http.StatusBadRequest)
-			response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-			log.WithFields(log.Fields{
-				"func": "ReadLoadoutsEndpoint()",
-				"event": "Encoding loadouts into JSON response",
-				"line": 132,
-			}).Error(err)
-			return
-		}
-		return
+	// return loadouts for specific category
+	if category != "" {
+		query := bson.M{"category": category}
+		loadouts = readManyLoadouts(query)
+	} else if weapon != "" { // else return loadouts for specific weapon
+		query := bson.M{"weapon": weapon}
+		loadouts = readManyLoadouts(query)
+	} else { // else return all loadouts in the loadouts collection
+		query := bson.M{}
+		loadouts = readManyLoadouts(query)
 	}
-	// client is used to connect to MongoDB directly
-	var client = NewClient()
-	var db = auth.NewAuth().Database
-	collection := client.Database(db).Collection(CollectionName)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	cursor, err := collection.Find(ctx, bson.M{})
-	if err != nil {
+	if loadouts == nil {
 		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		response.Write([]byte(`{"message": "cannot find loadouts"}`))
 		log.WithFields(log.Fields{
-			"func": "ReadLoadoutsEndpoint()",
-			"event": "Finding all loadouts",
-			"line": 150,
-		}).Error(err)
+			"func":  "ReadLoadoutsEndpoint()",
+			"event": "Loadouts are nil",
+		}).Error()
 		return
 	}
-	defer func(cursor *mongo.Cursor, ctx context.Context) {
-		_ = cursor.Close(ctx)
-	}(cursor, ctx)
-	// TODO optimize for loop
-	for cursor.Next(ctx) {
-		var loadout models.Loadout
-		err := cursor.Decode(&loadout)
-		if err != nil {
-			response.WriteHeader(http.StatusInternalServerError)
-			response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-			log.WithFields(log.Fields{
-				"func": "ReadLoadoutsEndpoint()",
-				"event": "Decoding cursor into loadouts",
-				"line": 167,
-			}).Error(err)
-			return
-		}
-		loadouts = append(loadouts, loadout)
-	}
-	if err := cursor.Err(); err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		return
-	}
-	err = json.NewEncoder(response).Encode(loadouts)
+	err := json.NewEncoder(response).Encode(loadouts)
 	if err != nil {
 		response.WriteHeader(http.StatusBadRequest)
 		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
 		log.WithFields(log.Fields{
-			"func": "ReadLoadoutsEndpoint()",
-			"event": "Encoding []Loadouts into JSON response",
-			"line": 185,
+			"func":  "ReadLoadoutsEndpoint()",
+			"event": "Encoding loadouts into JSON response",
 		}).Error(err)
 		return
 	}
 }
 
-func readManyLoadouts(category string) []models.Loadout {
+// readManyLoadouts is a helper function to retrieve all loadouts
+// and contains the true logic for querying the database
+func readManyLoadouts(query bson.M) []models.Loadout {
 	// client is used to connect to MongoDB directly
 	var client = NewClient()
 	var db = auth.NewAuth().Database
 	collection := client.Database(db).Collection(CollectionName)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer client.Disconnect(ctx)
 	defer cancel()
-	cursor, err := collection.Find(ctx, bson.D{{"category", category}})
+	// find all documents using the given bson.M{} query,
+	// where the bson.M{} query can specify category, weapon, or be empty (find all loadouts)
+	cursor, err := collection.Find(ctx, query)
 	if err != nil {
 		log.WithFields(log.Fields{
-			"func": "readManyLoadouts()",
+			"func":  "readManyLoadouts()",
 			"event": "Finding a weapon in DB",
-			"line": 205,
 		}).Error(err)
 		return nil
 	}
@@ -216,17 +133,17 @@ func readManyLoadouts(category string) []models.Loadout {
 	}(cursor, ctx)
 	var loadouts []models.Loadout
 	// TODO optimize for loop
+	// iterate through cursor and encode documents into Loadout struct
 	for cursor.Next(ctx) {
 		var loadout models.Loadout
-		err = cursor.Decode(&loadout)
-		if err != nil {
+		if err = cursor.Decode(&loadout); err != nil {
 			log.WithFields(log.Fields{
-				"func": "readManyLoadouts()",
+				"func":  "readManyLoadouts()",
 				"event": "Decoding a cursor into Loadout",
-				"line": 221,
 			}).Error(err)
 			return nil
 		}
+		// append encoded Loadout in []Loadouts
 		loadouts = append(loadouts, loadout)
 	}
 	if err := cursor.Err(); err != nil {
@@ -235,3 +152,18 @@ func readManyLoadouts(category string) []models.Loadout {
 
 	return loadouts
 }
+
+/*
+	* we probably don't need to update loadouts
+	* if necessary, we just add a new loadout
+func UpdateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
+
+}
+*/
+
+/*
+	* we probably don't need to delete loadouts
+func DeleteLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
+
+}
+*/

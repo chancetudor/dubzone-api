@@ -12,5 +12,4 @@ type Weapon struct {
 	RPM            int           `json:"rpm,omitempty" bson:"rpm,omitempty"`
 	BulletVelocity int           `json:"bullet_velocity,omitempty" bson:"bullet_velocity,omitempty"`
 	DamageProfile  DamageProfile `json:"damage_profile,omitempty" bson:"damage_profile,omitempty"`
-	Loadouts       []Loadout     `json:"loadouts,omitempty" bson:"loadouts,omitempty"`
 }
