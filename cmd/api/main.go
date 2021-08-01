@@ -11,6 +11,7 @@ import (
 var Version = "0.0.1"
 
 func init() {
+	// initializes a custom logging file
 	file, err := os.OpenFile("./pkg/log/api_logs.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err == nil {
 		log.SetOutput(file)
@@ -29,7 +30,7 @@ func main() {
 		log.WithFields(log.Fields{
 			"func": "main()",
 			"event": "ListenAndServe",
-			"line": 27,
+			"line": 28,
 		}).Fatal(err)
 	}
 }

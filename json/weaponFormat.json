@@ -27,20 +27,5 @@
 		"maxstk": 10,
 		"minttk": 499,
 		"maxttk": 749
-	},
-	"loadouts": [
-		{
-			"weapon": "XM4",
-			"category": "SNIPER SUPPORT",
-			"muzzle": "AGENCY",
-			"barrel": "",
-			"laser": "",
-			"optic": "REFLEX",
-			"stock": "RAIDER",
-			"underbarrel": "",
-			"ammo": "45/60 MAG",
-			"rear_grip": "SERPENT/AIRBORNE",
-			"perk": ""
-		}
-	]
+	}
 }
