@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"github.com/chancetudor/dubzone-api/internal/auth"
 	"github.com/chancetudor/dubzone-api/internal/models"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
@@ -35,13 +34,9 @@ func (a *API) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.
 	// capitalize weapon name to match DB schema
 	loadout.Weapon = strings.ToUpper(loadout.Weapon)
 
-	// client := NewClient()
-	authDetails := auth.NewAuth()
-	db := authDetails.Database
-	client := a.Client
-	collection := client.Database(db).Collection(authDetails.LoadoutCollection)
+	db := a.Auth.Database
+	collection := a.Client.Database(db).Collection(a.Auth.LoadoutCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	//defer client.Disconnect(ctx)
 	defer cancel()
 
 	_, err = collection.InsertOne(ctx, loadout)
@@ -85,13 +80,13 @@ func (a *API) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.R
 	// return loadouts for specific category
 	if category != "" {
 		query := bson.M{"category": category}
-		loadouts = readManyLoadouts(query, a.Client)
+		loadouts = a.readManyLoadouts(query)
 	} else if weapon != "" { // else return loadouts for specific weapon
 		query := bson.M{"weapon": weapon}
-		loadouts = readManyLoadouts(query, a.Client)
+		loadouts = a.readManyLoadouts(query)
 	} else { // else return all loadouts in the loadouts collection
 		query := bson.M{}
-		loadouts = readManyLoadouts(query, a.Client)
+		loadouts = a.readManyLoadouts(query)
 	}
 
 	if loadouts == nil {
@@ -118,13 +113,10 @@ func (a *API) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.R
 
 // readManyLoadouts is a helper function to retrieve all loadouts
 // and contains the true logic for querying the database
-func readManyLoadouts(query bson.M, client *mongo.Client) []models.Loadout {
-	// client := NewClient()
-	authDetails := auth.NewAuth()
-	db := authDetails.Database
-	collection := client.Database(db).Collection(authDetails.LoadoutCollection)
+func (a *API) readManyLoadouts(query bson.M) []models.Loadout {
+	db := a.Auth.Database
+	collection := a.Client.Database(db).Collection(a.Auth.LoadoutCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	//defer client.Disconnect(ctx)
 	defer cancel()
 
 	// find all documents using the given bson.M{} query,
