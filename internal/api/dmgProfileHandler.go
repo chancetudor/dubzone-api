@@ -1,6 +1,8 @@
 package api
 
-import "net/http"
+import (
+	"net/http"
+)
 
 // DamageProfile endpoints live here TODO FINISH
 
@@ -14,23 +16,23 @@ import "net/http"
 	r.HandleFunc("/dmgprofiles", ReadDamageProfileEndpoint).Methods("GET")
 */
 
-func CreateDamageProfileEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) CreateDamageProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 
 }
 
-func ReadDamageProfileEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) ReadDamageProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 
 }
 
-func UpdateDamageProfileEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) UpdateDamageProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 
 }
 
-func DeleteDamageProfileEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) DeleteDamageProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 
 }
 
-func ReadDamageProfilesEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) ReadDamageProfilesEndpoint(response http.ResponseWriter, request *http.Request) {
 
 }
 
