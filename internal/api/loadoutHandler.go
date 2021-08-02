@@ -13,8 +13,6 @@ import (
 	"time"
 )
 
-const CollectionName = "Loadouts"
-
 /* Loadout endpoints live here
 * functionality for
 	* Creating a single loadout
@@ -28,18 +26,19 @@ func CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) 
 	var loadout models.Loadout
 	// decode JSON request payload into Loadout
 	err := json.NewDecoder(request.Body).Decode(&loadout)
-	// capitalize weapon name to match DB schema
-	loadout.Weapon = strings.ToUpper(loadout.Weapon)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"func":  "CreateLoadoutEndpoint()",
 			"event": "Decoding JSON to loadout struct",
 		}).Fatal(err)
 	}
+	// capitalize weapon name to match DB schema
+	loadout.Weapon = strings.ToUpper(loadout.Weapon)
 	// client is used to connect to MongoDB directly
 	var client = NewClient()
 	var db = auth.NewAuth().Database
-	collection := client.Database(db).Collection(CollectionName)
+	var collectionName = auth.NewAuth().LoadoutCollection
+	collection := client.Database(db).Collection(collectionName)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer client.Disconnect(ctx)
 	defer cancel()
@@ -114,7 +113,8 @@ func readManyLoadouts(query bson.M) []models.Loadout {
 	// client is used to connect to MongoDB directly
 	var client = NewClient()
 	var db = auth.NewAuth().Database
-	collection := client.Database(db).Collection(CollectionName)
+	var collectionName = auth.NewAuth().LoadoutCollection
+	collection := client.Database(db).Collection(collectionName)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer client.Disconnect(ctx)
 	defer cancel()

@@ -9,9 +9,12 @@ import (
 type MongoAuth struct {
 	URI      string
 	Database string
+	LoadoutCollection string
+	WeaponsCollection string
 }
 
 // NewAuth Creates a new MongoAuth struct, containing the username and password necessary to connect to a MongoDB client
+// along with the necessary collection names
 func NewAuth() *MongoAuth {
 	log.Println("Retrieving auth info: " + "func auth.NewAuth()")
 	err := godotenv.Load("./config/dev.env")
@@ -26,5 +29,7 @@ func NewAuth() *MongoAuth {
 	return &MongoAuth{
 		URI:      os.Getenv("MONGO_URI"),
 		Database: os.Getenv("DATABASE"),
+		LoadoutCollection: os.Getenv("LOADOUTSCOLLECTIONNAME"),
+		WeaponsCollection: os.Getenv("WEAPONSCOLLECTIONNAME"),
 	}
 }

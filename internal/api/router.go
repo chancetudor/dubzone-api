@@ -16,8 +16,7 @@ func NewRouter() *mux.Router {
 
 // InitRouter creates new router and initializes functions that will handle requests
 func InitRouter(r *mux.Router) {
-	log.Println("Initializing router: " + "func InitRouter()")
-	// TODO FIND A WAY TO ADD PARAMETER QUERIES/FILTERING INSTEAD OF MULTIPLE ENDPOINTS
+	log.Println("Initializing router, adding handlers: " + "func InitRouter()")
 	// single weapon endpoints -- these return a single weapon, or dmg profile / loadout associated with a weapon
 	r.HandleFunc("/weapon/{weaponname}", CreateWeaponEndpoint).Methods("POST")
 	r.HandleFunc("/weapon/{weaponname}", ReadWeaponEndpoint).Methods("GET")
