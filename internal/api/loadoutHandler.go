@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"github.com/chancetudor/dubzone-api/internal/auth"
 	"github.com/chancetudor/dubzone-api/internal/models"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
@@ -21,7 +20,7 @@ import (
 */
 
 // CreateLoadoutEndpoint creates a single new loadout in the loadouts collection
-func CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var loadout models.Loadout
 	// decode JSON request payload into Loadout
@@ -35,12 +34,9 @@ func CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) 
 	// capitalize weapon name to match DB schema
 	loadout.Weapon = strings.ToUpper(loadout.Weapon)
 
-	client := NewClient()
-	authDetails := auth.NewAuth()
-	db := authDetails.Database
-	collection := client.Database(db).Collection(authDetails.LoadoutCollection)
+	db := a.Auth.Database
+	collection := a.Client.Database(db).Collection(a.Auth.LoadoutCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer client.Disconnect(ctx)
 	defer cancel()
 
 	_, err = collection.InsertOne(ctx, loadout)
@@ -72,7 +68,7 @@ func CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) 
 // a given category,
 // a given weapon name,
 // or returns all loadouts if category / weapon name are not provided
-func ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := request.URL.Query()
 	// category and weapon are optional query parameters and are stored
@@ -84,13 +80,13 @@ func ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
 	// return loadouts for specific category
 	if category != "" {
 		query := bson.M{"category": category}
-		loadouts = readManyLoadouts(query)
+		loadouts = a.readManyLoadouts(query)
 	} else if weapon != "" { // else return loadouts for specific weapon
 		query := bson.M{"weapon": weapon}
-		loadouts = readManyLoadouts(query)
+		loadouts = a.readManyLoadouts(query)
 	} else { // else return all loadouts in the loadouts collection
 		query := bson.M{}
-		loadouts = readManyLoadouts(query)
+		loadouts = a.readManyLoadouts(query)
 	}
 
 	if loadouts == nil {
@@ -117,13 +113,10 @@ func ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
 
 // readManyLoadouts is a helper function to retrieve all loadouts
 // and contains the true logic for querying the database
-func readManyLoadouts(query bson.M) []models.Loadout {
-	client := NewClient()
-	authDetails := auth.NewAuth()
-	db := authDetails.Database
-	collection := client.Database(db).Collection(authDetails.LoadoutCollection)
+func (a *API) readManyLoadouts(query bson.M) []models.Loadout {
+	db := a.Auth.Database
+	collection := a.Client.Database(db).Collection(a.Auth.LoadoutCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer client.Disconnect(ctx)
 	defer cancel()
 
 	// find all documents using the given bson.M{} query,

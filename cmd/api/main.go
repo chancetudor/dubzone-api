@@ -22,15 +22,14 @@ func init() {
 
 func main() {
 	log.Debug("Starting application: " + "func main()")
-	dubzoneRouter := api.NewRouter()
-	api.InitRouter(dubzoneRouter)
+	apiContainer := api.NewAPI()
+	defer apiContainer.DisconnectClient()
 	log.Debug("Calling ListenAndServe()...")
-	err := http.ListenAndServe(":12345", dubzoneRouter)
+	err := http.ListenAndServe(":12345", apiContainer.Router)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"func": "main()",
 			"event": "ListenAndServe",
-			"line": 28,
 		}).Fatal(err)
 	}
 }

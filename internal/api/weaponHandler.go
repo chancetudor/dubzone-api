@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"github.com/chancetudor/dubzone-api/internal/auth"
 	"github.com/chancetudor/dubzone-api/internal/models"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
@@ -21,20 +20,17 @@ import (
 	* Reading multiple weapons, given game name, or returning all weapons
 */
 
-
 // CreateWeaponEndpoint creates a single new weapon in the Weapons collection
-func CreateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) CreateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var weapon models.Weapon
 	err := json.NewDecoder(request.Body).Decode(&weapon)
 	weapon.WeaponName = strings.ToUpper(weapon.WeaponName)
 
-	client := NewClient()
-	authDetails := auth.NewAuth()
-	db := authDetails.Database
-	collection := client.Database(db).Collection(authDetails.WeaponsCollection)
+	db := a.Auth.Database
+	collection := a.Client.Database(db).Collection(a.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer client.Disconnect(ctx)
+	// defer client.Disconnect(ctx)
 	defer cancel()
 
 	_, err = collection.InsertOne(ctx, weapon)
@@ -63,15 +59,13 @@ func CreateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 }
 
 // ReadWeaponEndpoint returns weapon data for a specified weapon name
-func ReadWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
-	client := NewClient()
-	authDetails := auth.NewAuth()
-	db := authDetails.Database
-	collection := client.Database(db).Collection(authDetails.WeaponsCollection)
+	db := a.Auth.Database
+	collection := a.Client.Database(db).Collection(a.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer client.Disconnect(ctx)
+	// defer client.Disconnect(ctx)
 	defer cancel()
 
 	params := mux.Vars(request)
@@ -95,7 +89,7 @@ func ReadWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 // ReadWeaponsEndpoint returns multiple weapons,
 // either all weapons in the Weapons collection
 // or all weapons from an optionally specified game
-func ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Request) {
+func (a *API) ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := request.URL.Query()
 	game := strings.ToUpper(params.Get("game"))
@@ -103,10 +97,10 @@ func ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Request) {
 	var weapons []models.Weapon
 	if game != "" {
 		query := bson.M{"game_from": game}
-		weapons = readManyWeapons(query)
+		weapons = a.readManyWeapons(query)
 	} else {
 		query := bson.M{}
-		weapons = readManyWeapons(query)
+		weapons = a.readManyWeapons(query)
 	}
 
 	if weapons == nil {
@@ -133,13 +127,11 @@ func ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Request) {
 
 // readManyWeapons is a helper function for ReadWeaponsEndpoint
 // and contains the true logic for querying the database
-func readManyWeapons(query bson.M) []models.Weapon {
-	client := NewClient()
-	authDetails := auth.NewAuth()
-	db := authDetails.Database
-	collection := client.Database(db).Collection(authDetails.WeaponsCollection)
+func (a *API) readManyWeapons(query bson.M) []models.Weapon {
+	db := a.Auth.Database
+	collection := a.Client.Database(db).Collection(a.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer client.Disconnect(ctx)
+	// defer client.Disconnect(ctx)
 	defer cancel()
 
 	// find all documents using the given bson.M{} query,
@@ -148,8 +140,8 @@ func readManyWeapons(query bson.M) []models.Weapon {
 	cursor, err := collection.Find(ctx, query)
 	if err != nil {
 		log.WithFields(log.Fields{
-			"func":  "readManyLoadouts()",
-			"event": "Finding a loadout in DB",
+			"func":  "readManyWeapons()",
+			"event": "Finding weapons in DB",
 		}).Error(err)
 		return nil
 	}
@@ -194,4 +186,3 @@ func UpdateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 
 }
 */
-
