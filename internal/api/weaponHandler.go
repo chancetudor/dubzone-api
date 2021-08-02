@@ -18,18 +18,9 @@ import (
 * functionality for
 	* Creating a single weapon
 	* Reading a single weapon
-	* Updating a single weapon
-	* Reading multiple weapons, given weapon name, or returning all weapons
+	* Reading multiple weapons, given game name, or returning all weapons
 */
 
-/*
-	// single weapon endpoints
-	r.HandleFunc("/weapon/{weaponname}", CreateWeaponEndpoint).Methods("POST")
-	r.HandleFunc("/weapon/{weaponname}", ReadWeaponEndpoint).Methods("GET")
-	r.HandleFunc("/weapon/{weaponname}", UpdateWeaponEndpoint).Methods("PUT")
-	// multiple weapon endpoints
-	r.HandleFunc("/weapons", ReadWeaponEndpoint).Methods("GET")
-*/
 
 // CreateWeaponEndpoint creates a single new weapon in the Weapons collection
 func CreateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
@@ -167,7 +158,7 @@ func readManyWeapons(query bson.M) []models.Weapon {
 	}(cursor, ctx)
 
 	var weapons []models.Weapon
-	// TODO optimize for loop
+	// TODO optimize for loop -- maybe pagination?
 	// iterate through cursor and encode documents into Loadout struct
 	for cursor.Next(ctx) {
 		var weapon models.Weapon
