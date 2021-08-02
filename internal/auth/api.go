@@ -22,7 +22,7 @@ func NewAuth() *MongoAuth {
 		log.WithFields(log.Fields{
 			"func": "NewAuth()",
 			"event": "Loading .env file",
-			"line": 17,
+			"line": 20,
 		}).Fatal(err)
 	}
 

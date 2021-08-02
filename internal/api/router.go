@@ -17,20 +17,20 @@ func NewRouter() *mux.Router {
 // InitRouter creates new router and initializes functions that will handle requests
 func InitRouter(r *mux.Router) {
 	log.Println("Initializing router, adding handlers: " + "func InitRouter()")
-	// single weapon endpoints -- these return a single weapon, or dmg profile / loadout associated with a weapon
-	r.HandleFunc("/weapon/{weaponname}", CreateWeaponEndpoint).Methods("POST")
+	// single weapon endpoints, which deal with a single weapon
+	r.HandleFunc("/weapon", CreateWeaponEndpoint).Methods("POST")
 	r.HandleFunc("/weapon/{weaponname}", ReadWeaponEndpoint).Methods("GET")
-	r.HandleFunc("/weapon/{weaponname}", UpdateWeaponEndpoint).Methods("PUT")
-	// r.HandleFunc("/weapon/{weaponname}", DeleteWeaponEndpoint).Methods("DELETE")
+	// single dmgProfile endpoints, which deal with a single dmgProfile for a given weapon
 	r.HandleFunc("/dmgprofile/{weaponname}", CreateDamageProfileEndpoint).Methods("POST")
 	r.HandleFunc("/dmgprofile/{weaponname}", ReadDamageProfileEndpoint).Methods("GET")
 	r.HandleFunc("/dmgprofile/{weaponname}", UpdateDamageProfileEndpoint).Methods("PUT")
 	r.HandleFunc("/dmgprofile/{weaponname}", DeleteDamageProfileEndpoint).Methods("DELETE")
+	// single loadout endpoints, which deal with a single loadout
 	r.HandleFunc("/loadout", CreateLoadoutEndpoint).Methods("POST")
-	// r.HandleFunc("/loadout/{weaponname}", UpdateLoadoutEndpoint).Methods("PUT")
-	// r.HandleFunc("/loadout/{weaponname}", DeleteLoadoutEndpoint).Methods("DELETE")
-	// multiple weapon endpoints
+	// returns multiple weapons
 	r.HandleFunc("/weapons", ReadWeaponsEndpoint).Methods("GET")
+	// returns multiple dmgProfiles
 	r.HandleFunc("/dmgprofiles", ReadDamageProfilesEndpoint).Methods("GET")
+	// returns multiple loadouts
 	r.HandleFunc("/loadouts", ReadLoadoutsEndpoint).Methods("GET")
 }
