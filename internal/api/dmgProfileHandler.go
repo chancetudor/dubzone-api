@@ -18,9 +18,9 @@ func (a *API) UpdateDamageProfileEndpoint(response http.ResponseWriter, request 
 
 }
 
-func (a *API) ReadDamageProfilesEndpoint(response http.ResponseWriter, request *http.Request) {
-
-}
+// func (a *API) ReadDamageProfilesEndpoint(response http.ResponseWriter, request *http.Request) {
+//
+// }
 
 // func (a *API) CreateDamageProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 //
