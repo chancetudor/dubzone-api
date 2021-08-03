@@ -65,10 +65,7 @@ func (a *API) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.
 	response.Write([]byte(`{"message": "Weapon added"}`))
 }
 
-// ReadLoadoutsEndpoint returns loadouts for
-// a given category,
-// a given weapon name,
-// or returns all loadouts if category / weapon name are not provided
+// ReadLoadoutsEndpoint returns all loadouts
 func (a *API) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
@@ -98,7 +95,7 @@ func (a *API) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.R
 	}
 }
 
-
+// ReadLoadoutsByCategoryEndpoint returns all loadouts with a specified category
 func (a *API) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := mux.Vars(request)
@@ -131,6 +128,7 @@ func (a *API) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, reque
 	}
 }
 
+// ReadLoadoutsByWeaponEndpoint returns all loadouts for a specified weapon
 func (a *API) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := mux.Vars(request)

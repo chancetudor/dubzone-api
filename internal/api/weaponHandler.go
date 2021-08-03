@@ -72,6 +72,7 @@ func (a *API) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Req
 	weaponName := strings.ToUpper(params["weaponname"])
 	var weapon models.Weapon
 	// find weapon using given weaponname
+	// TODO use projection to suppress _id
 	err := collection.FindOne(ctx, bson.D{{"weapon_name", weaponName}}).Decode(&weapon)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)

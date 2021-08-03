@@ -16,6 +16,7 @@ type API struct {
 	Auth *auth.MongoAuth
 }
 
+// NewAPI is a constructor for our API struct
 func NewAPI() *API {
 	api := &API{
 		Router: newRouter(),
@@ -27,6 +28,7 @@ func NewAPI() *API {
 	return api
 }
 
+// newRouter creates a new Gorilla mux with appropriate options
 func newRouter() *mux.Router {
 	log.Println("Creating new router: " + "func NewRouter()")
 	r := mux.NewRouter().StrictSlash(true)
@@ -34,6 +36,7 @@ func newRouter() *mux.Router {
 	return r
 }
 
+// newClient creates a new mongo client with appropriate authentication
 func newClient() *mongo.Client {
 	log.Println("Creating new client: " + "func NewClient()")
 
@@ -54,6 +57,7 @@ func newClient() *mongo.Client {
 	return client
 }
 
+// DisconnectClient disconnects the mongo client
 func (a *API) DisconnectClient() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -71,19 +75,29 @@ func (a *API) DisconnectClient() {
 // initRouter initializes handler funcs on router
 func (a *API) initRouter() {
 	log.Println("Initializing router, adding handlers: " + "func InitRouter()")
-	// single weapon endpoints, which deal with a single weapon
+	// creates a single new weapon in Weapons collection
 	a.Router.HandleFunc("/weapon", a.CreateWeaponEndpoint).Methods("POST")
+	// gets a specified weapon from Weapons collection
 	a.Router.HandleFunc("/weapon/{weaponname}", a.ReadWeaponEndpoint).Methods("GET")
-	// single dmgProfile endpoints, which deal with a single dmgProfile for a given weapon
+	// gets all damage profiles for specified weapon
 	a.Router.HandleFunc("/dmgprofile/{weaponname}", a.ReadDamageProfileEndpoint).Methods("GET")
-	a.Router.HandleFunc("/dmgprofile/{weaponname}", a.UpdateDamageProfileEndpoint).Methods("PUT")
-	// single loadout endpoints, which deal with a single loadout
+	// gets close-range damage profiles for specified weapon
+	a.Router.HandleFunc("/dmgprofile/{weaponname}/close", a.ReadCloseDamageProfileEndpoint).Methods("GET")
+	// gets mid-range damage profiles for specified weapon
+	a.Router.HandleFunc("/dmgprofile/{weaponname}/mid", a.ReadMidDamageProfileEndpoint).Methods("GET")
+	// gets far-range damage profiles for specified weapon
+	a.Router.HandleFunc("/dmgprofile/{weaponname}/far", a.ReadFarDamageProfileEndpoint).Methods("GET")
+	// updates a close-range damage profile for a specified weapon
+	a.Router.HandleFunc("/dmgprofile/{weaponname}/close", a.UpdateCloseDamageProfileEndpoint).Methods("PUT")
+	// updates a mid-range damage profile for a specified weapon
+	a.Router.HandleFunc("/dmgprofile/{weaponname}/mid", a.UpdateMidDamageProfileEndpoint).Methods("PUT")
+	// updates a close-range damage profile for a specified weapon
+	a.Router.HandleFunc("/dmgprofile/{weaponname}/far", a.UpdateFarDamageProfileEndpoint).Methods("PUT")
+	// creates a single new loadout in Loadouts collection
 	a.Router.HandleFunc("/loadout", a.CreateLoadoutEndpoint).Methods("POST")
 	// returns multiple weapons
 	a.Router.HandleFunc("/weapons", a.ReadWeaponsEndpoint).Methods("GET")
 	a.Router.HandleFunc("/weapons/{game}", a.ReadWeaponsByGameEndpoint).Methods("GET")
-	// returns multiple dmgProfiles
-	a.Router.HandleFunc("/dmgprofiles", a.ReadDamageProfilesEndpoint).Methods("GET")
 	// returns multiple loadouts
 	a.Router.HandleFunc("/loadouts", a.ReadLoadoutsEndpoint).Methods("GET")
 	a.Router.HandleFunc("/loadouts/{category}", a.ReadLoadoutsByCategoryEndpoint).Methods("GET")
