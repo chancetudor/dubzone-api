@@ -66,7 +66,6 @@ func (a *API) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Req
 	db := a.Auth.Database
 	collection := a.Client.Database(db).Collection(a.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	// defer client.Disconnect(ctx)
 	defer cancel()
 
 	params := mux.Vars(request)
@@ -87,22 +86,45 @@ func (a *API) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Req
 	err = json.NewEncoder(response).Encode(weapon)
 }
 
-// ReadWeaponsEndpoint returns multiple weapons,
-// either all weapons in the Weapons collection
-// or all weapons from an optionally specified game
+// ReadWeaponsEndpoint returns all weapons in the Weapons collection
 func (a *API) ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
-	params := request.URL.Query()
-	game := strings.ToUpper(params.Get("game"))
 
 	var weapons []models.Weapon
-	if game != "" {
-		query := bson.M{"game_from": game}
-		weapons = a.readManyWeapons(query)
-	} else {
-		query := bson.M{}
-		weapons = a.readManyWeapons(query)
+	query := bson.M{}
+	weapons = a.readManyWeapons(query)
+
+	if weapons == nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		response.Write([]byte(`{"message": "cannot find loadouts"}`))
+		log.WithFields(log.Fields{
+			"func":  "ReadWeaponsEndpoint()",
+			"event": "No weapons retrieved",
+		}).Error()
+		return
 	}
+
+	err := json.NewEncoder(response).Encode(weapons)
+	if err != nil {
+		response.WriteHeader(http.StatusBadRequest)
+		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		log.WithFields(log.Fields{
+			"func":  "ReadWeaponsEndpoint()",
+			"event": "Encoding weapons into JSON response",
+		}).Error(err)
+		return
+	}
+}
+
+// ReadWeaponsByGameEndpoint returns all weapons from a specified game
+func (a *API) ReadWeaponsByGameEndpoint(response http.ResponseWriter, request *http.Request) {
+	response.Header().Add("content-type", "application/json")
+
+	params := mux.Vars(request)
+	game := strings.ToUpper(params["game"])
+	var weapons []models.Weapon
+	query := bson.M{"game_from": game}
+	weapons = a.readManyWeapons(query)
 
 	if weapons == nil {
 		response.WriteHeader(http.StatusInternalServerError)
