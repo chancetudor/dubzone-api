@@ -75,10 +75,8 @@ func (a *API) initRouter() {
 	a.Router.HandleFunc("/weapon", a.CreateWeaponEndpoint).Methods("POST")
 	a.Router.HandleFunc("/weapon/{weaponname}", a.ReadWeaponEndpoint).Methods("GET")
 	// single dmgProfile endpoints, which deal with a single dmgProfile for a given weapon
-	// a.Router.HandleFunc("/dmgprofile/{weaponname}", a.CreateDamageProfileEndpoint).Methods("POST")
 	a.Router.HandleFunc("/dmgprofile/{weaponname}", a.ReadDamageProfileEndpoint).Methods("GET")
 	a.Router.HandleFunc("/dmgprofile/{weaponname}", a.UpdateDamageProfileEndpoint).Methods("PUT")
-	// a.Router.HandleFunc("/dmgprofile/{weaponname}", a.DeleteDamageProfileEndpoint).Methods("DELETE")
 	// single loadout endpoints, which deal with a single loadout
 	a.Router.HandleFunc("/loadout", a.CreateLoadoutEndpoint).Methods("POST")
 	// returns multiple weapons
@@ -87,4 +85,6 @@ func (a *API) initRouter() {
 	a.Router.HandleFunc("/dmgprofiles", a.ReadDamageProfilesEndpoint).Methods("GET")
 	// returns multiple loadouts
 	a.Router.HandleFunc("/loadouts", a.ReadLoadoutsEndpoint).Methods("GET")
+	a.Router.HandleFunc("/loadouts/{category}", a.ReadLoadoutsByCategoryEndpoint).Methods("GET")
+	a.Router.HandleFunc("/loadouts/{weaponname}", a.ReadLoadoutsByWeaponEndpoint).Methods("GET")
 }

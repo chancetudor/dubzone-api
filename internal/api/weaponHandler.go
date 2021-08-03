@@ -66,7 +66,6 @@ func (a *API) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Req
 	db := a.Auth.Database
 	collection := a.Client.Database(db).Collection(a.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	// defer client.Disconnect(ctx)
 	defer cancel()
 
 	params := mux.Vars(request)
