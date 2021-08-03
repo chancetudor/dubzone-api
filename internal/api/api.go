@@ -81,6 +81,7 @@ func (a *API) initRouter() {
 	a.Router.HandleFunc("/loadout", a.CreateLoadoutEndpoint).Methods("POST")
 	// returns multiple weapons
 	a.Router.HandleFunc("/weapons", a.ReadWeaponsEndpoint).Methods("GET")
+	a.Router.HandleFunc("/weapons/{game}", a.ReadWeaponsByGameEndpoint).Methods("GET")
 	// returns multiple dmgProfiles
 	a.Router.HandleFunc("/dmgprofiles", a.ReadDamageProfilesEndpoint).Methods("GET")
 	// returns multiple loadouts
