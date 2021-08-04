@@ -15,12 +15,12 @@ import (
 
 /* Weapon endpoints live here
 * functionality for
-	* Creating a single weapon
-	* Reading a single weapon
+	* Creating srv single weapon
+	* Reading srv single weapon
 	* Reading multiple weapons, given game name, or returning all weapons
 */
 
-// CreateWeaponEndpoint creates a single new weapon in the Weapons collection
+// CreateWeaponEndpoint creates srv single new weapon in the Weapons collection
 func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var weapon models.Weapon
@@ -50,7 +50,7 @@ func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *h
 		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
 		log.WithFields(log.Fields{
 			"func":  "CreateWeaponEndpoint()",
-			"event": "Encoding a weapon name as a response",
+			"event": "Encoding srv weapon name as srv response",
 		}).Error(err)
 		return
 	}
@@ -58,7 +58,7 @@ func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *h
 	response.Write([]byte(`{"message": "Weapon added"}`))
 }
 
-// ReadWeaponEndpoint returns weapon data for a specified weapon name
+// ReadWeaponEndpoint returns weapon data for srv specified weapon name
 func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
@@ -94,7 +94,7 @@ func (srv *server) ReadWeaponsEndpoint(response http.ResponseWriter, request *ht
 
 	var weapons []models.Weapon
 	query := bson.M{}
-	weapons = a.readManyWeapons(query)
+	weapons = srv.readManyWeapons(query)
 
 	if weapons == nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -118,15 +118,15 @@ func (srv *server) ReadWeaponsEndpoint(response http.ResponseWriter, request *ht
 	}
 }
 
-// ReadWeaponsByGameEndpoint returns all weapons from a specified game
-func (a *API) ReadWeaponsByGameEndpoint(response http.ResponseWriter, request *http.Request) {
+// ReadWeaponsByGameEndpoint returns all weapons from srv specified game
+func (srv *server) ReadWeaponsByGameEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
 	params := mux.Vars(request)
 	game := strings.ToUpper(params["game"])
 	var weapons []models.Weapon
 	query := bson.M{"game_from": game}
-	weapons = a.readManyWeapons(query)
+	weapons = srv.readManyWeapons(query)
 
 	if weapons == nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -150,7 +150,7 @@ func (a *API) ReadWeaponsByGameEndpoint(response http.ResponseWriter, request *h
 	}
 }
 
-// readManyWeapons is a helper function for ReadWeaponsEndpoint
+// readManyWeapons is srv helper function for ReadWeaponsEndpoint
 // and contains the true logic for querying the database
 func (srv *server) readManyWeapons(query bson.M) []models.Weapon {
 	db := srv.Auth.Database
@@ -160,7 +160,7 @@ func (srv *server) readManyWeapons(query bson.M) []models.Weapon {
 	defer cancel()
 
 	// find all documents using the given bson.M{} query,
-	// where the bson.M{} query can specify the game a weapon is from
+	// where the bson.M{} query can specify the game srv weapon is from
 	// or the bson.M{} query can be empty (find all weapons)
 	cursor, err := collection.Find(ctx, query)
 	if err != nil {
@@ -182,7 +182,7 @@ func (srv *server) readManyWeapons(query bson.M) []models.Weapon {
 		if err = cursor.Decode(&weapon); err != nil {
 			log.WithFields(log.Fields{
 				"func":  "readManyWeapons()",
-				"event": "Decoding a cursor into a Weapon",
+				"event": "Decoding srv cursor into srv Weapon",
 			}).Error(err)
 			return nil
 		}
@@ -197,15 +197,15 @@ func (srv *server) readManyWeapons(query bson.M) []models.Weapon {
 }
 
 /*
-	* we probably don't need to delete a weapon
+	* we probably don't need to delete srv weapon
 func DeleteWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 
 }
 */
 
 /*
-	* we probably don't need to update a weapon
-// UpdateWeaponEndpoint takes a specified weapon and a series of parameters
+	* we probably don't need to update srv weapon
+// UpdateWeaponEndpoint takes srv specified weapon and srv series of parameters
 // and updates that weapon's parameters to the given ones
 func UpdateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 

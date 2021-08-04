@@ -1,7 +1,7 @@
 build:
-	go build -o bin/main cmd/api/main.go
+	go build -o bin/main cmd/server/main.go
 
 #test:
 
 run:
-	go build -o bin/main cmd/api/main.go && ./bin/main
+	go build -o bin/main cmd/server/main.go && ./bin/main

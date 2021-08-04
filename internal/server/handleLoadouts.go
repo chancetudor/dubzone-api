@@ -15,12 +15,12 @@ import (
 
 /* Loadout endpoints live here
 * functionality for
-	* Creating a single loadout
-	* Reading loadouts given a category
-	* Reading loadouts given a weapon name
+	* Creating srv single loadout
+	* Reading loadouts given srv category
+	* Reading loadouts given srv weapon name
 */
 
-// CreateLoadoutEndpoint creates a single new loadout in the loadouts collection
+// CreateLoadoutEndpoint creates srv single new loadout in the loadouts collection
 func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var loadout models.Loadout
@@ -57,7 +57,7 @@ func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *
 		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
 		log.WithFields(log.Fields{
 			"func":  "CreateLoadoutEndpoint()",
-			"event": "Encoding a weapon name as a response",
+			"event": "Encoding srv weapon name as srv response",
 		}).Error(err)
 		return
 	}
@@ -66,15 +66,15 @@ func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *
 }
 
 // ReadLoadoutsEndpoint returns loadouts for
-// a given category,
-// a given weapon name,
+// srv given category,
+// srv given weapon name,
 // or returns all loadouts if category / weapon name are not provided
 func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
 	var loadouts []models.Loadout
 	query := bson.M{}
-	loadouts = a.readManyLoadouts(query)
+	loadouts = srv.readManyLoadouts(query)
 
 	if loadouts == nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -98,8 +98,8 @@ func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *h
 	}
 }
 
-// ReadLoadoutsByCategoryEndpoint returns all loadouts with a specified category
-func (a *API) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, request *http.Request) {
+// ReadLoadoutsByCategoryEndpoint returns all loadouts with srv specified category
+func (srv *server) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := mux.Vars(request)
 	// category and weapon are optional query parameters and are stored
@@ -107,7 +107,7 @@ func (a *API) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, reque
 	category := strings.Title(params["category"])
 	var loadouts []models.Loadout
 	query := bson.M{"category": category}
-	loadouts = a.readManyLoadouts(query)
+	loadouts = srv.readManyLoadouts(query)
 
 	if loadouts == nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -131,8 +131,8 @@ func (a *API) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, reque
 	}
 }
 
-// ReadLoadoutsByWeaponEndpoint returns all loadouts for a specified weapon
-func (a *API) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
+// ReadLoadoutsByWeaponEndpoint returns all loadouts for srv specified weapon
+func (srv *server) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := mux.Vars(request)
 	// category and weapon are optional query parameters and are stored
@@ -140,7 +140,7 @@ func (a *API) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, request
 	weaponName := strings.ToUpper(params["weaponname"])
 	var loadouts []models.Loadout
 	query := bson.M{"category": weaponName}
-	loadouts = a.readManyLoadouts(query)
+	loadouts = srv.readManyLoadouts(query)
 
 	if loadouts == nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -164,7 +164,7 @@ func (a *API) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, request
 	}
 }
 
-// readManyLoadouts is a helper function to retrieve all loadouts
+// readManyLoadouts is srv helper function to retrieve all loadouts
 // and contains the true logic for querying the database
 func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
 	db := srv.Auth.Database
@@ -178,7 +178,7 @@ func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
 	if err != nil {
 		log.WithFields(log.Fields{
 			"func":  "readManyLoadouts()",
-			"event": "Finding a loadout in DB",
+			"event": "Finding srv loadout in DB",
 		}).Error(err)
 		return nil
 	}
@@ -194,7 +194,7 @@ func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
 		if err = cursor.Decode(&loadout); err != nil {
 			log.WithFields(log.Fields{
 				"func":  "readManyLoadouts()",
-				"event": "Decoding a cursor into a Loadout",
+				"event": "Decoding srv cursor into srv Loadout",
 			}).Error(err)
 			return nil
 		}
@@ -210,7 +210,7 @@ func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
 
 /*
 	* we probably don't need to update loadouts
-	* if necessary, we just add a new loadout
+	* if necessary, we just add srv new loadout
 func UpdateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
 
 }
