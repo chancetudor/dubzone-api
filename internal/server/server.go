@@ -27,6 +27,7 @@ func NewServer() *server {
 	return api
 }
 
+// newRouter creates a new Gorilla mux with appropriate options
 func newRouter() *mux.Router {
 	log.Println("Creating new router: " + "func NewRouter()")
 	r := mux.NewRouter().StrictSlash(true)
@@ -34,6 +35,7 @@ func newRouter() *mux.Router {
 	return r
 }
 
+// newClient creates a new mongo client with appropriate authentication
 func newClient() *mongo.Client {
 	log.Println("Creating new client: " + "func NewClient()")
 
