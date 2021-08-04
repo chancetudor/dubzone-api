@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"context"
@@ -10,17 +10,17 @@ import (
 	"time"
 )
 
-type API struct {
+type server struct {
 	Router *mux.Router
 	Client *mongo.Client
-	Auth *auth.MongoAuth
+	Auth   *auth.MongoAuth
 }
 
-func NewAPI() *API {
-	api := &API{
+func NewServer() *server {
+	api := &server{
 		Router: newRouter(),
 		Client: newClient(),
-		Auth: auth.NewAuth(),
+		Auth:   auth.NewAuth(),
 	}
 	api.initRouter()
 
@@ -46,7 +46,7 @@ func newClient() *mongo.Client {
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.WithFields(log.Fields{
-			"func": "NewClient()",
+			"func":  "NewClient()",
 			"event": "Connecting to mongoDB",
 		}).Fatal(err)
 	}
@@ -54,37 +54,37 @@ func newClient() *mongo.Client {
 	return client
 }
 
-func (a *API) DisconnectClient() {
+func (srv *server) DisconnectClient() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	defer func(Client *mongo.Client, ctx context.Context) {
 		err := Client.Disconnect(ctx)
 		if err != nil {
 			log.WithFields(log.Fields{
-				"func": "main()",
+				"func":  "main()",
 				"event": "Client disconnect",
 			}).Fatal(err)
 		}
-	}(a.Client, ctx)
+	}(srv.Client, ctx)
 }
 
 // initRouter initializes handler funcs on router
-func (a *API) initRouter() {
+func (srv *server) initRouter() {
 	log.Println("Initializing router, adding handlers: " + "func InitRouter()")
 	// single weapon endpoints, which deal with a single weapon
-	a.Router.HandleFunc("/weapon", a.CreateWeaponEndpoint).Methods("POST")
-	a.Router.HandleFunc("/weapon/{weaponname}", a.ReadWeaponEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/weapon", srv.CreateWeaponEndpoint).Methods("POST")
+	srv.Router.HandleFunc("/weapon/{weaponname}", srv.ReadWeaponEndpoint).Methods("GET")
 	// single dmgProfile endpoints, which deal with a single dmgProfile for a given weapon
 	// a.Router.HandleFunc("/dmgprofile/{weaponname}", a.CreateDamageProfileEndpoint).Methods("POST")
-	a.Router.HandleFunc("/dmgprofile/{weaponname}", a.ReadDamageProfileEndpoint).Methods("GET")
-	a.Router.HandleFunc("/dmgprofile/{weaponname}", a.UpdateDamageProfileEndpoint).Methods("PUT")
+	srv.Router.HandleFunc("/dmgprofile/{weaponname}", srv.ReadDamageProfileEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/dmgprofile/{weaponname}", srv.UpdateDamageProfileEndpoint).Methods("PUT")
 	// a.Router.HandleFunc("/dmgprofile/{weaponname}", a.DeleteDamageProfileEndpoint).Methods("DELETE")
 	// single loadout endpoints, which deal with a single loadout
-	a.Router.HandleFunc("/loadout", a.CreateLoadoutEndpoint).Methods("POST")
+	srv.Router.HandleFunc("/loadout", srv.CreateLoadoutEndpoint).Methods("POST")
 	// returns multiple weapons
-	a.Router.HandleFunc("/weapons", a.ReadWeaponsEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/weapons", srv.ReadWeaponsEndpoint).Methods("GET")
 	// returns multiple dmgProfiles
-	a.Router.HandleFunc("/dmgprofiles", a.ReadDamageProfilesEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/dmgprofiles", srv.ReadDamageProfilesEndpoint).Methods("GET")
 	// returns multiple loadouts
-	a.Router.HandleFunc("/loadouts", a.ReadLoadoutsEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/loadouts", srv.ReadLoadoutsEndpoint).Methods("GET")
 }

@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"context"
@@ -20,7 +20,7 @@ import (
 */
 
 // CreateLoadoutEndpoint creates a single new loadout in the loadouts collection
-func (a *API) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
+func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var loadout models.Loadout
 	// decode JSON request payload into Loadout
@@ -34,8 +34,8 @@ func (a *API) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.
 	// capitalize weapon name to match DB schema
 	loadout.Weapon = strings.ToUpper(loadout.Weapon)
 
-	db := a.Auth.Database
-	collection := a.Client.Database(db).Collection(a.Auth.LoadoutCollection)
+	db := srv.Auth.Database
+	collection := srv.Client.Database(db).Collection(srv.Auth.LoadoutCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -68,7 +68,7 @@ func (a *API) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.
 // a given category,
 // a given weapon name,
 // or returns all loadouts if category / weapon name are not provided
-func (a *API) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
+func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := request.URL.Query()
 	// category and weapon are optional query parameters and are stored
@@ -80,13 +80,13 @@ func (a *API) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.R
 	// return loadouts for specific category
 	if category != "" {
 		query := bson.M{"category": category}
-		loadouts = a.readManyLoadouts(query)
+		loadouts = srv.readManyLoadouts(query)
 	} else if weapon != "" { // else return loadouts for specific weapon
 		query := bson.M{"weapon": weapon}
-		loadouts = a.readManyLoadouts(query)
+		loadouts = srv.readManyLoadouts(query)
 	} else { // else return all loadouts in the loadouts collection
 		query := bson.M{}
-		loadouts = a.readManyLoadouts(query)
+		loadouts = srv.readManyLoadouts(query)
 	}
 
 	if loadouts == nil {
@@ -113,9 +113,9 @@ func (a *API) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.R
 
 // readManyLoadouts is a helper function to retrieve all loadouts
 // and contains the true logic for querying the database
-func (a *API) readManyLoadouts(query bson.M) []models.Loadout {
-	db := a.Auth.Database
-	collection := a.Client.Database(db).Collection(a.Auth.LoadoutCollection)
+func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
+	db := srv.Auth.Database
+	collection := srv.Client.Database(db).Collection(srv.Auth.LoadoutCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

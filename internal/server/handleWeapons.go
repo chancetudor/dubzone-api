@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"context"
@@ -21,14 +21,14 @@ import (
 */
 
 // CreateWeaponEndpoint creates a single new weapon in the Weapons collection
-func (a *API) CreateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
+func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var weapon models.Weapon
 	err := json.NewDecoder(request.Body).Decode(&weapon)
 	weapon.WeaponName = strings.ToUpper(weapon.WeaponName)
 
-	db := a.Auth.Database
-	collection := a.Client.Database(db).Collection(a.Auth.WeaponsCollection)
+	db := srv.Auth.Database
+	collection := srv.Client.Database(db).Collection(srv.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	// defer client.Disconnect(ctx)
 	defer cancel()
@@ -59,11 +59,11 @@ func (a *API) CreateWeaponEndpoint(response http.ResponseWriter, request *http.R
 }
 
 // ReadWeaponEndpoint returns weapon data for a specified weapon name
-func (a *API) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
+func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
-	db := a.Auth.Database
-	collection := a.Client.Database(db).Collection(a.Auth.WeaponsCollection)
+	db := srv.Auth.Database
+	collection := srv.Client.Database(db).Collection(srv.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	// defer client.Disconnect(ctx)
 	defer cancel()
@@ -89,7 +89,7 @@ func (a *API) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Req
 // ReadWeaponsEndpoint returns multiple weapons,
 // either all weapons in the Weapons collection
 // or all weapons from an optionally specified game
-func (a *API) ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Request) {
+func (srv *server) ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := request.URL.Query()
 	game := strings.ToUpper(params.Get("game"))
@@ -97,10 +97,10 @@ func (a *API) ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Re
 	var weapons []models.Weapon
 	if game != "" {
 		query := bson.M{"game_from": game}
-		weapons = a.readManyWeapons(query)
+		weapons = srv.readManyWeapons(query)
 	} else {
 		query := bson.M{}
-		weapons = a.readManyWeapons(query)
+		weapons = srv.readManyWeapons(query)
 	}
 
 	if weapons == nil {
@@ -127,9 +127,9 @@ func (a *API) ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Re
 
 // readManyWeapons is a helper function for ReadWeaponsEndpoint
 // and contains the true logic for querying the database
-func (a *API) readManyWeapons(query bson.M) []models.Weapon {
-	db := a.Auth.Database
-	collection := a.Client.Database(db).Collection(a.Auth.WeaponsCollection)
+func (srv *server) readManyWeapons(query bson.M) []models.Weapon {
+	db := srv.Auth.Database
+	collection := srv.Client.Database(db).Collection(srv.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	// defer client.Disconnect(ctx)
 	defer cancel()

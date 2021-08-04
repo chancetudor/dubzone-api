@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/chancetudor/dubzone-api/internal/api"
+	"github.com/chancetudor/dubzone-api/internal/server"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
@@ -16,19 +16,19 @@ func init() {
 	if err == nil {
 		log.SetOutput(file)
 	} else {
-		log.Info("Failed to log to file, using default stderr")
+		log.Error("Failed to log to file, using default stderr")
 	}
 }
 
 func main() {
 	log.Debug("Starting application: " + "func main()")
-	apiContainer := api.NewAPI()
-	defer apiContainer.DisconnectClient()
+	srv := server.NewServer()
+	defer srv.DisconnectClient()
 	log.Debug("Calling ListenAndServe()...")
-	err := http.ListenAndServe(":12345", apiContainer.Router)
+	err := http.ListenAndServe(":12345", srv.Router)
 	if err != nil {
 		log.WithFields(log.Fields{
-			"func": "main()",
+			"func":  "main()",
 			"event": "ListenAndServe",
 		}).Fatal(err)
 	}

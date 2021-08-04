@@ -47,7 +47,7 @@ After installing Go and Docker, run the following commands to start experiencing
 # download the starter kit
 git clone https://github.com/qiangxue/go-rest-api.git
 
-cd go-rest-api
+cd go-rest-server
 
 # start a PostgreSQL database server in a Docker container
 make db-start
@@ -151,15 +151,7 @@ The DB operations implemented by the repository layer should work both with and 
 You can use `dbcontext.DB.Transactional()` in a service method to enclose multiple repository method calls in
 a transaction. For example,
 
-```go
-func serviceMethod(ctx context.Context, repo Repository, transactional dbcontext.TransactionFunc) error {
-    return transactional(ctx, func(ctx context.Context) error {
-        repo.method1(...)
-        repo.method2(...)
-        return nil
-    })
-}
-```
+
 
 If needed, you can also enclose method calls of different repositories in a single transaction. The return value
 of the function in `transactional` above determines if the transaction should be committed or rolled back.
