@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/chancetudor/dubzone-api/internal/auth"
 	"github.com/gorilla/mux"
+	errs "github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -32,7 +33,7 @@ func NewServer() *server {
 // newRouter creates a new Gorilla mux with appropriate options
 func newRouter() *mux.Router {
 	log.Println("Creating new router: " + "func NewRouter()")
-	r := mux.NewRouter().StrictSlash(true)//.UseEncodedPath() TODO add in and unescape paramters where necesse est
+	r := mux.NewRouter().StrictSlash(true) //.UseEncodedPath() TODO add in and unescape paramters where necesse est
 
 	return r
 }
@@ -56,6 +57,12 @@ func newClient() *mongo.Client {
 	}
 
 	return client
+}
+
+// error is a helper function to abstract err handling and logging
+func (srv *server) error(err error, msg string) {
+	errs.Errorf(msg, err)
+	log.Error(err.Error(), msg)
 }
 
 // respond is a helper function to abstract HTTP responses
@@ -101,10 +108,8 @@ func (srv *server) initRouter() {
 	srv.Router.HandleFunc("/weapon", srv.CreateWeaponEndpoint).Methods("POST")
 	srv.Router.HandleFunc("/weapon/{weaponname}", srv.ReadWeaponEndpoint).Methods("GET")
 	// single dmgProfile endpoints, which deal with a single dmgProfile for a given weapon
-	// a.Router.HandleFunc("/dmgprofile/{weaponname}", a.CreateDamageProfileEndpoint).Methods("POST")
 	srv.Router.HandleFunc("/dmgprofile/{weaponname}", srv.ReadDamageProfileEndpoint).Methods("GET")
 	srv.Router.HandleFunc("/dmgprofile/{weaponname}", srv.UpdateDamageProfileEndpoint).Methods("PUT")
-	// a.Router.HandleFunc("/dmgprofile/{weaponname}", a.DeleteDamageProfileEndpoint).Methods("DELETE")
 	// single loadout endpoints, which deal with a single loadout
 	srv.Router.HandleFunc("/loadout", srv.CreateLoadoutEndpoint).Methods("POST")
 	// returns multiple weapons
