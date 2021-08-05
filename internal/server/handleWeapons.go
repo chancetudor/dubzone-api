@@ -30,7 +30,6 @@ func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *h
 	db := srv.Auth.Database
 	collection := srv.Client.Database(db).Collection(srv.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	// defer client.Disconnect(ctx)
 	defer cancel()
 
 	_, err = collection.InsertOne(ctx, weapon)
@@ -48,6 +47,7 @@ func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *h
 
 // ReadWeaponEndpoint returns weapon data for srv specified weapon name
 // GET /weapon/{weaponname}
+// TODO deal with weapon name param containing spaces
 func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	db := srv.Auth.Database
 	collection := srv.Client.Database(db).Collection(srv.Auth.WeaponsCollection)
@@ -58,7 +58,7 @@ func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *htt
 	weaponName := strings.ToUpper(params["weaponname"])
 	var weapon models.Weapon
 	// find weapon using given weaponname
-	// TODO use projection to suppress _id
+	// TODO use mongoDB projection to suppress _id
 	err := collection.FindOne(ctx, bson.D{{"weapon_name", weaponName}}).Decode(&weapon)
 	if err != nil {
 		srv.respond(response, err, http.StatusInternalServerError)
