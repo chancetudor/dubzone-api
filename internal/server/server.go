@@ -2,11 +2,13 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/chancetudor/dubzone-api/internal/auth"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"net/http"
 	"time"
 )
 
@@ -30,7 +32,7 @@ func NewServer() *server {
 // newRouter creates a new Gorilla mux with appropriate options
 func newRouter() *mux.Router {
 	log.Println("Creating new router: " + "func NewRouter()")
-	r := mux.NewRouter().StrictSlash(true)
+	r := mux.NewRouter().StrictSlash(true)//.UseEncodedPath() TODO add in and unescape paramters where necesse est
 
 	return r
 }
@@ -54,6 +56,27 @@ func newClient() *mongo.Client {
 	}
 
 	return client
+}
+
+// respond is a helper function to abstract HTTP responses
+func (srv *server) respond(response http.ResponseWriter, data interface{}, status int) {
+	response.WriteHeader(status)
+
+	if data == nil {
+		response.Write([]byte(`{"message": "Error retrieving data"}`))
+		return
+	}
+
+	if data != nil {
+		if err := json.NewEncoder(response).Encode(data); err != nil {
+			response.WriteHeader(http.StatusBadRequest)
+			response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+			log.WithFields(log.Fields{
+				"func":  "srv.response()",
+				"event": "Encoding data into JSON response",
+			}).Error(err)
+		}
+	}
 }
 
 func (srv *server) DisconnectClient() {
@@ -89,4 +112,6 @@ func (srv *server) initRouter() {
 	srv.Router.HandleFunc("/dmgprofiles", srv.ReadDamageProfilesEndpoint).Methods("GET")
 	// returns multiple loadouts
 	srv.Router.HandleFunc("/loadouts", srv.ReadLoadoutsEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/loadouts/{category}", srv.ReadLoadoutsEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/loadouts/{weaponname}", srv.ReadLoadoutsEndpoint).Methods("GET")
 }

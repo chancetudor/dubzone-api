@@ -20,7 +20,8 @@ import (
 	* Reading loadouts given srv weapon name
 */
 
-// CreateLoadoutEndpoint creates srv single new loadout in the loadouts collection
+// CreateLoadoutEndpoint creates single new loadout in the loadouts collection
+// POST /loadout
 func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var loadout models.Loadout
@@ -41,9 +42,9 @@ func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *
 	defer cancel()
 
 	_, err = collection.InsertOne(ctx, loadout)
+
 	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		srv.respond(response, nil, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "CreateLoadoutEndpoint()",
 			"event": "Inserting into collection",
@@ -51,24 +52,11 @@ func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *
 		return
 	}
 
-	err = json.NewEncoder(response).Encode(loadout.Weapon)
-	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		log.WithFields(log.Fields{
-			"func":  "CreateLoadoutEndpoint()",
-			"event": "Encoding srv weapon name as srv response",
-		}).Error(err)
-		return
-	}
-
-	response.Write([]byte(`{"message": "Weapon added"}`))
+	srv.respond(response, loadout.Weapon, http.StatusOK)
 }
 
-// ReadLoadoutsEndpoint returns loadouts for
-// srv given category,
-// srv given weapon name,
-// or returns all loadouts if category / weapon name are not provided
+// ReadLoadoutsEndpoint returns all loadouts
+// GET /loadouts
 func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
@@ -77,8 +65,7 @@ func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *h
 	loadouts = srv.readManyLoadouts(query)
 
 	if loadouts == nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "cannot find loadouts"}`))
+		srv.respond(response, loadouts, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "ReadLoadoutsEndpoint()",
 			"event": "No loadouts retrieved",
@@ -86,19 +73,11 @@ func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *h
 		return
 	}
 
-	err := json.NewEncoder(response).Encode(loadouts)
-	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		log.WithFields(log.Fields{
-			"func":  "ReadLoadoutsEndpoint()",
-			"event": "Encoding loadouts into JSON response",
-		}).Error(err)
-		return
-	}
+	srv.respond(response, loadouts, http.StatusOK)
 }
 
 // ReadLoadoutsByCategoryEndpoint returns all loadouts with srv specified category
+// GET /loadouts/{category}
 func (srv *server) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := mux.Vars(request)
@@ -110,8 +89,7 @@ func (srv *server) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, 
 	loadouts = srv.readManyLoadouts(query)
 
 	if loadouts == nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "cannot find loadouts"}`))
+		srv.respond(response, loadouts, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "ReadLoadoutsEndpoint()",
 			"event": "No loadouts retrieved",
@@ -119,19 +97,12 @@ func (srv *server) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, 
 		return
 	}
 
-	err := json.NewEncoder(response).Encode(loadouts)
-	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		log.WithFields(log.Fields{
-			"func":  "ReadLoadoutsEndpoint()",
-			"event": "Encoding loadouts into JSON response",
-		}).Error(err)
-		return
-	}
+	srv.respond(response, loadouts, http.StatusOK)
 }
 
 // ReadLoadoutsByWeaponEndpoint returns all loadouts for srv specified weapon
+// GET /loadouts/{weaponname}
+// TODO deal with weapon names containing spaces -- maybe in docs specify that spaces must be represented by "_"?
 func (srv *server) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	params := mux.Vars(request)
@@ -143,8 +114,7 @@ func (srv *server) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, re
 	loadouts = srv.readManyLoadouts(query)
 
 	if loadouts == nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "cannot find loadouts"}`))
+		srv.respond(response, loadouts, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "ReadLoadoutsEndpoint()",
 			"event": "No loadouts retrieved",
@@ -152,16 +122,7 @@ func (srv *server) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, re
 		return
 	}
 
-	err := json.NewEncoder(response).Encode(loadouts)
-	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		log.WithFields(log.Fields{
-			"func":  "ReadLoadoutsEndpoint()",
-			"event": "Encoding loadouts into JSON response",
-		}).Error(err)
-		return
-	}
+	srv.respond(response, loadouts, http.StatusOK)
 }
 
 // readManyLoadouts is srv helper function to retrieve all loadouts
