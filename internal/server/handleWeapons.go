@@ -21,8 +21,8 @@ import (
 */
 
 // CreateWeaponEndpoint creates srv single new weapon in the Weapons collection
+// POST /weapon
 func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
-	response.Header().Add("content-type", "application/json")
 	var weapon models.Weapon
 	err := json.NewDecoder(request.Body).Decode(&weapon)
 	weapon.WeaponName = strings.ToUpper(weapon.WeaponName)
@@ -35,8 +35,7 @@ func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *h
 
 	_, err = collection.InsertOne(ctx, weapon)
 	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		srv.respond(response, err, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "CreateWeaponEndpoint()",
 			"event": "Inserting into collection",
@@ -44,24 +43,12 @@ func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *h
 		return
 	}
 
-	err = json.NewEncoder(response).Encode(weapon.WeaponName)
-	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		log.WithFields(log.Fields{
-			"func":  "CreateWeaponEndpoint()",
-			"event": "Encoding srv weapon name as srv response",
-		}).Error(err)
-		return
-	}
-
-	response.Write([]byte(`{"message": "Weapon added"}`))
+	srv.respond(response, weapon.WeaponName, http.StatusOK)
 }
 
 // ReadWeaponEndpoint returns weapon data for srv specified weapon name
+// GET /weapon/{weaponname}
 func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
-	response.Header().Add("content-type", "application/json")
-
 	db := srv.Auth.Database
 	collection := srv.Client.Database(db).Collection(srv.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -74,8 +61,7 @@ func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *htt
 	// TODO use projection to suppress _id
 	err := collection.FindOne(ctx, bson.D{{"weapon_name", weaponName}}).Decode(&weapon)
 	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		srv.respond(response, err, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "ReadWeaponEndpoint()",
 			"event": "Finding weapon in database",
@@ -83,22 +69,18 @@ func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *htt
 		return
 	}
 
-	err = json.NewEncoder(response).Encode(weapon)
+	srv.respond(response, weapon, http.StatusOK)
 }
 
-// ReadWeaponsEndpoint returns multiple weapons,
-// either all weapons in the Weapons collection
-// or all weapons from an optionally specified game
+// ReadWeaponsEndpoint returns all weapons in the Weapons collection
+// GET /weapons
 func (srv *server) ReadWeaponsEndpoint(response http.ResponseWriter, request *http.Request) {
-	response.Header().Add("content-type", "application/json")
-
 	var weapons []models.Weapon
 	query := bson.M{}
 	weapons = srv.readManyWeapons(query)
 
 	if weapons == nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "cannot find loadouts"}`))
+		srv.respond(response, weapons, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "ReadWeaponsEndpoint()",
 			"event": "No weapons retrieved",
@@ -106,22 +88,12 @@ func (srv *server) ReadWeaponsEndpoint(response http.ResponseWriter, request *ht
 		return
 	}
 
-	err := json.NewEncoder(response).Encode(weapons)
-	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		log.WithFields(log.Fields{
-			"func":  "ReadWeaponsEndpoint()",
-			"event": "Encoding weapons into JSON response",
-		}).Error(err)
-		return
-	}
+	srv.respond(response, weapons, http.StatusOK)
 }
 
-// ReadWeaponsByGameEndpoint returns all weapons from srv specified game
+// ReadWeaponsByGameEndpoint returns all weapons from specified game
+// GET /weapons/{game}
 func (srv *server) ReadWeaponsByGameEndpoint(response http.ResponseWriter, request *http.Request) {
-	response.Header().Add("content-type", "application/json")
-
 	params := mux.Vars(request)
 	game := strings.ToUpper(params["game"])
 	var weapons []models.Weapon
@@ -129,8 +101,7 @@ func (srv *server) ReadWeaponsByGameEndpoint(response http.ResponseWriter, reque
 	weapons = srv.readManyWeapons(query)
 
 	if weapons == nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "cannot find loadouts"}`))
+		srv.respond(response, weapons, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "ReadWeaponsEndpoint()",
 			"event": "No weapons retrieved",
@@ -138,16 +109,7 @@ func (srv *server) ReadWeaponsByGameEndpoint(response http.ResponseWriter, reque
 		return
 	}
 
-	err := json.NewEncoder(response).Encode(weapons)
-	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		log.WithFields(log.Fields{
-			"func":  "ReadWeaponsEndpoint()",
-			"event": "Encoding weapons into JSON response",
-		}).Error(err)
-		return
-	}
+	srv.respond(response, weapons, http.StatusOK)
 }
 
 // readManyWeapons is srv helper function for ReadWeaponsEndpoint
@@ -156,7 +118,6 @@ func (srv *server) readManyWeapons(query bson.M) []models.Weapon {
 	db := srv.Auth.Database
 	collection := srv.Client.Database(db).Collection(srv.Auth.WeaponsCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	// defer client.Disconnect(ctx)
 	defer cancel()
 
 	// find all documents using the given bson.M{} query,

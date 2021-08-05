@@ -2,11 +2,13 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/chancetudor/dubzone-api/internal/auth"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"net/http"
 	"time"
 )
 
@@ -56,6 +58,28 @@ func newClient() *mongo.Client {
 	return client
 }
 
+// respond is a helper function to abstract HTTP responses
+func (srv *server) respond(response http.ResponseWriter, data interface{}, status int) {
+	response.Header().Add("content-type", "application/json")
+	response.WriteHeader(status)
+
+	if data == nil {
+		response.Write([]byte(`{"message": "Error retrieving data"}`))
+		return
+	}
+
+	if data != nil {
+		if err := json.NewEncoder(response).Encode(data); err != nil {
+			response.WriteHeader(http.StatusBadRequest)
+			response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+			log.WithFields(log.Fields{
+				"func":  "srv.response()",
+				"event": "Encoding data into JSON response",
+			}).Error(err)
+		}
+	}
+}
+
 func (srv *server) DisconnectClient() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -85,6 +109,7 @@ func (srv *server) initRouter() {
 	srv.Router.HandleFunc("/loadout", srv.CreateLoadoutEndpoint).Methods("POST")
 	// returns multiple weapons
 	srv.Router.HandleFunc("/weapons", srv.ReadWeaponsEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/weapons/{game}", srv.ReadWeaponsEndpoint).Methods("GET")
 	// returns multiple dmgProfiles
 	srv.Router.HandleFunc("/dmgprofiles", srv.ReadDamageProfilesEndpoint).Methods("GET")
 	// returns multiple loadouts
