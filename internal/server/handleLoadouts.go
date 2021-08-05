@@ -23,7 +23,6 @@ import (
 // CreateLoadoutEndpoint creates single new loadout in the loadouts collection
 // POST /loadout
 func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
-	response.Header().Add("content-type", "application/json")
 	var loadout models.Loadout
 	// decode JSON request payload into Loadout
 	err := json.NewDecoder(request.Body).Decode(&loadout)
@@ -58,8 +57,6 @@ func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *
 // ReadLoadoutsEndpoint returns all loadouts
 // GET /loadouts
 func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
-	response.Header().Add("content-type", "application/json")
-
 	var loadouts []models.Loadout
 	query := bson.M{}
 	loadouts = srv.readManyLoadouts(query)
@@ -79,7 +76,6 @@ func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *h
 // ReadLoadoutsByCategoryEndpoint returns all loadouts with srv specified category
 // GET /loadouts/{category}
 func (srv *server) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, request *http.Request) {
-	response.Header().Add("content-type", "application/json")
 	params := mux.Vars(request)
 	// category and weapon are optional query parameters and are stored
 	// in the database in Uppercase, so we capitalize the query params
@@ -104,7 +100,6 @@ func (srv *server) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, 
 // GET /loadouts/{weaponname}
 // TODO deal with weapon names containing spaces -- maybe in docs specify that spaces must be represented by "_"?
 func (srv *server) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
-	response.Header().Add("content-type", "application/json")
 	params := mux.Vars(request)
 	// category and weapon are optional query parameters and are stored
 	// in the database in Uppercase, so we capitalize the query params
