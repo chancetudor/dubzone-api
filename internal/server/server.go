@@ -60,6 +60,7 @@ func newClient() *mongo.Client {
 
 // respond is a helper function to abstract HTTP responses
 func (srv *server) respond(response http.ResponseWriter, data interface{}, status int) {
+	response.Header().Add("content-type", "application/json")
 	response.WriteHeader(status)
 
 	if data == nil {
@@ -108,6 +109,7 @@ func (srv *server) initRouter() {
 	srv.Router.HandleFunc("/loadout", srv.CreateLoadoutEndpoint).Methods("POST")
 	// returns multiple weapons
 	srv.Router.HandleFunc("/weapons", srv.ReadWeaponsEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/weapons/{game}", srv.ReadWeaponsEndpoint).Methods("GET")
 	// returns multiple dmgProfiles
 	srv.Router.HandleFunc("/dmgprofiles", srv.ReadDamageProfilesEndpoint).Methods("GET")
 	// returns multiple loadouts
