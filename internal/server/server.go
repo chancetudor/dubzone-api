@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/chancetudor/dubzone-api/internal/auth"
 	"github.com/gorilla/mux"
+	errs "github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -58,6 +59,12 @@ func newClient() *mongo.Client {
 	return client
 }
 
+// error is a helper function to abstract err handling and logging
+func (srv *server) error(err error, msg string) {
+	errs.Errorf(msg, err)
+	log.Error(err.Error(), msg)
+}
+
 // respond is a helper function to abstract HTTP responses
 func (srv *server) respond(response http.ResponseWriter, data interface{}, status int) {
 	response.Header().Add("content-type", "application/json")
@@ -101,17 +108,20 @@ func (srv *server) initRouter() {
 	srv.Router.HandleFunc("/weapon", srv.CreateWeaponEndpoint).Methods("POST")
 	srv.Router.HandleFunc("/weapon/{weaponname}", srv.ReadWeaponEndpoint).Methods("GET")
 	// single dmgProfile endpoints, which deal with a single dmgProfile for a given weapon
-	// a.Router.HandleFunc("/dmgprofile/{weaponname}", a.CreateDamageProfileEndpoint).Methods("POST")
-	srv.Router.HandleFunc("/dmgprofile/{weaponname}", srv.ReadDamageProfileEndpoint).Methods("GET")
-	srv.Router.HandleFunc("/dmgprofile/{weaponname}", srv.UpdateDamageProfileEndpoint).Methods("PUT")
-	// a.Router.HandleFunc("/dmgprofile/{weaponname}", a.DeleteDamageProfileEndpoint).Methods("DELETE")
+	srv.Router.HandleFunc("/dmgprofile/{weaponname}/close", srv.ReadCloseDamageProfile).Methods("GET")
+	srv.Router.HandleFunc("/dmgprofile/{weaponname}/mid", srv.ReadMidDamageProfile).Methods("GET")
+	srv.Router.HandleFunc("/dmgprofile/{weaponname}/far", srv.ReadFarDamageProfile).Methods("GET")
+	srv.Router.HandleFunc("/dmgprofile/{weaponname}", srv.UpdateDamageProfile).Methods("PUT")
+	srv.Router.HandleFunc("/dmgprofile/{weaponname}/close", srv.UpdateCloseDamageProfile).Methods("PUT")
+	srv.Router.HandleFunc("/dmgprofile/{weaponname}/mid", srv.UpdateMidDamageProfile).Methods("PUT")
+	srv.Router.HandleFunc("/dmgprofile/{weaponname}/far", srv.UpdateFarDamageProfile).Methods("PUT")
 	// single loadout endpoints, which deal with a single loadout
 	srv.Router.HandleFunc("/loadout", srv.CreateLoadoutEndpoint).Methods("POST")
 	// returns multiple weapons
 	srv.Router.HandleFunc("/weapons", srv.ReadWeaponsEndpoint).Methods("GET")
 	srv.Router.HandleFunc("/weapons/{game}", srv.ReadWeaponsEndpoint).Methods("GET")
 	// returns multiple dmgProfiles
-	srv.Router.HandleFunc("/dmgprofiles", srv.ReadDamageProfilesEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/dmgprofiles/{weaponname}", srv.ReadDamageProfiles).Methods("GET")
 	// returns multiple loadouts
 	srv.Router.HandleFunc("/loadouts", srv.ReadLoadoutsEndpoint).Methods("GET")
 	srv.Router.HandleFunc("/loadouts/{category}", srv.ReadLoadoutsEndpoint).Methods("GET")

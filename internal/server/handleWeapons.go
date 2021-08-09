@@ -8,6 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
 	"strings"
 	"time"
@@ -35,7 +36,7 @@ func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *h
 
 	_, err = collection.InsertOne(ctx, weapon)
 	if err != nil {
-		srv.respond(response, err, http.StatusInternalServerError)
+		srv.respond(response, nil, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "CreateWeaponEndpoint()",
 			"event": "Inserting into collection",
@@ -57,11 +58,16 @@ func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *htt
 	params := mux.Vars(request)
 	weaponName := strings.ToUpper(params["weaponname"])
 	var weapon models.Weapon
+	projection := bson.D{
+		{"_id", 0},
+	}
 	// find weapon using given weaponname
-	// TODO use projection to suppress _id
-	err := collection.FindOne(ctx, bson.D{{"weapon_name", weaponName}}).Decode(&weapon)
+	err := collection.FindOne(ctx, bson.D{
+		{"weapon_name", weaponName},
+	},
+	options.FindOne().SetProjection(projection)).Decode(&weapon)
 	if err != nil {
-		srv.respond(response, err, http.StatusInternalServerError)
+		srv.respond(response, nil, http.StatusInternalServerError)
 		log.WithFields(log.Fields{
 			"func":  "ReadWeaponEndpoint()",
 			"event": "Finding weapon in database",
