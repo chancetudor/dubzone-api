@@ -62,7 +62,7 @@ func (srv *server) ReadDamageProfiles(response http.ResponseWriter, request *htt
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	params:= mux.Vars(request)
+	params := mux.Vars(request)
 	weaponName := strings.ToUpper(params["weaponname"])
 	var dmgProfile models.DamageProfile
 	projection := bson.D{
@@ -75,10 +75,10 @@ func (srv *server) ReadDamageProfiles(response http.ResponseWriter, request *htt
 	err := collection.FindOne(ctx, bson.D{
 		{"weapon_name", weaponName},
 	},
-	options.FindOne().SetProjection(projection)).Decode(&dmgProfile)
+		options.FindOne().SetProjection(projection)).Decode(&dmgProfile)
 	if err != nil {
 		srv.respond(response, nil, http.StatusInternalServerError)
-		srv.error(err, "Error finding weapon in database")
+		srv.error(err, " Error finding weapon in database", "ReadDamageProfiles")
 		return
 	}
 

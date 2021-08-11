@@ -33,7 +33,7 @@ func NewServer() *server {
 // newRouter creates a new Gorilla mux with appropriate options
 func newRouter() *mux.Router {
 	log.Println("Creating new router: " + "func NewRouter()")
-	r := mux.NewRouter().StrictSlash(true)//.UseEncodedPath() TODO add in and unescape paramters where necesse est
+	r := mux.NewRouter().StrictSlash(true) //.UseEncodedPath() TODO add in and unescape paramters where necesse est
 
 	return r
 }
@@ -60,9 +60,12 @@ func newClient() *mongo.Client {
 }
 
 // error is a helper function to abstract err handling and logging
-func (srv *server) error(err error, msg string) {
+func (srv *server) error(err error, msg string, function string) {
 	errs.Errorf(msg, err)
-	log.Error(err.Error(), msg)
+	log.WithFields(log.Fields{
+		"func":  function,
+		"event": msg,
+	}).Error(err)
 }
 
 // respond is a helper function to abstract HTTP responses

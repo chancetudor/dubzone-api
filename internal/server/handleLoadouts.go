@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/chancetudor/dubzone-api/internal/models"
 	"github.com/gorilla/mux"
-	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
@@ -28,10 +27,7 @@ func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *
 	// decode JSON request payload into Loadout
 	err := json.NewDecoder(request.Body).Decode(&loadout)
 	if err != nil {
-		log.WithFields(log.Fields{
-			"func":  "CreateLoadoutEndpoint()",
-			"event": "Decoding JSON to loadout struct",
-		}).Fatal(err)
+		srv.error(err, "Decoding JSON to Loadout struct", "CreateLoadoutEndpoint")
 	}
 	// capitalize weapon name to match DB schema
 	loadout.Weapon = strings.ToUpper(loadout.Weapon)
@@ -45,10 +41,7 @@ func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *
 
 	if err != nil {
 		srv.respond(response, nil, http.StatusInternalServerError)
-		log.WithFields(log.Fields{
-			"func":  "CreateLoadoutEndpoint()",
-			"event": "Inserting into collection",
-		}).Error(err)
+		srv.error(err, "Inserting into collection", "CreateLoadoutEndpoint")
 		return
 	}
 
@@ -66,10 +59,7 @@ func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *h
 
 	if loadouts == nil {
 		srv.respond(response, loadouts, http.StatusInternalServerError)
-		log.WithFields(log.Fields{
-			"func":  "ReadLoadoutsEndpoint()",
-			"event": "No loadouts retrieved",
-		}).Error()
+		srv.error(nil, "No loadouts retrieved", "ReadLoadoutsEndpoint")
 		return
 	}
 
@@ -90,10 +80,7 @@ func (srv *server) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, 
 
 	if loadouts == nil {
 		srv.respond(response, loadouts, http.StatusInternalServerError)
-		log.WithFields(log.Fields{
-			"func":  "ReadLoadoutsEndpoint()",
-			"event": "No loadouts retrieved",
-		}).Error()
+		srv.error(nil, "No loadouts retrieved", "ReadLoadoutsByCategoryEndpoint")
 		return
 	}
 
@@ -115,10 +102,7 @@ func (srv *server) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, re
 
 	if loadouts == nil {
 		srv.respond(response, loadouts, http.StatusInternalServerError)
-		log.WithFields(log.Fields{
-			"func":  "ReadLoadoutsEndpoint()",
-			"event": "No loadouts retrieved",
-		}).Error()
+		srv.error(nil, "No loadouts retrieved", "ReadLoadoutsByWeaponEndpoint")
 		return
 	}
 
@@ -137,10 +121,7 @@ func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
 	// where the bson.M{} query can specify category, weapon, or be empty (find all loadouts)
 	cursor, err := collection.Find(ctx, query)
 	if err != nil {
-		log.WithFields(log.Fields{
-			"func":  "readManyLoadouts()",
-			"event": "Finding srv loadout in DB",
-		}).Error(err)
+		srv.error(err, "Finding loadout in DB", "readManyLoadouts")
 		return nil
 	}
 	defer func(cursor *mongo.Cursor, ctx context.Context) {
@@ -153,10 +134,7 @@ func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
 	for cursor.Next(ctx) {
 		var loadout models.Loadout
 		if err = cursor.Decode(&loadout); err != nil {
-			log.WithFields(log.Fields{
-				"func":  "readManyLoadouts()",
-				"event": "Decoding srv cursor into srv Loadout",
-			}).Error(err)
+			srv.error(err, "Decoding cursor into Loadout struct", "readManyLoadouts")
 			return nil
 		}
 		// append encoded Loadout in []Loadouts
