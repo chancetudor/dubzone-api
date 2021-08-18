@@ -4,9 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/chancetudor/dubzone-api/internal/auth"
+	"github.com/chancetudor/dubzone-api/internal/logger"
 	"github.com/gorilla/mux"
-	errs "github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
@@ -32,7 +31,7 @@ func NewServer() *server {
 
 // newRouter creates a new Gorilla mux with appropriate options
 func newRouter() *mux.Router {
-	log.Println("Creating new router: " + "func NewRouter()")
+	logger.Debug("Creating new router", "newRouter()")
 	r := mux.NewRouter().StrictSlash(true) //.UseEncodedPath() TODO add in and unescape paramters where necesse est
 
 	return r
@@ -40,7 +39,7 @@ func newRouter() *mux.Router {
 
 // newClient creates a new mongo client with appropriate authentication
 func newClient() *mongo.Client {
-	log.Println("Creating new client: " + "func NewClient()")
+	logger.Debug("Creating new client", "NewClient()")
 
 	mongoAuth := auth.NewAuth()
 	clientOptions := options.Client().
@@ -50,42 +49,43 @@ func newClient() *mongo.Client {
 
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
-		log.WithFields(log.Fields{
-			"func":  "NewClient()",
-			"event": "Connecting to mongoDB",
-		}).Fatal(err)
+		logger.Fatal(err, "Connecting to mongoDB", "NewClient()")
 	}
 
 	return client
 }
 
-// error is a helper function to abstract err handling and logging
-func (srv *server) error(err error, msg string, function string) {
-	errs.Errorf(msg, err)
-	log.WithFields(log.Fields{
-		"func":  function,
-		"event": msg,
-	}).Error(err)
-}
+// // error is a helper function to abstract err handling and logging
+// func (srv *server) error(err error, msg string, function string) {
+// 	errs.Errorf(msg, err)
+// 	log.WithFields(log.Fields{
+// 		"func":  function,
+// 		"event": msg,
+// 	}).Error(err)
+// }
 
 // respond is a helper function to abstract HTTP responses
-func (srv *server) respond(response http.ResponseWriter, data interface{}, status int) {
+func (srv *server) respond(response http.ResponseWriter, data interface{}, status int, err error) {
 	response.Header().Add("content-type", "application/json")
+
+	if err != nil {
+		http.Error(response, err.Error(), status)
+		return
+	}
+
 	response.WriteHeader(status)
 
 	if data == nil {
-		response.Write([]byte(`{"message": "Error retrieving data"}`))
-		return
+		_, err := response.Write([]byte(`"message: " + "Data not found"`))
+		if err != nil {
+			return
+		}
 	}
 
 	if data != nil {
 		if err := json.NewEncoder(response).Encode(data); err != nil {
-			response.WriteHeader(http.StatusBadRequest)
-			response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-			log.WithFields(log.Fields{
-				"func":  "srv.response()",
-				"event": "Encoding data into JSON response",
-			}).Error(err)
+			http.Error(response, err.Error(), http.StatusInternalServerError)
+			logger.Error(err, "Encoding data into JSON response", "srv.response()")
 		}
 	}
 }
@@ -96,17 +96,14 @@ func (srv *server) DisconnectClient() {
 	defer func(Client *mongo.Client, ctx context.Context) {
 		err := Client.Disconnect(ctx)
 		if err != nil {
-			log.WithFields(log.Fields{
-				"func":  "main()",
-				"event": "Client disconnect",
-			}).Fatal(err)
+			logger.Fatal(err, "Error disconnecting mongo client", "DisconnectClient")
 		}
 	}(srv.Client, ctx)
 }
 
 // initRouter initializes handler funcs on router
 func (srv *server) initRouter() {
-	log.Println("Initializing router, adding handlers: " + "func InitRouter()")
+	logger.Debug("Initializing router, adding handlers", "InitRouter()")
 	// single weapon endpoints, which deal with a single weapon
 	srv.Router.HandleFunc("/weapon", srv.CreateWeaponEndpoint).Methods("POST")
 	srv.Router.HandleFunc("/weapon/{weaponname}", srv.ReadWeaponEndpoint).Methods("GET")

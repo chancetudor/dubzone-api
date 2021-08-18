@@ -4,7 +4,7 @@ import (
 	p "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Weapon represents an Warzone weapon.
+// Weapon represents a Warzone weapon.
 type Weapon struct {
 	ID             p.ObjectID    `json:"_id,omitempty" bson:"_id,omitempty"`
 	WeaponName     string        `json:"weapon_name,omitempty" bson:"weapon_name,omitempty"`

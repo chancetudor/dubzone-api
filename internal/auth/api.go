@@ -1,8 +1,8 @@
 package auth
 
 import (
+	"github.com/chancetudor/dubzone-api/internal/logger"
 	"github.com/joho/godotenv"
-	log "github.com/sirupsen/logrus"
 	"os"
 )
 
@@ -16,14 +16,10 @@ type MongoAuth struct {
 // NewAuth Creates a new MongoAuth struct, containing the username and password necessary to connect to a MongoDB client
 // along with the necessary collection names
 func NewAuth() *MongoAuth {
-	log.Println("Retrieving auth info: " + "func auth.NewAuth()")
+	logger.Debug("Retrieving auth info", "auth.NewAuth()")
 	err := godotenv.Load("./config/dev.env")
 	if err != nil {
-		log.WithFields(log.Fields{
-			"func": "NewAuth()",
-			"event": "Loading .env file",
-			"line": 20,
-		}).Fatal(err)
+		logger.Fatal(err, "Loading .env file", "auth.NewAuth()")
 	}
 
 	return &MongoAuth{

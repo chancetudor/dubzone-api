@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"github.com/chancetudor/dubzone-api/internal/logger"
 	"github.com/chancetudor/dubzone-api/internal/models"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
@@ -35,12 +36,12 @@ func (srv *server) CreateWeaponEndpoint(response http.ResponseWriter, request *h
 
 	_, err = collection.InsertOne(ctx, weapon)
 	if err != nil {
-		srv.respond(response, nil, http.StatusInternalServerError)
-		srv.error(err, " Inserting weapon into collection", " CreateWeaponEndpoint")
+		srv.respond(response, nil, http.StatusInternalServerError, err)
+		logger.Error(err, "Inserting weapon into collection", "CreateWeaponEndpoint")
 		return
 	}
 
-	srv.respond(response, weapon.WeaponName, http.StatusOK)
+	srv.respond(response, weapon.WeaponName, http.StatusOK, nil)
 }
 
 // ReadWeaponEndpoint returns weapon data for srv specified weapon name
@@ -63,12 +64,12 @@ func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *htt
 	},
 		options.FindOne().SetProjection(projection)).Decode(&weapon)
 	if err != nil {
-		srv.respond(response, nil, http.StatusInternalServerError)
-		srv.error(err, " Finding weapon in database", " ReadWeaponEndpoint")
+		srv.respond(response, nil, http.StatusInternalServerError, err)
+		logger.Error(err, "Finding weapon in database", "ReadWeaponEndpoint")
 		return
 	}
 
-	srv.respond(response, weapon, http.StatusOK)
+	srv.respond(response, weapon, http.StatusOK, nil)
 }
 
 // ReadWeaponsEndpoint returns all weapons in the Weapons collection
@@ -79,12 +80,13 @@ func (srv *server) ReadWeaponsEndpoint(response http.ResponseWriter, request *ht
 	weapons = srv.readManyWeapons(query)
 
 	if weapons == nil {
-		srv.respond(response, weapons, http.StatusInternalServerError)
-		srv.error(nil, " No weapons retrieved", " ReadWeaponsEndpoint")
+		// an err cannot be passed to respond() but an error still occurred
+		srv.respond(response, weapons, http.StatusInternalServerError, nil)
+		logger.Error(nil, "No weapons retrieved", "ReadWeaponsEndpoint")
 		return
 	}
 
-	srv.respond(response, weapons, http.StatusOK)
+	srv.respond(response, weapons, http.StatusOK, nil)
 }
 
 // ReadWeaponsByGameEndpoint returns all weapons from specified game
@@ -97,12 +99,13 @@ func (srv *server) ReadWeaponsByGameEndpoint(response http.ResponseWriter, reque
 	weapons = srv.readManyWeapons(query)
 
 	if weapons == nil {
-		srv.respond(response, weapons, http.StatusInternalServerError)
-		srv.error(nil, " No weapons retrieved", " ReadWeaponsByGameEndpoint")
+		// an err cannot be passed to respond() but an error still occurred
+		srv.respond(response, weapons, http.StatusInternalServerError, nil)
+		logger.Error(nil, "No weapons retrieved", "ReadWeaponsByGameEndpoint")
 		return
 	}
 
-	srv.respond(response, weapons, http.StatusOK)
+	srv.respond(response, weapons, http.StatusOK, nil)
 }
 
 // readManyWeapons is srv helper function for ReadWeaponsEndpoint
@@ -118,7 +121,7 @@ func (srv *server) readManyWeapons(query bson.M) []models.Weapon {
 	// or the bson.M{} query can be empty (find all weapons)
 	cursor, err := collection.Find(ctx, query)
 	if err != nil {
-		srv.error(err, " Finding weapons in database", " readManyWeapons")
+		logger.Error(err, "Finding weapons in database", "readManyWeapons")
 		return nil
 	}
 	defer func(cursor *mongo.Cursor, ctx context.Context) {
@@ -131,7 +134,7 @@ func (srv *server) readManyWeapons(query bson.M) []models.Weapon {
 	for cursor.Next(ctx) {
 		var weapon models.Weapon
 		if err = cursor.Decode(&weapon); err != nil {
-			srv.error(err, " Decoding cursor into Weapon", " readManyWeapons")
+			logger.Error(err, "Decoding cursor into Weapon", "readManyWeapons")
 			return nil
 		}
 		// append encoded Loadout in []Loadouts
