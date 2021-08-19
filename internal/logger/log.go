@@ -16,7 +16,7 @@ func InitLogger() {
 		log.Error("Failed to log to file, using default stderr")
 	}
 
-	log.Debug("STARTING APPLICATION")
+	log.Println("STARTING APPLICATION")
 }
 
 // Fatal is a helper function to abstract fatal err handling and logging

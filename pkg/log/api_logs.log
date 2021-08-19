@@ -1,1 +1,26 @@
 time="2021-08-17T18:51:25-04:00" level=error msg="mongo: no documents in result" event="Finding weapon in database" func=ReadWeaponEndpoint
+time="2021-08-18T19:29:27-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T19:29:27-04:00" level=info msg="Creating new router: func NewRouter()"
+time="2021-08-18T19:29:27-04:00" level=info msg="Creating new client: func NewClient()"
+time="2021-08-18T19:30:25-04:00" level=error msg="mongo: no documents in result" event="Error finding weapon in database" func=ReadDamageProfiles
+time="2021-08-18T19:33:27-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T19:33:27-04:00" level=info msg="Creating new router: func NewRouter()"
+time="2021-08-18T19:33:27-04:00" level=info msg="Creating new client: func NewClient()"
+time="2021-08-18T19:33:32-04:00" level=error msg="<nil>" event="Error finding weapon in database" func=ReadDamageProfiles
+time="2021-08-18T19:33:36-04:00" level=error msg="<nil>" event="Error finding weapon in database" func=ReadDamageProfiles
+time="2021-08-18T19:33:53-04:00" level=error msg="<nil>" event="Error finding weapon in database" func=ReadDamageProfiles
+time="2021-08-18T19:34:53-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T19:34:53-04:00" level=info msg="Creating new router: func NewRouter()"
+time="2021-08-18T19:34:53-04:00" level=info msg="Creating new client: func NewClient()"
+time="2021-08-18T19:36:13-04:00" level=error msg="mongo: no documents in result" event="Error finding weapon in database" func=ReadDamageProfiles
+time="2021-08-18T19:36:23-04:00" level=error msg="mongo: no documents in result" event="Error finding weapon in database" func=ReadDamageProfiles
+time="2021-08-18T19:37:47-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T19:37:47-04:00" level=info msg="Creating new router: func NewRouter()"
+time="2021-08-18T19:37:47-04:00" level=info msg="Creating new client: func NewClient()"
+time="2021-08-18T19:45:39-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T19:46:13-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T19:46:54-04:00" level=error msg="mongo: no documents in result" event="Error finding weapon in database" func=ReadDamageProfiles
+time="2021-08-18T19:47:34-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T19:47:44-04:00" level=error msg="mongo: no documents in result" event="Error finding weapon in database" func=ReadDamageProfiles
+time="2021-08-18T20:37:40-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T20:38:52-04:00" level=info msg="STARTING APPLICATION"

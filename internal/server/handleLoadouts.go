@@ -40,12 +40,12 @@ func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *
 	_, err = collection.InsertOne(ctx, loadout)
 
 	if err != nil {
-		srv.respond(response, nil, http.StatusInternalServerError, err)
+		srv.respond(response, err, http.StatusInternalServerError)
 		logger.Error(err, "Inserting into collection", "CreateLoadoutEndpoint")
 		return
 	}
 
-	srv.respond(response, loadout.Weapon, http.StatusOK, nil)
+	srv.respond(response, loadout.Weapon, http.StatusOK)
 }
 
 // ReadLoadoutsEndpoint returns all loadouts
@@ -53,16 +53,15 @@ func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *
 func (srv *server) ReadLoadoutsEndpoint(response http.ResponseWriter, request *http.Request) {
 	var loadouts []models.Loadout
 	query := bson.M{}
-	loadouts = srv.readManyLoadouts(query)
+	loadouts, err := srv.readManyLoadouts(query)
 
-	if loadouts == nil {
-		// an err cannot be passed to respond() but an error still occurred
-		srv.respond(response, loadouts, http.StatusInternalServerError, nil)
+	if err != nil {
+		srv.respond(response, err, http.StatusInternalServerError)
 		logger.Error(nil, "No loadouts retrieved", "ReadLoadoutsEndpoint")
 		return
 	}
 
-	srv.respond(response, loadouts, http.StatusOK, nil)
+	srv.respond(response, loadouts, http.StatusOK)
 }
 
 // ReadLoadoutsByCategoryEndpoint returns all loadouts with srv specified category
@@ -74,16 +73,15 @@ func (srv *server) ReadLoadoutsByCategoryEndpoint(response http.ResponseWriter, 
 	category := strings.Title(params["category"])
 	var loadouts []models.Loadout
 	query := bson.M{"category": category}
-	loadouts = srv.readManyLoadouts(query)
+	loadouts, err := srv.readManyLoadouts(query)
 
-	if loadouts == nil {
-		// an err cannot be passed to respond() but an error still occurred
-		srv.respond(response, loadouts, http.StatusInternalServerError, nil)
-		//logger.Error(nil, "No loadouts retrieved", "ReadLoadoutsByCategoryEndpoint")
+	if err != nil {
+		srv.respond(response, err, http.StatusInternalServerError)
+		logger.Error(err, "No loadouts retrieved", "ReadLoadoutsByCategoryEndpoint")
 		return
 	}
 
-	srv.respond(response, loadouts, http.StatusOK, nil)
+	srv.respond(response, loadouts, http.StatusOK)
 }
 
 // ReadLoadoutsByWeaponEndpoint returns all loadouts for srv specified weapon
@@ -96,22 +94,20 @@ func (srv *server) ReadLoadoutsByWeaponEndpoint(response http.ResponseWriter, re
 	weaponName := strings.ToUpper(params["weaponname"])
 	var loadouts []models.Loadout
 	query := bson.M{"category": weaponName}
-	loadouts = srv.readManyLoadouts(query)
+	loadouts, err := srv.readManyLoadouts(query)
 
-	if loadouts == nil {
-		// an err cannot be passed to respond() but an error still occurred
-		srv.respond(response, loadouts, http.StatusInternalServerError, nil)
-		logger.Error(nil, "No loadouts retrieved", "ReadLoadoutsByWeaponEndpoint")
-		//logger.Error(nil, "No loadouts retrieved", "ReadLoadoutsByWeaponEndpoint")
+	if err != nil {
+		srv.respond(response, err, http.StatusInternalServerError)
+		logger.Error(err, "No loadouts retrieved", "ReadLoadoutsByWeaponEndpoint")
 		return
 	}
 
-	srv.respond(response, loadouts, http.StatusOK, nil)
+	srv.respond(response, loadouts, http.StatusOK)
 }
 
 // readManyLoadouts is srv helper function to retrieve all loadouts
 // and contains the true logic for querying the database
-func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
+func (srv *server) readManyLoadouts(query bson.M) ([]models.Loadout, error) {
 	db := srv.Auth.Database
 	collection := srv.Client.Database(db).Collection(srv.Auth.LoadoutCollection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -122,7 +118,7 @@ func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
 	cursor, err := collection.Find(ctx, query)
 	if err != nil {
 		logger.Error(err, "Finding loadout in DB", "readManyLoadouts")
-		return nil
+		return nil, err
 	}
 	defer func(cursor *mongo.Cursor, ctx context.Context) {
 		_ = cursor.Close(ctx)
@@ -135,16 +131,16 @@ func (srv *server) readManyLoadouts(query bson.M) []models.Loadout {
 		var loadout models.Loadout
 		if err = cursor.Decode(&loadout); err != nil {
 			logger.Error(err, "Decoding cursor into Loadout struct", "readManyLoadouts")
-			return nil
+			return nil, err
 		}
 		// append encoded Loadout in []Loadouts
 		loadouts = append(loadouts, loadout)
 	}
 	if err := cursor.Err(); err != nil {
-		return nil
+		return nil, err
 	}
 
-	return loadouts
+	return loadouts, nil
 }
 
 /*
