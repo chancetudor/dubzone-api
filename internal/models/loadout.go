@@ -1,16 +1,17 @@
 package models
 
-// Loadout represents a Warzone loadout.
+import p "go.mongodb.org/mongo-driver/bson/primitive"
+
+// Loadout represents a Warzone loadout,
+// complete with a primary weapon, secondary weapon, three perks, and lethal and tactical equipment
 type Loadout struct {
-	Weapon      string `json:"weapon,omitempty" bson:"weapon,omitempty"`
-	Category    string `json:"category,omitempty" bson:"category,omitempty"`
-	Muzzle      string `json:"muzzle,omitempty" bson:"muzzle,omitempty"`
-	Barrel      string `json:"barrel,omitempty" bson:"barrel,omitempty"`
-	Laser       string `json:"laser,omitempty" bson:"laser,omitempty"`
-	Optic       string `json:"optic,omitempty" bson:"optic,omitempty"`
-	Stock       string `json:"stock,omitempty" bson:"stock,omitempty"`
-	Underbarrel string `json:"under_barrel,omitempty" bson:"under_barrel,omitempty"`
-	Ammo        string `json:"ammo,omitempty" bson:"ammo,omitempty"`
-	RearGrip    string `json:"rear_grip,omitempty" bson:"rear_grip,omitempty"`
-	Perk        string `json:"perk,omitempty" bson:"perk,omitempty"`
+	ID        p.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Primary   Weapon     `json:"primary,omitempty" bson:"primary,omitempty"`
+	Secondary Weapon     `json:"secondary,omitempty" bson:"secondary,omitempty"`
+	PerkOne   string     `json:"perk_one,omitempty" bson:"perk_one,omitempty"`
+	PerkTwo   string     `json:"perk_two,omitempty" bson:"perk_two,omitempty"`
+	PerkThree string     `json:"perk_three,omitempty" bson:"perk_three,omitempty"`
+	Lethal    string     `json:"lethal,omitempty" bson:"lethal,omitempty"`
+	Tactical  string     `json:"tactical,omitempty" bson:"tactical,omitempty"`
+	Meta      bool       `json:"meta_loadout,omitempty" bson:"meta_loadout,omitempty"`
 }

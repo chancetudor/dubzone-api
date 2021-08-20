@@ -1,0 +1,37 @@
+{
+  "_id": "",
+  "primary": {
+    "weapon_name": "Krig",
+    "category": "Range",
+    "muzzle": "Agency",
+    "barrel": "Ranger/Mil-Spec",
+    "laser": "",
+    "optic": "3x",
+    "stock": "",
+    "under_barrel": "Field Agent",
+    "ammo": "60 Mag Normal",
+    "rear_grip": "",
+    "perk": "",
+    "meta_weapon": true
+  },
+  "secondary": {
+    "weapon_name": "AK47 CW",
+    "category": "Sniper Support",
+    "muzzle": "Gru Supp",
+    "barrel": "",
+    "laser": "",
+    "optic": "Reflex",
+    "stock": "KGB Skeletal",
+    "under_barrel": "",
+    "ammo": "45/60 Mag",
+    "rear_grip": "Serpent/Airborne",
+    "perk": "",
+    "meta_weapon": true
+  },
+  "perk_one": "EOD",
+  "perk_two": "Ghost",
+  "perk_three": "Amped",
+  "lethal": "Semtex",
+  "tactical": "Stuns",
+  "meta_loadout": false
+}

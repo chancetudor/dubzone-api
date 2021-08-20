@@ -1,8 +1,9 @@
+// TODO rewrite
+
 package server
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/chancetudor/dubzone-api/internal/logger"
 	"github.com/chancetudor/dubzone-api/internal/models"
 	"github.com/gorilla/mux"
@@ -15,38 +16,10 @@ import (
 
 /* Loadout endpoints live here
 * functionality for
-	* Creating srv single loadout
-	* Reading loadouts given srv category
-	* Reading loadouts given srv weapon name
+	* Creating a single loadout
+	* Reading loadouts given a category
+	* Reading loadouts given a weapon name
 */
-
-// CreateLoadoutEndpoint creates single new loadout in the loadouts collection
-// POST /loadout
-func (srv *server) CreateLoadoutEndpoint(response http.ResponseWriter, request *http.Request) {
-	var loadout models.Loadout
-	// decode JSON request payload into Loadout
-	err := json.NewDecoder(request.Body).Decode(&loadout)
-	if err != nil {
-		logger.Error(err, "Decoding JSON to Loadout struct", "CreateLoadoutEndpoint")
-	}
-	// capitalize weapon name to match DB schema
-	loadout.Weapon = strings.ToUpper(loadout.Weapon)
-
-	db := srv.Auth.Database
-	collection := srv.Client.Database(db).Collection(srv.Auth.LoadoutCollection)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	_, err = collection.InsertOne(ctx, loadout)
-
-	if err != nil {
-		srv.respond(response, err, http.StatusInternalServerError)
-		logger.Error(err, "Inserting into collection", "CreateLoadoutEndpoint")
-		return
-	}
-
-	srv.respond(response, loadout.Weapon, http.StatusOK)
-}
 
 // ReadLoadoutsEndpoint returns all loadouts
 // GET /loadouts

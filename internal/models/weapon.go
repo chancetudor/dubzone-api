@@ -1,15 +1,18 @@
 package models
 
-import (
-	p "go.mongodb.org/mongo-driver/bson/primitive"
-)
-
-// Weapon represents a Warzone weapon.
+// Weapon represents a Warzone weapon,
+// complete with a category and all recommended attachments
 type Weapon struct {
-	ID             p.ObjectID    `json:"_id,omitempty" bson:"_id,omitempty"`
-	WeaponName     string        `json:"weapon_name,omitempty" bson:"weapon_name,omitempty"`
-	GameFrom       string        `json:"game_from,omitempty" bson:"game_from,omitempty"`
-	RPM            int           `json:"rpm,omitempty" bson:"rpm,omitempty"`
-	BulletVelocity int           `json:"bullet_velocity,omitempty" bson:"bullet_velocity,omitempty"`
-	DamageProfile  DamageProfile `json:"damage_profile,omitempty" bson:"damage_profile,omitempty"`
+	WeaponName  string `json:"weapon_name,omitempty" bson:"weapon_name,omitempty"`
+	Category    string `json:"category,omitempty" bson:"category,omitempty"`
+	Muzzle      string `json:"muzzle,omitempty" bson:"muzzle,omitempty"`
+	Barrel      string `json:"barrel,omitempty" bson:"barrel,omitempty"`
+	Laser       string `json:"laser,omitempty" bson:"laser,omitempty"`
+	Optic       string `json:"optic,omitempty" bson:"optic,omitempty"`
+	Stock       string `json:"stock,omitempty" bson:"stock,omitempty"`
+	Underbarrel string `json:"under_barrel,omitempty" bson:"under_barrel,omitempty"`
+	Ammo        string `json:"ammo,omitempty" bson:"ammo,omitempty"`
+	RearGrip    string `json:"rear_grip,omitempty" bson:"rear_grip,omitempty"`
+	Perk        string `json:"perk,omitempty" bson:"perk,omitempty"`
+	Meta        bool   `json:"meta_weapon,omitempty" bson:"meta_weapon,omitempty"`
 }
