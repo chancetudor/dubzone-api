@@ -33,3 +33,4 @@ dmgProfiles.json
 *.env
 
 api_logs.log
+pkg/log/api_logs.log

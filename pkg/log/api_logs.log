@@ -24,3 +24,5 @@ time="2021-08-18T19:47:34-04:00" level=info msg="STARTING APPLICATION"
 time="2021-08-18T19:47:44-04:00" level=error msg="mongo: no documents in result" event="Error finding weapon in database" func=ReadDamageProfiles
 time="2021-08-18T20:37:40-04:00" level=info msg="STARTING APPLICATION"
 time="2021-08-18T20:38:52-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T20:50:26-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-18T20:51:28-04:00" level=info msg="STARTING APPLICATION"
