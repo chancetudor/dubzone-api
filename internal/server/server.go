@@ -32,7 +32,7 @@ func NewServer() *server {
 // newRouter creates a new Gorilla mux with appropriate options
 func newRouter() *mux.Router {
 	logger.Debug("Creating new router", "NewRouter()")
-	r := mux.NewRouter().StrictSlash(true) //.UseEncodedPath() TODO add in and unescape paramters where necesse est
+	r := mux.NewRouter().StrictSlash(true)
 
 	return r
 }
@@ -60,6 +60,7 @@ func (srv *server) respond(response http.ResponseWriter, data interface{}, statu
 	response.Header().Add("content-type", "application/json")
 	// switch on the type of interface{} passed in
 	// if data is type error, respond with an error
+	// if data is nil, respond with NoContent
 	// otherwise, encode response
 	switch d := data.(type) {
 	case error:
@@ -67,10 +68,7 @@ func (srv *server) respond(response http.ResponseWriter, data interface{}, statu
 		return
 	default:
 		response.WriteHeader(status)
-		if err := json.NewEncoder(response).Encode(data); err != nil {
-			http.Error(response, err.Error(), status)
-			logger.Error(err, "Encoding data into JSON response", "srv.response()")
-		}
+		_ = json.NewEncoder(response).Encode(data)
 	}
 }
 
@@ -92,8 +90,10 @@ func (srv *server) initRouter() {
 	logger.Debug("Initializing router, adding handlers", "InitRouter()")
 	// returns multiple loadouts
 	srv.Router.HandleFunc("/loadouts", srv.ReadLoadoutsEndpoint).Methods("GET")
-	srv.Router.HandleFunc("/loadouts/{category}", srv.ReadLoadoutsEndpoint).Methods("GET")
-	srv.Router.HandleFunc("/loadouts/{weaponname}", srv.ReadLoadoutsEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/loadouts", srv.CreateLoadoutEndpoint).Methods("POST")
+	srv.Router.HandleFunc("/loadouts/category/{cat}", srv.ReadLoadoutsByCategoryEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/loadouts/weapon/{name}", srv.ReadLoadoutsByWeaponEndpoint).Methods("GET")
+	srv.Router.HandleFunc("/loadouts/meta", srv.ReadLoadoutsByMetaEndpoint).Methods("GET")
 
 	srv.Router.HandleFunc("/weapon/{weaponname}", srv.ReadWeaponEndpoint).Methods("GET")
 	// single weapon endpoints, which deal with a single weapon

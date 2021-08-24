@@ -15,7 +15,6 @@ import (
 	* Reading a single weapon
 */
 
-
 // ReadWeaponEndpoint returns weapon data for a specified weapon name
 // GET /weapon/{weaponname}
 // TODO deal with weapon name param containing spaces
@@ -29,7 +28,6 @@ func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *htt
 	weaponName := strings.ToUpper(params["weaponname"])
 	var weapon models.Weapon
 	// find weapon using given weaponname
-	// TODO use mongoDB projection to suppress _id
 	err := collection.FindOne(ctx, bson.D{{"weapon_name", weaponName}}).Decode(&weapon)
 	if err != nil {
 		srv.respond(response, err, http.StatusInternalServerError)
@@ -95,19 +93,3 @@ func (srv *server) ReadWeaponEndpoint(response http.ResponseWriter, request *htt
 //
 // 	return weapons, nil
 // }
-
-/*
-	* we probably don't need to delete srv weapon
-func DeleteWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
-
-}
-*/
-
-/*
-	* we probably don't need to update srv weapon
-// UpdateWeaponEndpoint takes srv specified weapon and srv series of parameters
-// and updates that weapon's parameters to the given ones
-func UpdateWeaponEndpoint(response http.ResponseWriter, request *http.Request) {
-
-}
-*/

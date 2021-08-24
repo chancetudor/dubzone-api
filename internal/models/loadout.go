@@ -1,6 +1,8 @@
 package models
 
-import p "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	p "go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 // Loadout represents a Warzone loadout,
 // complete with a primary weapon, secondary weapon, three perks, and lethal and tactical equipment
