@@ -77,3 +77,121 @@ time="2021-08-24T16:51:41-04:00" level=error msg="connection(warzonedata-shard-0
 time="2021-08-24T16:54:45-04:00" level=info msg="STARTING APPLICATION"
 time="2021-08-24T16:54:59-04:00" level=info msg="STARTING APPLICATION"
 time="2021-08-24T16:56:54-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T10:36:04-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T10:36:44-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T10:38:17-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T10:38:32-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T10:41:57-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T10:42:28-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T10:51:21-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T10:52:43-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T10:54:06-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T10:54:29-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T10:54:41-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T10:54:58-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T10:57:03-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T10:57:32-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T10:58:34-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T10:58:44-04:00" level=error msg="server selection error: context deadline exceeded, current topology: { Type: ReplicaSetNoPrimary, Servers: [{ Addr: warzonedata-shard-00-00.xbbkl.mongodb.net:27017, Type: Unknown, Last error: connection() error occured during connection handshake: connection(warzonedata-shard-00-00.xbbkl.mongodb.net:27017[-19]) socket was unexpectedly closed: EOF }, { Addr: warzonedata-shard-00-01.xbbkl.mongodb.net:27017, Type: Unknown, Last error: connection() error occured during connection handshake: connection(warzonedata-shard-00-01.xbbkl.mongodb.net:27017[-17]) socket was unexpectedly closed: EOF }, { Addr: warzonedata-shard-00-02.xbbkl.mongodb.net:27017, Type: Unknown, Last error: connection() error occured during connection handshake: connection(warzonedata-shard-00-02.xbbkl.mongodb.net:27017[-18]) socket was unexpectedly closed: EOF }, ] }" event="Error reading weapons" func=ReadWeaponsByMetaEndpoint
+time="2021-08-25T10:58:51-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:03:55-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:04:52-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:10:44-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:16:08-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:16:08-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:16:08-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:16:08-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:16:08-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:16:08-04:00" level=info event="Initializing router, adding handlers" func="InitRouter()"
+time="2021-08-25T11:16:08-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:16:13-04:00" level=info event="No weapons found" func=ReadWeaponsByMetaEndpoint
+time="2021-08-25T11:18:37-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:18:37-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:18:37-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:18:37-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:18:37-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:18:37-04:00" level=info event="Initializing router, adding handlers" func="InitRouter()"
+time="2021-08-25T11:18:37-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:18:49-04:00" level=info event="No weapons found" func=ReadWeaponsByCategoryEndpoint
+time="2021-08-25T11:19:42-04:00" level=info event="No weapons found" func=ReadWeaponsByCategoryEndpoint
+time="2021-08-25T11:19:50-04:00" level=info event="No weapons found" func=ReadWeaponsByCategoryEndpoint
+time="2021-08-25T11:24:14-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:24:14-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:24:14-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:24:14-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:24:15-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:24:15-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:24:15-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:24:27-04:00" level=info event="No weapons found" func=ReadWeaponsByCategoryEndpoint
+time="2021-08-25T11:24:41-04:00" level=info event="No weapons found" func=ReadWeaponsByCategoryEndpoint
+time="2021-08-25T11:25:35-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:25:35-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:25:35-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:25:35-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:25:35-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:25:35-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:25:35-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:27:10-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:27:10-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:27:10-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:27:10-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:27:10-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:27:10-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:27:10-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:28:19-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:28:19-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:28:19-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:28:19-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:28:19-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:28:19-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:28:19-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:28:47-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:28:47-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:28:47-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:28:47-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:28:47-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:28:47-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:28:47-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:28:58-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T11:29:11-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:29:11-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:29:11-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:29:11-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:29:11-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:29:11-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:29:11-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:29:15-04:00" level=error msg="mongo: no documents in result" event="No weapons retrieved" func=ReadWeaponEndpoint
+time="2021-08-25T11:29:32-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:29:32-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:29:32-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:29:32-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:29:32-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:29:32-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:29:32-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:29:42-04:00" level=info event="No weapons found" func=ReadWeaponsByCategoryEndpoint
+time="2021-08-25T11:29:47-04:00" level=info event="No weapons found" func=ReadWeaponsByCategoryEndpoint
+time="2021-08-25T11:34:11-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:34:11-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:34:11-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:34:11-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:34:12-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:34:12-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:34:12-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:35:13-04:00" level=info event="No loadouts found" func=ReadLoadoutsByWeaponEndpoint
+time="2021-08-25T11:35:16-04:00" level=info event="No loadouts found" func=ReadLoadoutsByWeaponEndpoint
+time="2021-08-25T11:36:53-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:36:53-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:36:53-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:36:53-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:36:53-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:36:53-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:36:53-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:37:22-04:00" level=info event="No loadouts found" func=ReadLoadoutsByCategoryEndpoint
+time="2021-08-25T11:37:48-04:00" level=info msg="STARTING APPLICATION"
+time="2021-08-25T11:37:48-04:00" level=info event="Creating new router" func="NewRouter()"
+time="2021-08-25T11:37:48-04:00" level=info event="Creating new client" func="NewClient()"
+time="2021-08-25T11:37:48-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:37:48-04:00" level=info event="Retrieving auth info" func="auth.NewAuth()"
+time="2021-08-25T11:37:48-04:00" level=info event="Initializing router & adding handlers" func="InitRouter()"
+time="2021-08-25T11:37:48-04:00" level=info event="Calling ListenAndServe()..." func="main()"
+time="2021-08-25T11:37:55-04:00" level=info event="No loadouts found" func=ReadLoadoutsByCategoryEndpoint

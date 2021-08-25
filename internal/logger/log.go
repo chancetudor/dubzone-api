@@ -36,12 +36,12 @@ func Error(err error, msg string, function string) {
 	}).Error(err)
 }
 
-// Debug is a helper function to abstract debug information
-func Debug(msg string, function string) {
+// Info is a helper function to abstract debug information
+func Info(msg string, function string) {
 	log.WithFields(log.Fields{
 		"func": function,
 		"event": msg,
-	}).Debug()
+	}).Info()
 }
 
 func clearLogs() {

@@ -13,7 +13,7 @@ func main() {
 	logger.InitLogger()
 	srv := server.NewServer()
 	defer srv.DisconnectClient()
-	logger.Debug("Calling ListenAndServe()...", "main()")
+	logger.Info("Calling ListenAndServe()...", "main()")
 	err := http.ListenAndServe(":12345", srv.Router)
 	if err != nil {
 		logger.Error(err, "ListenAndServe", "main()")
