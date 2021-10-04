@@ -1,6 +1,6 @@
 # DubZone API
 
-Inspired by Derek Sivers' post ["Why You Need a Database"](https://sive.rs/dbt), I set out to create a database and an API to access the database. 
+Inspired by Derek Sivers' post ["Why You Need a Database,"](https://sive.rs/dbt) I set out to create a database and an API to access the database. 
 
 I didn't know what data to hold and expose until I realized that information about weapons and loadouts for Call of Duty Warzone would be a perfect candidate, as such information is only currently accessible in a multitude of YouTube videos.
 
