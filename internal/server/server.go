@@ -98,21 +98,4 @@ func (srv *server) initRouter() {
 	srv.Router.HandleFunc("/weapons/meta", srv.ReadWeaponsByMetaEndpoint).Methods("GET")
 	srv.Router.HandleFunc("/weapons/{cat}", srv.ReadWeaponsByCategoryEndpoint).Methods("GET")
 	srv.Router.HandleFunc("/weapons/categories", srv.GetWeaponCategories).Methods("GET")
-	// single weapon endpoints, which deal with a single weapon
-	// srv.Router.HandleFunc("/weapon", srv.CreateWeaponEndpoint).Methods("POST")
-	//
-	// // single dmgProfile endpoints, which deal with a single dmgProfile for a given weapon
-	// srv.Router.HandleFunc("/dmgprofile/{weaponname}/close", srv.ReadCloseDamageProfile).Methods("GET")
-	// srv.Router.HandleFunc("/dmgprofile/{weaponname}/mid", srv.ReadMidDamageProfile).Methods("GET")
-	// srv.Router.HandleFunc("/dmgprofile/{weaponname}/far", srv.ReadFarDamageProfile).Methods("GET")
-	// srv.Router.HandleFunc("/dmgprofile/{weaponname}", srv.UpdateDamageProfile).Methods("PUT")
-	// srv.Router.HandleFunc("/dmgprofile/{weaponname}/close", srv.UpdateCloseDamageProfile).Methods("PUT")
-	// srv.Router.HandleFunc("/dmgprofile/{weaponname}/mid", srv.UpdateMidDamageProfile).Methods("PUT")
-	// srv.Router.HandleFunc("/dmgprofile/{weaponname}/far", srv.UpdateFarDamageProfile).Methods("PUT")
-	// single loadout endpoints, which deal with a single loadout
-	// returns multiple weapons
-	// srv.Router.HandleFunc("/weapons", srv.ReadWeaponsEndpoint).Methods("GET")
-	// srv.Router.HandleFunc("/weapons/{game}", srv.ReadWeaponsEndpoint).Methods("GET")
-	// // returns multiple dmgProfiles
-	// srv.Router.HandleFunc("/dmgprofile/{weaponname}", srv.ReadDamageProfiles).Methods("GET")
 }
