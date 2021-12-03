@@ -24,13 +24,12 @@ testdata/postgres
 .pid
 
 # .json data files
-loadouts.json
-weaponsList.json
-extraLoadouts.json
-dmgProfiles.json
+json
 
 # Env variables
 *.env
 
 api_logs.log
-pkg/log/api_logs.log
+log/api_logs.log
+.idea
+bin

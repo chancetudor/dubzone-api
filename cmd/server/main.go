@@ -1,21 +1,29 @@
 package main
 
 import (
-	"github.com/chancetudor/dubzone-api/internal/logger"
 	"github.com/chancetudor/dubzone-api/internal/server"
-	"net/http"
+	"github.com/sirupsen/logrus"
+	"os"
 )
 
 // Version indicates the current version of the application.
-var Version = "0.0.1"
+var Version = "0.0.2"
+var log = logrus.New()
+
+func init() {
+	file, err := os.OpenFile("./log/api_logs.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err == nil {
+		log.SetOutput(file)
+	} else {
+		log.Error("Failed to log to file, using default stderr")
+	}
+	log.ReportCaller = true
+}
 
 func main() {
-	logger.InitLogger()
-	srv := server.NewServer()
-	defer srv.DisconnectClient()
-	logger.Info("Calling ListenAndServe()...", "main()")
-	err := http.ListenAndServe(":12345", srv.Router)
+	srv := server.NewServer(log)
+	err := srv.Start(":9090")
 	if err != nil {
-		logger.Error(err, "ListenAndServe", "main()")
+		srv.Log.Fatal(err)
 	}
 }
