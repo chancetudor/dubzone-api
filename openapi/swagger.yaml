@@ -1,0 +1,160 @@
+basePath: /
+consumes:
+  - application/json
+definitions:
+  Loadout:
+    description: "A Loadout is the principal object for this service\n\nLoadouts are
+      comprised of two Weapons, three perks, and tactical and lethal equipment "
+    properties:
+      lethal:
+        description: The lethal equipment for this loadout
+        type: string
+        x-go-name: Lethal
+      meta_loadout:
+        description: Marks whether this is a meta loadout or not
+        example: true
+        type: boolean
+        x-go-name: Meta
+      perk_one:
+        description: The first perk slot for this loadout
+        type: string
+        x-go-name: PerkOne
+      perk_three:
+        description: The third perk slot for this loadout
+        type: string
+        x-go-name: PerkThree
+      perk_two:
+        description: The second perk slot for this loadout
+        type: string
+        x-go-name: PerkTwo
+      primary:
+        $ref: '#/definitions/Weapon'
+      secondary:
+        $ref: '#/definitions/Weapon'
+      tactical:
+        description: The tactical equipment for this loadout
+        type: string
+        x-go-name: Tactical
+    required:
+      - primary
+      - secondary
+      - meta_loadout
+    title: Loadout represents a Warzone loadout
+    type: object
+    x-go-package: github.com/chancetudor/dubzone-api/internal/models
+  Weapon:
+    description: |-
+      A Weapon can have a maximum of 5 fields set at one time. TODO potentially change w/ Vanguard integration
+      Leave the field as an empty string ("") if the field is not to be set.
+    properties:
+      ammo:
+        description: The weapon's magazine attachment
+        type: string
+        x-go-name: Ammo
+      barrel:
+        description: The weapon's barrel attachment
+        type: string
+        x-go-name: Barrel
+      category:
+        description: The weapon's category
+        example: Range
+        type: string
+        x-go-name: Category
+      laser:
+        description: The weapon's laser attachment
+        type: string
+        x-go-name: Laser
+      meta_weapon:
+        description: Marks whether the weapon is a meta weapon or not
+        type: boolean
+        x-go-name: Meta
+      muzzle:
+        description: The weapon's muzzle attachment
+        type: string
+        x-go-name: Muzzle
+      optic:
+        description: The weapon's optic attachment
+        type: string
+        x-go-name: Optic
+      perk:
+        description: The weapon's perk
+        type: string
+        x-go-name: Perk
+      rear_grip:
+        description: The weapon's grip attachment
+        type: string
+        x-go-name: RearGrip
+      stock:
+        description: "The weapon's stock attachment. \nN.B.: if the weapon is equipped
+          with \"No Stock,\" please enter that as it's stock. \nIf a stock attachment
+          is *not* set, use an empty string."
+        example: '"No Stock"'
+        type: string
+        x-go-name: Stock
+      under_barrel:
+        description: The weapon's underbarrel attachment
+        type: string
+        x-go-name: Underbarrel
+      weapon_name:
+        description: The weapon's name
+        type: string
+        x-go-name: WeaponName
+    required:
+      - weapon_name
+      - category
+      - meta_weapon
+    title: Weapon represents a Warzone weapon, complete with a category and all recommended
+      attachments.
+    type: object
+    x-go-package: github.com/chancetudor/dubzone-api/internal/models
+host: localhost
+info:
+  contact:
+    email: hi@cmtudor.me
+    name: Chance Tudor
+    url: https://cmtudor.me
+  description: A service that communicates meta weapons and loadouts, stored in a
+    database, to a consumer in JSON format.
+  title: Dubzone API
+  version: 0.0.2
+paths:
+  /loadouts:
+    get:
+      operationId: listLoadouts
+      responses:
+        "200":
+          $ref: '#/responses/loadoutsResponse'
+      summary: Returns a list of all loadouts.
+      tags:
+        - loadouts
+    post:
+      operationId: newLoadout
+      responses:
+        "200":
+          $ref: '#/responses/noContent'
+      summary: Creates a new loadout.
+      tags:
+        - loadout
+  /loadouts/meta:
+    get:
+      operationId: listMetaLoadouts
+      responses:
+        "200":
+          $ref: '#/responses/loadoutsResponse'
+      summary: Returns a list of all loadouts marked as meta.
+      tags:
+        - loadouts
+produces:
+  - application/json
+responses:
+  loadoutsResponse:
+    description: ""
+    schema:
+      items:
+        $ref: '#/definitions/Loadout'
+      type: array
+  noContent:
+    description: ""
+schemes:
+  - https
+swagger: "2.0"

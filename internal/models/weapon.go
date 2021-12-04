@@ -3,19 +3,61 @@ package models
 import "github.com/go-playground/validator/v10"
 
 // Weapon represents a Warzone weapon, complete with a category and all recommended attachments.
+// A Weapon can have a maximum of 5 fields set at one time. TODO potentially change w/ Vanguard integration
+// Leave the field as an empty string ("") if the field is not to be set.
 type Weapon struct {
-	WeaponName  string `json:"weapon_name,omitempty" validate:"required, alpha, max=15"`
-	Category    string `json:"category,omitempty" validate:"required, alpha"`
-	Muzzle      string `json:"muzzle,omitempty" validate:"required, alpha"`
-	Barrel      string `json:"barrel,omitempty" validate:"required, alpha"`
-	Laser       string `json:"laser,omitempty" validate:"required, alpha"`
-	Optic       string `json:"optic,omitempty" validate:"required, alpha"`
-	Stock       string `json:"stock,omitempty" validate:"required, alpha"`
-	Underbarrel string `json:"under_barrel,omitempty" validate:"required, alpha"`
-	Ammo        string `json:"ammo,omitempty" validate:"required, alpha"`
-	RearGrip    string `json:"rear_grip,omitempty" validate:"required, alpha"`
-	Perk        string `json:"perk,omitempty" validate:"required, alpha"`
-	Meta        bool   `json:"meta_weapon,omitempty" validate:"required, boolean"`
+	// The weapon's name
+	//
+	// required: true
+	WeaponName string `json:"weapon_name" validate:"required,ascii"`
+	// The weapon's category
+	//
+	// required: true
+	// example: Range
+	Category string `json:"category" validate:"required,ascii"`
+	// The weapon's muzzle attachment
+	//
+	// required: false
+	Muzzle string `json:"muzzle,omitempty" validate:"omitempty,ascii"`
+	// The weapon's barrel attachment
+	//
+	// required: false
+	Barrel string `json:"barrel,omitempty" validate:"omitempty,ascii"`
+	// The weapon's laser attachment
+	//
+	// required: false
+	Laser string `json:"laser,omitempty" validate:"omitempty,ascii"`
+	// The weapon's optic attachment
+	//
+	// required: false
+	Optic string `json:"optic,omitempty" validate:"omitempty,ascii"`
+	// The weapon's stock attachment.
+	// N.B.: if the weapon is equipped with "No Stock," please enter that as it's stock.
+	// If a stock attachment is *not* set, use an empty string.
+	//
+	// required: false
+	// example: "No Stock"
+	Stock string `json:"stock,omitempty" validate:"omitempty,ascii"`
+	// The weapon's underbarrel attachment
+	//
+	// required: false
+	Underbarrel string `json:"under_barrel,omitempty" validate:"omitempty,ascii"`
+	// The weapon's magazine attachment
+	//
+	// required: false
+	Ammo string `json:"ammo,omitempty" validate:"omitempty,ascii"`
+	// The weapon's grip attachment
+	//
+	// required: false
+	RearGrip string `json:"rear_grip,omitempty" validate:"omitempty,ascii"`
+	// The weapon's perk
+	//
+	// required: false
+	Perk string `json:"perk,omitempty" validate:"omitempty,ascii"`
+	// Marks whether the weapon is a meta weapon or not
+	//
+	// required: true
+	Meta bool `json:"meta_weapon" validate:"required"`
 }
 
 type Weapons []Weapon

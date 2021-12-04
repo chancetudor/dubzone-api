@@ -1,4 +1,4 @@
-// Package classification Dubzone API.
+// Package classification Dubzone API
 //
 // A service that communicates meta weapons and loadouts, stored in a database, to a consumer in JSON format.
 //
@@ -18,6 +18,7 @@
 package server
 
 import (
+	"github.com/chancetudor/dubzone-api/middleware"
 	"github.com/gorilla/mux"
 	"github.com/patrickmn/go-cache"
 	"github.com/sirupsen/logrus"
@@ -29,17 +30,24 @@ type server struct {
 	router *mux.Router
 	cache  *cache.Cache
 	Log    *logrus.Logger
+	mdl    *middleware.Middleware
 }
 
 // NewServer returns a pointer to a type server that has a mux router
 // configured with endpoints, an in-memory cache
 // set to 5 minute expiration time and 10 minute clean-up time,
 // and a pointer to a logger that's passed in.
+//
+// The server contains a pointer to type middleware.Middleware,
+// which is passed the same log as the server.
+// This allows middleware, basically http.HandlerFuncs,
+// to log any errors to the same log file as the server.
 func NewServer(l *logrus.Logger) *server {
 	api := &server{
 		router: newRouter(),
 		cache:  cache.New(5*time.Minute, 10*time.Minute),
 		Log:    l,
+		mdl:    middleware.NewMiddleware(l),
 	}
 	api.routes()
 
@@ -59,22 +67,6 @@ func newRouter() *mux.Router {
 	return r
 }
 
-// // respond is a helper function to abstract HTTP responses
-// func (srv *server) respond(response http.ResponseWriter, data interface{}, status int) {
-// 	response.Header().Add("content-type", "application/json")
-// 	// switch on the type of interface{} passed in
-// 	// if data is type error, respond with an error
-// 	// otherwise, encode response
-// 	switch d := data.(type) {
-// 	case error:
-// 		http.Error(response, d.Error(), status)
-// 		return
-// 	default:
-// 		response.WriteHeader(status)
-// 		_ = json.NewEncoder(response).Encode(data)
-// 	}
-// }
-
 // routes creates a subrouter for each type of request,
 // adds middleware validation, and ties handlers to each path.
 func (srv *server) routes() {
@@ -86,7 +78,7 @@ func (srv *server) routes() {
 	getRouter.HandleFunc("/loadouts", srv.GetLoadouts())
 	// getRouter.HandleFunc("/loadouts/category/{cat}", srv.GetLoadoutsByCategory())
 	// getRouter.HandleFunc("/loadouts/weapon/{name}", srv.GetLoadoutsByWeapon())
-	// getRouter.HandleFunc("/loadouts/meta", srv.GetMetaLoadouts())
+	getRouter.HandleFunc("/loadouts/meta", srv.GetMetaLoadouts())
 
 	// weapons handlers
 	// getRouter.HandleFunc("/weapons/{name}", srv.GetWeaponsByName())
@@ -96,5 +88,5 @@ func (srv *server) routes() {
 
 	// init subrouter just for POST requests and associate handlers
 	postRouter := srv.router.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/loadouts", srv.ValidateLoadout(srv.CreateLoadout()))
+	postRouter.HandleFunc("/loadouts", srv.mdl.ValidateLoadout(srv.CreateLoadout()))
 }
