@@ -9,5 +9,5 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.4.2
-	github.com/steinfletcher/apitest v1.5.11 // indirect
+	github.com/steinfletcher/apitest v1.5.11
 )

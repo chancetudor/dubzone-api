@@ -3,7 +3,7 @@ This file contains all swagger responses.
 These types are not used for any of our handlers.
 */
 
-package middleware
+package openapi
 
 import "github.com/chancetudor/dubzone-api/internal/models"
 
