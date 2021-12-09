@@ -12,18 +12,16 @@ var log = logrus.New()
 
 func init() {
 	// TODO set to prod_logs when in production
-	file, err := os.OpenFile("./log/test_logs.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err == nil {
-		log.SetOutput(file)
-	} else {
-		log.Error("Failed to log to file, using default stderr")
+	file, err := os.OpenFile("./logs/test_logs.logs", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Error("Failed to logs to file, using default stderr")
+		return
+
 	}
+	log.SetOutput(file)
 }
 
 func main() {
 	srv := server.NewServer(log)
-	err := srv.Start(":9090")
-	if err != nil {
-		srv.Log.Fatal(err)
-	}
+	srv.Start(":9090")
 }

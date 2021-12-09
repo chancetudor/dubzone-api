@@ -29,7 +29,7 @@ import (
 type server struct {
 	router *mux.Router
 	cache  *cache.Cache
-	Log    *logrus.Logger
+	log    *logrus.Logger
 	mdl    *middleware.Middleware
 }
 
@@ -39,14 +39,14 @@ type server struct {
 // and a pointer to a logger that's passed in.
 //
 // The server contains a pointer to type middleware.Middleware,
-// which is passed the same log as the server.
-// This allows middleware, basically http.HandlerFuncs,
-// to log any errors to the same log file as the server.
+// which is passed the same logs as the server.
+// This allows middleware, http.HandlerFuncs,
+// to logs any errors to the same logs file as the server.
 func NewServer(l *logrus.Logger) *server {
 	api := &server{
 		router: newRouter(),
 		cache:  cache.New(5*time.Minute, 10*time.Minute),
-		Log:    l,
+		log:    l,
 		mdl:    middleware.NewMiddleware(l),
 	}
 	api.routes()
@@ -55,9 +55,9 @@ func NewServer(l *logrus.Logger) *server {
 }
 
 // Start simply runs http.ListenAndServe on the passed-in bind address.
-func (srv *server) Start(port string) error {
-	srv.Log.Info("Starting server on port " + port)
-	return http.ListenAndServe(port, srv.router)
+func (srv *server) Start(port string) {
+	srv.log.Info("Starting server on port " + port)
+	srv.log.Fatal(http.ListenAndServe(port, srv.router))
 }
 
 // newRouter creates a new Gorilla mux with appropriate options
@@ -65,28 +65,4 @@ func newRouter() *mux.Router {
 	r := mux.NewRouter().StrictSlash(true)
 
 	return r
-}
-
-// routes creates a subrouter for each type of request,
-// adds middleware validation, and ties handlers to each path.
-func (srv *server) routes() {
-	srv.Log.Info("Initializing router & adding handlers", "InitRouter()")
-	// init subrouter just for GET requests and associate handlers
-	getRouter := srv.router.Methods(http.MethodGet).Subrouter()
-
-	// loadouts handlers
-	getRouter.HandleFunc("/loadouts", srv.GetLoadouts())
-	// getRouter.HandleFunc("/loadouts/category/{cat}", srv.GetLoadoutsByCategory())
-	// getRouter.HandleFunc("/loadouts/weapon/{name}", srv.GetLoadoutsByWeapon())
-	getRouter.HandleFunc("/loadouts/meta", srv.GetMetaLoadouts())
-
-	// weapons handlers
-	// getRouter.HandleFunc("/weapons/{name}", srv.GetWeaponsByName())
-	// getRouter.HandleFunc("/weapons/meta", srv.GetMetaWeapons())
-	// getRouter.HandleFunc("/weapons/{cat}", srv.GetWeaponsByCategory())
-	// getRouter.HandleFunc("/weapons/categories", srv.GetWeaponCategories())
-
-	// init subrouter just for POST requests and associate handlers
-	postRouter := srv.router.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/loadouts", srv.mdl.ValidateLoadout(srv.CreateLoadout()))
 }

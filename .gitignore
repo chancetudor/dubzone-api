@@ -29,6 +29,7 @@ json
 # Env variables
 *.env
 
-log
+logs
 .idea
 bin
+app.yaml

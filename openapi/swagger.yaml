@@ -1,10 +1,12 @@
 basePath: /
 consumes:
-  - application/json
+- application/json
 definitions:
   Loadout:
-    description: "A Loadout is the principal object for this service\n\nLoadouts are
-      comprised of two Weapons, three perks, and tactical and lethal equipment "
+    description: |-
+      A Loadout is the principal object for this service
+
+      Loadouts are comprised of two Weapons, three perks, and tactical and lethal equipment
     properties:
       lethal:
         description: The lethal equipment for this loadout
@@ -36,9 +38,9 @@ definitions:
         type: string
         x-go-name: Tactical
     required:
-      - primary
-      - secondary
-      - meta_loadout
+    - primary
+    - secondary
+    - meta_loadout
     title: Loadout represents a Warzone loadout
     type: object
     x-go-package: github.com/chancetudor/dubzone-api/internal/models
@@ -85,9 +87,10 @@ definitions:
         type: string
         x-go-name: RearGrip
       stock:
-        description: "The weapon's stock attachment. \nN.B.: if the weapon is equipped
-          with \"No Stock,\" please enter that as it's stock. \nIf a stock attachment
-          is *not* set, use an empty string."
+        description: |-
+          The weapon's stock attachment.
+          N.B.: if the weapon is equipped with "No Stock," please enter that as it's stock.
+          If a stock attachment is *not* set, use an empty string.
         example: '"No Stock"'
         type: string
         x-go-name: Stock
@@ -100,9 +103,9 @@ definitions:
         type: string
         x-go-name: WeaponName
     required:
-      - weapon_name
-      - category
-      - meta_weapon
+    - weapon_name
+    - category
+    - meta_weapon
     title: Weapon represents a Warzone weapon, complete with a category and all recommended
       attachments.
     type: object
@@ -126,7 +129,7 @@ paths:
           $ref: '#/responses/loadoutsResponse'
       summary: Returns a list of all loadouts.
       tags:
-        - loadouts
+      - loadouts
     post:
       operationId: newLoadout
       responses:
@@ -134,7 +137,24 @@ paths:
           $ref: '#/responses/noContent'
       summary: Creates a new loadout.
       tags:
-        - loadout
+      - loadout
+  /loadouts/category/{category}:
+    get:
+      operationId: listLoadoutsByCategory
+      parameters:
+      - description: The category by which to return loadouts.
+        in: path
+        name: category
+        required: true
+        type: string
+        x-go-name: Category
+      responses:
+        "200":
+          $ref: '#/responses/loadoutsResponse'
+      summary: Returns a list of all loadouts whose primary weapon's category matches
+        the category parameter given.
+      tags:
+      - loadouts
   /loadouts/meta:
     get:
       operationId: listMetaLoadouts
@@ -143,9 +163,26 @@ paths:
           $ref: '#/responses/loadoutsResponse'
       summary: Returns a list of all loadouts marked as meta.
       tags:
-        - loadouts
+      - loadouts
+  /loadouts/weapon/{weapon_name}:
+    get:
+      operationId: listLoadoutsByWeapon
+      parameters:
+      - description: The name of the weapon by which to return loadouts.
+        in: path
+        name: weapon_name
+        required: true
+        type: string
+        x-go-name: Name
+      responses:
+        "200":
+          $ref: '#/responses/loadoutsResponse'
+      summary: Returns a list of all loadouts whose primary weapon's category matches
+        the name parameter given.
+      tags:
+      - loadouts
 produces:
-  - application/json
+- application/json
 responses:
   loadoutsResponse:
     description: ""
@@ -156,5 +193,5 @@ responses:
   noContent:
     description: ""
 schemes:
-  - https
+- https
 swagger: "2.0"

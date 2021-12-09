@@ -10,6 +10,10 @@ type Weapon struct {
 	//
 	// required: true
 	WeaponName string `json:"weapon_name" validate:"required,ascii"`
+	// The game the weapon is from
+	//
+	// required: true
+	Game string `json:"game" validate:"required,ascii"`
 	// The weapon's category
 	//
 	// required: true
@@ -88,7 +92,7 @@ var XM4 = Weapon{
 
 var C58 = Weapon{
 	WeaponName:  "C58",
-	Category:    "Range",
+	Category:    "Sniper Support",
 	Muzzle:      "Suppressed",
 	Barrel:      "Long Barrel",
 	Laser:       "",
@@ -103,7 +107,7 @@ var C58 = Weapon{
 
 var Mac10 = Weapon{
 	WeaponName:  "MAC 10",
-	Category:    "Close Range",
+	Category:    "Close-Med",
 	Muzzle:      "Suppressed",
 	Barrel:      "Short Barrel",
 	Laser:       "Tiger Team",
@@ -117,7 +121,7 @@ var Mac10 = Weapon{
 }
 
 var Pistol = Weapon{
-	WeaponName:  "Colt .45",
+	WeaponName:  "COLT .45",
 	Category:    "Secondary",
 	Muzzle:      "",
 	Barrel:      "Long Barrel",

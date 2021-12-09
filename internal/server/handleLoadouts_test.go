@@ -11,11 +11,11 @@ import (
 var log = logrus.New()
 
 func initDevLogs() {
-	file, err := os.OpenFile("/Users/chancetudor/GitHub/dubzone-api/log/test_logs.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, err := os.OpenFile("/Users/chancetudor/GitHub/dubzone-api/logs/test_logs.logs", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err == nil {
 		log.SetOutput(file)
 	} else {
-		log.Error("Failed to log to file, using default stderr")
+		log.Error("Failed to logs to file, using default stderr")
 	}
 }
 

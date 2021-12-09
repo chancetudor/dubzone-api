@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
 	"io"
+	"strings"
 )
 
 // Loadout represents a Warzone loadout
@@ -51,6 +52,8 @@ type Loadout struct {
 
 // Loadouts describes a slice of type *Loadout
 type Loadouts []*Loadout
+
+var validCats map[string]bool = map[string]bool{"RANGE": true, "CLOSE": true, "CLOSE-MED": true, "SNIPER RANGED": true, "SNIPER SUPPORT": true}
 
 // TODO remove as we implement Google Cloud Datastore
 var StaticLoadouts = Loadouts{
@@ -102,4 +105,51 @@ func GetMetaLoadouts() Loadouts {
 	}
 
 	return MetaLoadouts
+}
+
+// TODO remove as we get Google Cloud Datastore in operation
+func GetLoadoutsByCategory(cat string) Loadouts {
+	CatLoadouts := Loadouts{}
+	for _, l := range StaticLoadouts {
+		if strings.EqualFold(cat, l.Primary.Category) {
+			CatLoadouts = append(CatLoadouts, l)
+		}
+	}
+
+	return CatLoadouts
+}
+
+func GetLoadoutsByName(name string) Loadouts {
+	loadouts := Loadouts{}
+	for _, l := range StaticLoadouts {
+		if strings.EqualFold(name, l.Primary.WeaponName) {
+			loadouts = append(loadouts, l)
+		}
+	}
+
+	return loadouts
+}
+
+// ValidCategory is called in ValidateCategoryParam and returns a bool representing whether
+// the category parameter is valid or not. If the category passed is "snipersupport" or "sniperranged,"
+// the function transforms that string into "sniper support" and/or "sniper ranged," as these
+// are the correct values. The caller is not expected to know this.
+func ValidCategory(cat string) (string, bool) {
+	validCat := transformCategory(cat)
+	_, valid := validCats[strings.ToUpper(validCat)]
+	if valid {
+		return validCat, true
+	}
+	return "", false
+}
+
+func transformCategory(c string) string {
+	switch {
+	case strings.EqualFold(c, "snipersupport"):
+		return "sniper support"
+	case strings.EqualFold(c, "sniperranged"):
+		return "sniper ranged"
+	}
+
+	return c
 }
