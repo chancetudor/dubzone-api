@@ -19,6 +19,7 @@ func init() {
 
 	}
 	log.SetOutput(file)
+	log.Formatter = &logrus.JSONFormatter{PrettyPrint: true}
 }
 
 func main() {

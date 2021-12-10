@@ -61,7 +61,7 @@ type Weapon struct {
 	// Marks whether the weapon is a meta weapon or not
 	//
 	// required: true
-	Meta bool `json:"meta_weapon" validate:"required"`
+	Meta *bool `json:"meta_weapon" validate:"required"`
 }
 
 type Weapons []Weapon
@@ -87,7 +87,7 @@ var XM4 = Weapon{
 	Ammo:        "60 round mags",
 	RearGrip:    "",
 	Perk:        "",
-	Meta:        true,
+	Meta:        &[]bool{true}[0],
 }
 
 var C58 = Weapon{
@@ -102,7 +102,7 @@ var C58 = Weapon{
 	Ammo:        "45 round mags",
 	RearGrip:    "",
 	Perk:        "",
-	Meta:        true,
+	Meta:        &[]bool{true}[0],
 }
 
 var Mac10 = Weapon{
@@ -117,7 +117,7 @@ var Mac10 = Weapon{
 	Ammo:        "60 round mags",
 	RearGrip:    "",
 	Perk:        "",
-	Meta:        true,
+	Meta:        &[]bool{true}[0],
 }
 
 var Pistol = Weapon{
@@ -132,7 +132,7 @@ var Pistol = Weapon{
 	Ammo:        "10 round mags",
 	RearGrip:    "",
 	Perk:        "",
-	Meta:        false,
+	Meta:        &[]bool{false}[0],
 }
 
 var StaticWeapons = Weapons{XM4, C58, Mac10, Pistol}

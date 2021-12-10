@@ -9,9 +9,8 @@ import (
 // routes creates a subrouter for each type of request,
 // and ties middleware and final handlers to each path.
 func (srv *server) routes() {
-	srv.log.WithFields(logrus.Fields{"Caller": "routes()", "Message": "Initializing router & adding handlers"}).Info()
+	srv.log.WithFields(logrus.Fields{"Caller": "routes()", "Message": "Initializing router and adding handlers"}).Info()
 	loadoutsRouter := srv.router.PathPrefix("/loadouts/").Subrouter()
-	// TODO use srv.router.Queries()
 	loadoutsRouter.Handle("/", alice.
 		New(srv.mdl.Log).
 		ThenFunc(srv.GetLoadouts())).
@@ -20,15 +19,15 @@ func (srv *server) routes() {
 	loadoutsRouter.Handle("/", alice.
 		New(srv.mdl.Log, srv.mdl.Authenticate, srv.mdl.ValidateLoadout).
 		ThenFunc(srv.CreateLoadout())).
-		Schemes("https").
+		Schemes("http"). // TODO switch to https in prod
 		Methods(http.MethodPost)
 	loadoutsRouter.Handle("/weapon/{weapon_name}", alice.
-		New(srv.mdl.ValidateNameParam).
+		New(srv.mdl.Log, srv.mdl.ValidateNameParam).
 		ThenFunc(srv.GetLoadoutsByWeapon())).
 		Schemes("http", "https").
 		Methods(http.MethodGet)
 	loadoutsRouter.Handle("/category/{category}", alice.
-		New(srv.mdl.ValidateCategoryParam).
+		New(srv.mdl.Log, srv.mdl.ValidateCategoryParam).
 		ThenFunc(srv.GetLoadoutsByCategory())).
 		Schemes("http", "https").
 		Methods(http.MethodGet)

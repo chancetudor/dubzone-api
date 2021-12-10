@@ -1,3 +1,10 @@
+/*
+Package models contains the Go representation of our data,
+which is passed as JSON to/from the consumer and into our database.
+
+Package models contains Loadout models and Weapon models.
+*/
+
 package models
 
 import (
@@ -47,7 +54,7 @@ type Loadout struct {
 	//
 	// required: true
 	// example: true
-	Meta bool `json:"meta_loadout" validate:"required"`
+	Meta *bool `json:"meta_loadout" validate:"required"`
 }
 
 // Loadouts describes a slice of type *Loadout
@@ -57,9 +64,9 @@ var validCats map[string]bool = map[string]bool{"RANGE": true, "CLOSE": true, "C
 
 // TODO remove as we implement Google Cloud Datastore
 var StaticLoadouts = Loadouts{
-	&Loadout{Primary: XM4, Secondary: Pistol, PerkOne: "Perk1", PerkTwo: "Perk2", PerkThree: "Perk3", Lethal: "Semtex", Tactical: "Stuns", Meta: true},
-	&Loadout{Primary: C58, Secondary: Pistol, PerkOne: "Perk1", PerkTwo: "Perk2", PerkThree: "Perk3", Lethal: "Semtex", Tactical: "Stuns", Meta: true},
-	&Loadout{Primary: Mac10, Secondary: Pistol, PerkOne: "Perk1", PerkTwo: "Perk2", PerkThree: "Perk3", Lethal: "Semtex", Tactical: "Stuns", Meta: false},
+	&Loadout{Primary: XM4, Secondary: Pistol, PerkOne: "Perk1", PerkTwo: "Perk2", PerkThree: "Perk3", Lethal: "Semtex", Tactical: "Stuns", Meta: &[]bool{true}[0]},
+	&Loadout{Primary: C58, Secondary: Pistol, PerkOne: "Perk1", PerkTwo: "Perk2", PerkThree: "Perk3", Lethal: "Semtex", Tactical: "Stuns", Meta: &[]bool{true}[0]},
+	&Loadout{Primary: Mac10, Secondary: Pistol, PerkOne: "Perk1", PerkTwo: "Perk2", PerkThree: "Perk3", Lethal: "Semtex", Tactical: "Stuns", Meta: &[]bool{true}[0]},
 }
 
 // FromJSON takes in an io.Reader, the *http.Request body,
@@ -99,7 +106,7 @@ func AddProduct(l *Loadout) {
 func GetMetaLoadouts() Loadouts {
 	MetaLoadouts := Loadouts{}
 	for _, l := range StaticLoadouts {
-		if l.Meta == true {
+		if l.Meta == &[]bool{true}[0] {
 			MetaLoadouts = append(MetaLoadouts, l)
 		}
 	}

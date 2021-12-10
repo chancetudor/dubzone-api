@@ -62,6 +62,10 @@ definitions:
         example: Range
         type: string
         x-go-name: Category
+      game:
+        description: The game the weapon is from
+        type: string
+        x-go-name: Game
       laser:
         description: The weapon's laser attachment
         type: string
@@ -104,6 +108,7 @@ definitions:
         x-go-name: WeaponName
     required:
     - weapon_name
+    - game
     - category
     - meta_weapon
     title: Weapon represents a Warzone weapon, complete with a category and all recommended
@@ -121,7 +126,7 @@ info:
   title: Dubzone API
   version: 0.0.2
 paths:
-  /loadouts:
+  /loadouts/:
     get:
       operationId: listLoadouts
       responses:
