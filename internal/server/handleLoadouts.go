@@ -14,6 +14,8 @@ import (
 //	200: noContent
 // schemes:
 //	http, https
+// security:
+//	basicAuth
 
 /*
 CreateLoadout takes a JSON representation of a Loadout,

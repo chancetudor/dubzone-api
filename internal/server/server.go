@@ -62,7 +62,7 @@ func (srv *server) Start(port string) {
 
 // newRouter creates a new Gorilla mux with appropriate options
 func newRouter() *mux.Router {
-	r := mux.NewRouter().StrictSlash(true)
+	r := mux.NewRouter()
 
 	return r
 }
