@@ -1,6 +1,10 @@
 package models
 
-import "github.com/go-playground/validator/v10"
+import (
+	"encoding/json"
+	"github.com/go-playground/validator/v10"
+	"io"
+)
 
 // Weapon represents a Warzone weapon, complete with a category and all recommended attachments.
 // A Weapon can have a maximum of 5 fields set at one time. TODO potentially change w/ Vanguard integration
@@ -71,8 +75,38 @@ func (w *Weapon) Validate() error {
 	return v.Struct(v)
 }
 
-func GetWeapons() Weapons {
+// FromJSON takes in an io.Reader, the *http.Request body,
+// and unmarshals that body into a Loadout.
+func (l *Weapons) FromJSON(r io.Reader) error {
+	e := json.NewDecoder(r)
+	return e.Decode(l)
+}
+
+// ToJSON serializes the contents of the collection to JSON
+// NewEncoder provides better performance than json.Unmarshal as it does not
+// have to buffer the output into an in memory slice of bytes
+// this reduces allocations and the overheads of the service
+//
+// https://golang.org/pkg/encoding/json/#NewEncoder
+func (l *Weapons) ToJSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(l)
+}
+
+func GetStaticWeapons() Weapons {
 	return StaticWeapons
+}
+
+// TODO remove as we get Google Cloud Datastore in operation
+func GetMetaWeapons() Weapons {
+	MetaWeapons := Weapons{}
+	for _, l := range StaticWeapons {
+		if l.Meta == &[]bool{true}[0] {
+			MetaWeapons = append(MetaWeapons, l)
+		}
+	}
+
+	return MetaWeapons
 }
 
 var XM4 = Weapon{

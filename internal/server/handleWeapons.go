@@ -1,5 +1,125 @@
 package server
 
+import (
+	"github.com/chancetudor/dubzone-api/internal/models"
+	"github.com/chancetudor/dubzone-api/middleware"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
+	"net/http"
+)
+
+// swagger:route GET /weapons/ weapons listWeapons
+// Returns a list of all weapons.
+// responses:
+//	200: weaponsResponse
+// schemes:
+//	http, https
+
+// GetWeapons returns all weapons in the database in JSON formatting.
+func (srv *server) GetWeapons() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		srv.log.WithFields(logrus.Fields{"Caller": "GetWeapons()", "Message": "Returning all weapons"}).Info()
+		weapons := models.GetStaticWeapons()
+		w.Header().Add("Content-Type", "application/json")
+		err := weapons.ToJSON(w)
+		if err != nil {
+			srv.log.Error(errors.Wrap(err, "Unable to marshal JSON into weapons struct"))
+			http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
+		}
+	}
+}
+
+// swagger:route GET /weapons/meta weapons listMetaWeapons
+// Returns a list of all weapons marked as meta.
+// responses:
+//	200: weaponsResponse
+// schemes:
+//	http, https
+
+// GetMetaWeapons returns all weapons marked as meta.
+func (srv *server) GetMetaWeapons() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		srv.log.WithFields(logrus.Fields{"Caller": "GetMetaWeapons()", "Message": "Returning all meta weapons"}).Info()
+		meta := models.GetMetaWeapons()
+		w.Header().Add("Content-Type", "application/json")
+		err := meta.ToJSON(w)
+		if err != nil {
+			srv.log.Error(errors.Wrap(err, "Unable to marshal JSON into weapon struct"))
+			http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
+		}
+	}
+}
+
+// swagger:route GET /weapons/category/{category} weapons listWeaponsByCategory
+// Returns a list of all weapons whose category matches the category parameter given.
+// responses:
+//	200: weaponsResponse
+// schemes:
+//	http, https
+
+// GetWeaponsByCategory takes a category parameter
+// and returns all weapons tagged with that given category.
+// The category parameter is required; if it is not given
+// or if the category does not exist, an http.StatusBadRequest is returned.
+func (srv *server) GetWeaponsByCategory() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		cat := r.Context().Value(middleware.CatKey{}).(string)
+		srv.log.WithFields(logrus.Fields{"Caller": "GetLoadoutsByCategory()", "Message": "Returning all loadouts with category: " + cat}).Info()
+		loadouts := models.GetLoadoutsByCategory(cat)
+		w.Header().Add("Content-Type", "application/json")
+		err := loadouts.ToJSON(w)
+		if err != nil {
+			srv.log.Error(errors.Wrap(err, "Unable to marshal JSON into loadouts struct"))
+			http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
+		}
+	}
+}
+
+// swagger:route GET /loadouts/weapon/{weapon_name} loadouts listLoadoutsByWeapon
+// Returns a list of all loadouts whose primary weapon's category matches the name parameter given.
+// responses:
+//	200: loadoutsResponse
+// schemes:
+//	http, https
+
+// GetWeaponsByName takes a name parameter and returns all weapon builds
+// where the weapon name matches the parameter.
+// The name parameter is required; if it is not given an http.StatusBadRequest is returned.
+func (srv *server) GetWeaponsByName() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		name := r.Context().Value(middleware.NameKey{}).(string)
+		srv.log.WithFields(logrus.Fields{"Caller": "GetLoadoutsByWeapon()", "Message": "Returning all loadouts with name: " + name}).Info()
+		loadouts := models.GetLoadoutsByName(name)
+		w.Header().Add("Content-Type", "application/json")
+		err := loadouts.ToJSON(w)
+		if err != nil {
+			srv.log.Error(errors.Wrap(err, "Unable to marshal JSON into loadouts struct"))
+			http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
+		}
+	}
+}
+
+// swagger:route GET /weapons/categories weapons listWeaponCategories
+// Returns a list of all weapon categories.
+// responses:
+//	200: categoriesResponse
+// schemes:
+//	http, https
+
+// GetWeaponCategories returns all weapon categories in the database in JSON formatting.
+func (srv *server) GetWeaponCategories() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		srv.log.WithFields(logrus.Fields{"Caller": "GetWeaponCategories()", "Message": "Returning all weapon categories"}).Info()
+		categories := models.GetWeaponCategories()
+		w.Header().Add("Content-Type", "application/json")
+		err := categories.ToJSON(w)
+		if err != nil {
+			srv.log.Error(errors.Wrap(err, "Unable to marshal JSON into categories struct"))
+			http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
+		}
+	}
+}
+
 //
 // import (
 // 	"context"

@@ -51,6 +51,11 @@ func (srv *server) routes() {
 
 	// weapons handlers
 	weaponsRouter := srv.router.PathPrefix("/weapons").Subrouter()
+	weaponsRouter.Handle("/", alice.
+		New(srv.mdl.Log).
+		ThenFunc(srv.GetWeapons())).
+		Schemes("http", "https").
+		Methods(http.MethodGet)
 	weaponsRouter.Handle("/weapon/{weapon_name}", alice.
 		New(srv.mdl.Log, srv.mdl.ValidateNameParam).
 		ThenFunc(srv.GetWeaponsByName())).
@@ -66,12 +71,12 @@ func (srv *server) routes() {
 		ThenFunc(srv.GetWeaponsByCategory())).
 		Schemes("http", "https").
 		Methods(http.MethodGet)
-	weaponsRouter.Handle("/meta", alice.
+	weaponsRouter.Handle("/categories", alice.
 		New(srv.mdl.Log).
 		ThenFunc(srv.GetWeaponCategories())).
 		Schemes("http", "https").
 		Methods(http.MethodGet)
-	weaponsRouter.Handle("/meta", alice.
+	weaponsRouter.Handle("/game/{game}", alice.
 		New(srv.mdl.Log, srv.mdl.ValidateGameParam).
 		ThenFunc(srv.GetWeaponsByGame())).
 		Schemes("http", "https").
