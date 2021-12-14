@@ -6,21 +6,5 @@ I didn't know what data to hold and expose until I realized that information abo
 
 I built this in Go to further develop my knowledge of the language, and used MongoDB to gain further experience in NoSQL schemas.
 
-_This is a personal project, and so is not currently operational for real-world usage._ Feel free to take a look at my code to see my design choices and code quality, though!
-
-## Open Endpoints
-
-Open endpoints require no Authentication.
-
-* Loadouts : 
-  * `GET /loadouts` --> returns all loadouts
-  * `POST /loadout` --> creates a new loadout
-  * `GET /loadouts/category/{cat}` --> returns all loadouts fitting a specified category
-  * `GET /loadouts/weapon/{name}` --> returns all loadouts containing a specified weapon
-  * `GET /loadouts/meta` --> returns all loadouts that are currently meta
-* Weapons:
-  * `GET /weapon/{name}` --> returns a weapon's data
-  * `GET /weapons/meta` --> returns all weapons that are currently meta
-  * `GET /weapons/{cat}` --> returns all weapons fitting a specified category
-  * `GET /weapons/categories` --> returns all weapon categories.
+_This is a personal project, and so is not currently operational for real-world usage._ Feel free to take a look at my code to see my design choices and code quality, though! I am currently working on a complete overhaul and will host using GCP.
 
