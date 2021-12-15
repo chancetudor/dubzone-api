@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// swagger:route POST /loadouts/ loadout newLoadout
+// swagger:route POST /loadouts loadout newLoadout
 // Creates a new loadout.
 // responses:
 //	200: noContent
@@ -33,7 +33,7 @@ func (srv *server) CreateLoadout() http.HandlerFunc {
 	}
 }
 
-// swagger:route GET /loadouts/ loadouts listLoadouts
+// swagger:route GET /loadouts loadouts listLoadouts
 // Returns a list of all loadouts.
 // responses:
 //	200: loadoutsResponse
@@ -75,8 +75,8 @@ func (srv *server) GetMetaLoadouts() http.HandlerFunc {
 	}
 }
 
-// swagger:route GET /loadouts/category/{category} loadouts listLoadoutsByCategory
-// Returns a list of all loadouts whose primary weapon's category matches the category parameter given.
+// swagger:route GET /loadouts/weapon loadouts listLoadoutsWithQueryParams
+// Returns a list of all loadouts that meet a certain parameter (weapon name, category, game) given as a query param.
 // responses:
 //	200: loadoutsResponse
 // schemes:
@@ -100,8 +100,8 @@ func (srv *server) GetLoadoutsByCategory() http.HandlerFunc {
 	}
 }
 
-// swagger:route GET /loadouts/weapon/{weapon_name} loadouts listLoadoutsByWeapon
-// Returns a list of all loadouts whose primary weapon's name matches the name parameter given.
+// swagger:route GET /loadouts/weapon loadouts listLoadoutsWithQueryParams
+// Returns a list of all loadouts that meet a certain parameter (weapon name, category, game) given as a query param.
 // responses:
 //	200: loadoutsResponse
 // schemes:
@@ -124,14 +124,14 @@ func (srv *server) GetLoadoutsByWeapon() http.HandlerFunc {
 	}
 }
 
-// swagger:route GET /loadouts/weapon/{weapon_name} loadouts listLoadoutsByGame
-// Returns a list of all loadouts whose primary weapon's game matches the game parameter given.
+// swagger:route GET /loadouts/weapon loadouts listLoadoutsWithQueryParams
+// Returns a list of all loadouts that meet a certain parameter (weapon name, category, game) given as a query param.
 // responses:
 //	200: loadoutsResponse
 // schemes:
 //	http, https
 
-// GetLoadoutsByWeapon takes a name parameter and returns all loadouts
+// GetLoadoutsByGame takes a name parameter and returns all loadouts
 // whose primary weapon is named as such.
 // The name parameter is required; if it is not given an http.StatusBadRequest is returned.
 func (srv *server) GetLoadoutsByGame() http.HandlerFunc {

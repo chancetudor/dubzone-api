@@ -31,42 +31,44 @@ type categoriesResponse struct {
 	Body models.Categories
 }
 
-// swagger:parameters listLoadoutsByCategory
-type loadoutsByCategoryParameter struct {
+// swagger:parameters listLoadoutsWithQueryParams
+type listLoadoutsQueryParams struct {
+	//
 	// The category by which to return loadouts.
-	// in: path
+	// in: query
+	// pattern: [a-zA-Z]+[-]?[a-zA-Z]*
 	// required: true
 	Category string `json:"category"`
-}
-
-// swagger:parameters listWeaponsByCategory
-type weaponsByCategoryParameter struct {
-	// The category by which to return weapons.
-	// in: path
-	// required: true
-	Category string `json:"category"`
-}
-
-// swagger:parameters listLoadoutsByWeapon
-type loadoutsByWeaponParameter struct {
 	// The name of the weapon by which to return loadouts.
-	// in: path
+	// in: query
+	// pattern: [a-zA-Z]+\d*
 	// required: true
-	Name string `json:"weapon_name"`
+	WeaponName string `json:"name"`
+	// The name of the game by which to return loadout configurations.
+	// in: query
+	// pattern: [a-zA-Z]+[\s]?[a-zA-Z]+
+	// required: true
+	Game string `json:"game"`
 }
 
-// swagger:parameters listWeaponsByName
-type weaponsByNameParameter struct {
-	// The name of the weapon by which to return weapon configurations.
-	// in: path
+// swagger:parameters listWeaponsWithQueryParams
+type listWeaponsQueryParams struct {
+	// These are the query parameters to pass when using a /weapons/weapon endpoint.
+	// All are marked as required, but this means that you must use one and only one query parameter with the endpoint.
+	//
+	// The category by which to return weapon configurations.
+	// in: query
+	// pattern: [a-zA-Z]+[-]?[a-zA-Z]*
 	// required: true
-	Name string `json:"weapon_name"`
-}
-
-// swagger:parameters listWeaponsByGame
-type weaponsByGameParameter struct {
+	Category string `json:"category"`
 	// The name of the weapon by which to return weapon configurations.
-	// in: path
+	// in: query
+	// pattern: [a-zA-Z]+\d*
+	// required: true
+	WeaponName string `json:"name"`
+	// The name of the game by which to return weapon configurations.
+	// in: query
+	// pattern: [a-zA-Z]+[\s]?[a-zA-Z]+
 	// required: true
 	Game string `json:"game"`
 }

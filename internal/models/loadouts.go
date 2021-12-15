@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-// Loadout represents a Warzone loadout
+// Loadout
 //
 // A Loadout is the principal object for this service
 //

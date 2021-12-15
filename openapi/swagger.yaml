@@ -52,7 +52,7 @@ definitions:
     - primary
     - secondary
     - meta_loadout
-    title: Loadout represents a Warzone loadout
+    title: Loadout
     type: object
     x-go-package: github.com/chancetudor/dubzone-api/internal/models
   Loadouts:
@@ -63,7 +63,10 @@ definitions:
     x-go-package: github.com/chancetudor/dubzone-api/internal/models
   Weapon:
     description: |-
+      Weapon represents a Warzone weapon, complete with a category and all recommended attachments.
+
       A Weapon can have a maximum of 5 fields set at one time. TODO potentially change w/ Vanguard integration
+
       Leave the field as an empty string ("") if the field is not to be set.
     properties:
       ammo:
@@ -128,8 +131,7 @@ definitions:
     - game
     - category
     - meta_weapon
-    title: Weapon represents a Warzone weapon, complete with a category and all recommended
-      attachments.
+    title: 'Weapon '
     type: object
     x-go-package: github.com/chancetudor/dubzone-api/internal/models
   Weapons:
@@ -149,7 +151,7 @@ info:
   title: Dubzone API
   version: 0.0.2
 paths:
-  /loadouts/:
+  /loadouts:
     get:
       operationId: listLoadouts
       responses:
@@ -166,23 +168,6 @@ paths:
       summary: Creates a new loadout.
       tags:
       - loadout
-  /loadouts/category/{category}:
-    get:
-      operationId: listLoadoutsByCategory
-      parameters:
-      - description: The category by which to return loadouts.
-        in: path
-        name: category
-        required: true
-        type: string
-        x-go-name: Category
-      responses:
-        "200":
-          $ref: '#/responses/loadoutsResponse'
-      summary: Returns a list of all loadouts whose primary weapon's category matches
-        the category parameter given.
-      tags:
-      - loadouts
   /loadouts/meta:
     get:
       operationId: listMetaLoadouts
@@ -192,24 +177,39 @@ paths:
       summary: Returns a list of all loadouts marked as meta.
       tags:
       - loadouts
-  /loadouts/weapon/{weapon_name}:
+  /loadouts/weapon:
     get:
-      operationId: listLoadoutsByWeapon
+      operationId: listLoadoutsWithQueryParams
       parameters:
-      - description: The name of the weapon by which to return loadouts.
-        in: path
-        name: weapon_name
+      - description: The category by which to return loadouts.
+        in: query
+        name: category
+        pattern: '[a-zA-Z]+[-]?[a-zA-Z]*'
         required: true
         type: string
-        x-go-name: Name
+        x-go-name: Category
+      - description: The name of the weapon by which to return loadouts.
+        in: query
+        name: name
+        pattern: '[a-zA-Z]+\d*'
+        required: true
+        type: string
+        x-go-name: WeaponName
+      - description: The name of the game by which to return loadout configurations.
+        in: query
+        name: game
+        pattern: '[a-zA-Z]+[\s]?[a-zA-Z]+'
+        required: true
+        type: string
+        x-go-name: Game
       responses:
         "200":
           $ref: '#/responses/loadoutsResponse'
-      summary: Returns a list of all loadouts whose primary weapon's category matches
-        the name parameter given.
+      summary: Returns a list of all loadouts that meet a certain parameter (weapon
+        name, category, game) given as a query param.
       tags:
       - loadouts
-  /weapons/:
+  /weapons:
     get:
       operationId: listWeapons
       responses:
@@ -227,39 +227,6 @@ paths:
       summary: Returns a list of all weapon categories.
       tags:
       - weapons
-  /weapons/category/{category}:
-    get:
-      operationId: listWeaponsByCategory
-      parameters:
-      - description: The category by which to return weapons.
-        in: path
-        name: category
-        required: true
-        type: string
-        x-go-name: Category
-      responses:
-        "200":
-          $ref: '#/responses/weaponsResponse'
-      summary: Returns a list of all weapons whose category matches the category parameter
-        given.
-      tags:
-      - weapons
-  /weapons/game/{game}:
-    get:
-      operationId: listWeaponsByGame
-      parameters:
-      - description: The name of the weapon by which to return weapon configurations.
-        in: path
-        name: game
-        required: true
-        type: string
-        x-go-name: Game
-      responses:
-        "200":
-          $ref: '#/responses/weaponsResponse'
-      summary: Returns a list of all weapons from the game passed as a parameter.
-      tags:
-      - weapons
   /weapons/meta:
     get:
       operationId: listMetaWeapons
@@ -269,21 +236,39 @@ paths:
       summary: Returns a list of all weapons marked as meta.
       tags:
       - weapons
-  /weapons/weapon/{weapon_name}:
+  /weapons/weapon:
     get:
-      operationId: listWeaponsByName
+      operationId: listWeaponsWithQueryParams
       parameters:
-      - description: The name of the weapon by which to return weapon configurations.
-        in: path
-        name: weapon_name
+      - description: "These are the query parameters to pass when using a /weapons/weapon
+          endpoint. \nAll are marked as required, but this means that you must use
+          one and only one query parameter with the endpoint.\n\nThe category by which
+          to return weapon configurations."
+        in: query
+        name: category
+        pattern: '[a-zA-Z]+[-]?[a-zA-Z]*'
         required: true
         type: string
-        x-go-name: Name
+        x-go-name: Category
+      - description: The name of the weapon by which to return weapon configurations.
+        in: query
+        name: name
+        pattern: '[a-zA-Z]+\d*'
+        required: true
+        type: string
+        x-go-name: WeaponName
+      - description: The name of the game by which to return weapon configurations.
+        in: query
+        name: game
+        pattern: '[a-zA-Z]+[\s]?[a-zA-Z]+'
+        required: true
+        type: string
+        x-go-name: Game
       responses:
         "200":
           $ref: '#/responses/weaponsResponse'
-      summary: Returns a list of all weapons whose name matches the name parameter
-        given.
+      summary: Returns a list of all weapons that meet a certain parameter (weapon
+        name, category, game) given as a query param.
       tags:
       - weapons
 produces:

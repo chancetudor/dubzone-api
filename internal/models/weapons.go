@@ -7,8 +7,12 @@ import (
 	"strings"
 )
 
+// Weapon
+//
 // Weapon represents a Warzone weapon, complete with a category and all recommended attachments.
+//
 // A Weapon can have a maximum of 5 fields set at one time. TODO potentially change w/ Vanguard integration
+//
 // Leave the field as an empty string ("") if the field is not to be set.
 type Weapon struct {
 	// The weapon's name

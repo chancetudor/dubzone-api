@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// swagger:route GET /weapons/ weapons listWeapons
+// swagger:route GET /weapons weapons listWeapons
 // Returns a list of all weapons.
 // responses:
 //	200: weaponsResponse
@@ -50,8 +50,29 @@ func (srv *server) GetMetaWeapons() http.HandlerFunc {
 	}
 }
 
-// swagger:route GET /weapons/category/{category} weapons listWeaponsByCategory
-// Returns a list of all weapons whose category matches the category parameter given.
+// swagger:route GET /weapons/categories weapons listWeaponCategories
+// Returns a list of all weapon categories.
+// responses:
+//	200: categoriesResponse
+// schemes:
+//	http, https
+
+// GetWeaponCategories returns all weapon categories in the database in JSON formatting.
+func (srv *server) GetWeaponCategories() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		srv.log.WithFields(logrus.Fields{"Caller": "GetWeaponCategories()", "Message": "Returning all weapon categories"}).Info()
+		categories := models.GetWeaponCategories()
+		w.Header().Add("Content-Type", "application/json")
+		err := categories.ToJSON(w)
+		if err != nil {
+			srv.log.Error(errors.Wrap(err, "Unable to marshal JSON into categories struct"))
+			http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
+		}
+	}
+}
+
+// swagger:route GET /weapons/weapon weapons listWeaponsWithQueryParams
+// Returns a list of all weapons that meet a certain parameter (weapon name, category, game) given as a query param.
 // responses:
 //	200: weaponsResponse
 // schemes:
@@ -75,8 +96,8 @@ func (srv *server) GetWeaponsByCategory() http.HandlerFunc {
 	}
 }
 
-// swagger:route GET /weapons/weapon/{weapon_name} weapons listWeaponsByName
-// Returns a list of all weapons whose name matches the name parameter given.
+// swagger:route GET /weapons/weapon weapons listWeaponsWithQueryParams
+// Returns a list of all weapons that meet a certain parameter (weapon name, category, game) given as a query param.
 // responses:
 //	200: weaponsResponse
 // schemes:
@@ -102,8 +123,8 @@ func (srv *server) GetWeaponsByName() http.HandlerFunc {
 	}
 }
 
-// swagger:route GET /weapons/weapon/{game} weapons listWeaponsByGame
-// Returns a list of all weapons from the game passed as a parameter.
+// swagger:route GET /weapons/weapon weapons listWeaponsWithQueryParams
+// Returns a list of all weapons that meet a certain parameter (weapon name, category, game) given as a query param.
 // responses:
 //	200: weaponsResponse
 // schemes:
@@ -122,27 +143,6 @@ func (srv *server) GetWeaponsByGame() http.HandlerFunc {
 		err := weapons.ToJSON(w)
 		if err != nil {
 			srv.log.Error(errors.Wrap(err, "Unable to marshal JSON into weapons struct"))
-			http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
-		}
-	}
-}
-
-// swagger:route GET /weapons/categories weapons listWeaponCategories
-// Returns a list of all weapon categories.
-// responses:
-//	200: categoriesResponse
-// schemes:
-//	http, https
-
-// GetWeaponCategories returns all weapon categories in the database in JSON formatting.
-func (srv *server) GetWeaponCategories() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		srv.log.WithFields(logrus.Fields{"Caller": "GetWeaponCategories()", "Message": "Returning all weapon categories"}).Info()
-		categories := models.GetWeaponCategories()
-		w.Header().Add("Content-Type", "application/json")
-		err := categories.ToJSON(w)
-		if err != nil {
-			srv.log.Error(errors.Wrap(err, "Unable to marshal JSON into categories struct"))
 			http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
 		}
 	}
