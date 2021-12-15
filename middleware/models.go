@@ -24,3 +24,8 @@ type CatKey struct{}
 // When a name parameter is correct, we add the name to the request context,
 // for use in the next handler.
 type NameKey struct{}
+
+// GameKey is the key to be used for use in validating game parameters.
+// When a game parameter is correct, we add the game to the request context,
+// for use in the next handler.
+type GameKey struct{}

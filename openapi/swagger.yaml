@@ -2,6 +2,17 @@ basePath: /
 consumes:
 - application/json
 definitions:
+  Categories:
+    items:
+      $ref: '#/definitions/Category'
+    type: array
+    x-go-package: github.com/chancetudor/dubzone-api/internal/models
+  Category:
+    properties:
+      Category:
+        type: string
+    type: object
+    x-go-package: github.com/chancetudor/dubzone-api/internal/models
   Loadout:
     description: |-
       A Loadout is the principal object for this service
@@ -43,6 +54,12 @@ definitions:
     - meta_loadout
     title: Loadout represents a Warzone loadout
     type: object
+    x-go-package: github.com/chancetudor/dubzone-api/internal/models
+  Loadouts:
+    description: type Loadouts is a slice of type *Loadout
+    items:
+      $ref: '#/definitions/Loadout'
+    type: array
     x-go-package: github.com/chancetudor/dubzone-api/internal/models
   Weapon:
     description: |-
@@ -115,6 +132,12 @@ definitions:
       attachments.
     type: object
     x-go-package: github.com/chancetudor/dubzone-api/internal/models
+  Weapons:
+    description: type Weapons is a slice of type *Weapon
+    items:
+      $ref: '#/definitions/Weapon'
+    type: array
+    x-go-package: github.com/chancetudor/dubzone-api/internal/models
 host: localhost
 info:
   contact:
@@ -186,17 +209,100 @@ paths:
         the name parameter given.
       tags:
       - loadouts
+  /weapons/:
+    get:
+      operationId: listWeapons
+      responses:
+        "200":
+          $ref: '#/responses/weaponsResponse'
+      summary: Returns a list of all weapons.
+      tags:
+      - weapons
+  /weapons/categories:
+    get:
+      operationId: listWeaponCategories
+      responses:
+        "200":
+          $ref: '#/responses/categoriesResponse'
+      summary: Returns a list of all weapon categories.
+      tags:
+      - weapons
+  /weapons/category/{category}:
+    get:
+      operationId: listWeaponsByCategory
+      parameters:
+      - description: The category by which to return weapons.
+        in: path
+        name: category
+        required: true
+        type: string
+        x-go-name: Category
+      responses:
+        "200":
+          $ref: '#/responses/weaponsResponse'
+      summary: Returns a list of all weapons whose category matches the category parameter
+        given.
+      tags:
+      - weapons
+  /weapons/game/{game}:
+    get:
+      operationId: listWeaponsByGame
+      parameters:
+      - description: The name of the weapon by which to return weapon configurations.
+        in: path
+        name: game
+        required: true
+        type: string
+        x-go-name: Game
+      responses:
+        "200":
+          $ref: '#/responses/weaponsResponse'
+      summary: Returns a list of all weapons from the game passed as a parameter.
+      tags:
+      - weapons
+  /weapons/meta:
+    get:
+      operationId: listMetaWeapons
+      responses:
+        "200":
+          $ref: '#/responses/weaponsResponse'
+      summary: Returns a list of all weapons marked as meta.
+      tags:
+      - weapons
+  /weapons/weapon/{weapon_name}:
+    get:
+      operationId: listWeaponsByName
+      parameters:
+      - description: The name of the weapon by which to return weapon configurations.
+        in: path
+        name: weapon_name
+        required: true
+        type: string
+        x-go-name: Name
+      responses:
+        "200":
+          $ref: '#/responses/weaponsResponse'
+      summary: Returns a list of all weapons whose name matches the name parameter
+        given.
+      tags:
+      - weapons
 produces:
 - application/json
 responses:
+  categoriesResponse:
+    description: ""
+    schema:
+      $ref: '#/definitions/Categories'
   loadoutsResponse:
     description: ""
     schema:
-      items:
-        $ref: '#/definitions/Loadout'
-      type: array
+      $ref: '#/definitions/Loadouts'
   noContent:
     description: ""
+  weaponsResponse:
+    description: ""
+    schema:
+      $ref: '#/definitions/Weapons'
 schemes:
 - https
 swagger: "2.0"

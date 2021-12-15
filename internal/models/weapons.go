@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
 	"io"
+	"strings"
 )
 
 // Weapon represents a Warzone weapon, complete with a category and all recommended attachments.
@@ -68,11 +69,62 @@ type Weapon struct {
 	Meta *bool `json:"meta_weapon" validate:"required"`
 }
 
-type Weapons []Weapon
+// type Weapons is a slice of type *Weapon
+type Weapons []*Weapon
+
+// validCats is a map of all valid categories a weapon could have
+var validCats map[string]bool = map[string]bool{"RANGE": true, "CLOSE": true, "CLOSE-MED": true, "SNIPER RANGED": true, "SNIPER SUPPORT": true, "SECONDARY": true}
+
+// validGames is a map of all valid games a weapon could be from
+var validGames map[string]bool = map[string]bool{"COLD WAR": true, "MODERN WARFARE": true, "VANGUARD": true}
 
 func (w *Weapon) Validate() error {
 	v := validator.New()
 	return v.Struct(v)
+}
+
+// ValidCategory is called in ValidateCategoryParam and returns a bool representing whether
+// the category parameter is valid or not. If the category passed is "snipersupport" or "sniperranged,"
+// the function transforms that string into "sniper support" and/or "sniper ranged," as these
+// are the correct values. The caller is not expected to know this.
+func ValidCategory(cat string) (string, bool) {
+	validCat := transformCategory(cat)
+	_, valid := validCats[strings.ToUpper(validCat)]
+	if valid {
+		return validCat, true
+	}
+	return "", false
+}
+
+func transformCategory(c string) string {
+	switch {
+	case strings.EqualFold(c, "snipersupport"):
+		return "sniper support"
+	case strings.EqualFold(c, "sniperranged"):
+		return "sniper ranged"
+	}
+
+	return c
+}
+
+func ValidGame(game string) (string, bool) {
+	validGame := transformGame(game)
+	_, valid := validGames[strings.ToUpper(validGame)]
+	if valid {
+		return validGame, true
+	}
+	return "", false
+}
+
+func transformGame(g string) string {
+	switch {
+	case strings.EqualFold(g, "coldwar"):
+		return "cold war"
+	case strings.EqualFold(g, "modernwarfare"):
+		return "modern warfare"
+	}
+
+	return g
 }
 
 // FromJSON takes in an io.Reader, the *http.Request body,
@@ -100,18 +152,58 @@ func GetStaticWeapons() Weapons {
 // TODO remove as we get Google Cloud Datastore in operation
 func GetMetaWeapons() Weapons {
 	MetaWeapons := Weapons{}
-	for _, l := range StaticWeapons {
-		if l.Meta == &[]bool{true}[0] {
-			MetaWeapons = append(MetaWeapons, l)
+	for _, w := range StaticWeapons {
+		// have to dereference Meta field since it's a pointer
+		// see: https://github.com/go-playground/validator/issues/142 &&
+		// https://stackoverflow.com/questions/28817992/how-to-set-bool-pointer-to-true-in-struct-literal
+		if *w.Meta == true {
+			MetaWeapons = append(MetaWeapons, w)
 		}
 	}
 
 	return MetaWeapons
 }
 
+// TODO remove as we get Google Cloud Datastore in operation
+func GetWeaponsByGame(game string) Weapons {
+	weapons := Weapons{}
+	for _, w := range StaticWeapons {
+		if strings.EqualFold(w.Game, game) {
+			weapons = append(weapons, w)
+		}
+	}
+
+	return weapons
+}
+
+// TODO remove as we get Google Cloud Datastore in operation
+func GetWeaponsByName(name string) Weapons {
+	weapons := Weapons{}
+	for _, w := range StaticWeapons {
+		if strings.EqualFold(w.WeaponName, name) {
+			weapons = append(weapons, w)
+		}
+	}
+
+	return weapons
+}
+
+// TODO remove as we get Google Cloud Datastore in operation
+func GetWeaponsByCategory(cat string) Weapons {
+	weapons := Weapons{}
+	for _, w := range StaticWeapons {
+		if strings.EqualFold(w.Category, cat) {
+			weapons = append(weapons, w)
+		}
+	}
+
+	return weapons
+}
+
 var XM4 = Weapon{
 	WeaponName:  "XM4",
 	Category:    "Range",
+	Game:        "Cold War",
 	Muzzle:      "Suppressed",
 	Barrel:      "Long Barrel",
 	Laser:       "",
@@ -126,7 +218,8 @@ var XM4 = Weapon{
 
 var C58 = Weapon{
 	WeaponName:  "C58",
-	Category:    "Sniper Support",
+	Category:    "SniperSupport",
+	Game:        "Cold War",
 	Muzzle:      "Suppressed",
 	Barrel:      "Long Barrel",
 	Laser:       "",
@@ -136,11 +229,13 @@ var C58 = Weapon{
 	Ammo:        "45 round mags",
 	RearGrip:    "",
 	Perk:        "",
-	Meta:        &[]bool{true}[0],
+	// see: https://github.com/go-playground/validator/issues/142 &&
+	// https://stackoverflow.com/questions/28817992/how-to-set-bool-pointer-to-true-in-struct-literal
+	Meta: &[]bool{true}[0],
 }
 
 var Mac10 = Weapon{
-	WeaponName:  "MAC 10",
+	WeaponName:  "MAC10",
 	Category:    "Close-Med",
 	Muzzle:      "Suppressed",
 	Barrel:      "Short Barrel",
@@ -151,12 +246,15 @@ var Mac10 = Weapon{
 	Ammo:        "60 round mags",
 	RearGrip:    "",
 	Perk:        "",
-	Meta:        &[]bool{true}[0],
+	// see: https://github.com/go-playground/validator/issues/142 &&
+	// https://stackoverflow.com/questions/28817992/how-to-set-bool-pointer-to-true-in-struct-literal
+	Meta: &[]bool{true}[0],
 }
 
 var Pistol = Weapon{
-	WeaponName:  "COLT .45",
+	WeaponName:  "DEAGLE",
 	Category:    "Secondary",
+	Game:        "Modern Warfare",
 	Muzzle:      "",
 	Barrel:      "Long Barrel",
 	Laser:       "No Laser",
@@ -166,7 +264,9 @@ var Pistol = Weapon{
 	Ammo:        "10 round mags",
 	RearGrip:    "",
 	Perk:        "",
-	Meta:        &[]bool{false}[0],
+	// see: https://github.com/go-playground/validator/issues/142 &&
+	// https://stackoverflow.com/questions/28817992/how-to-set-bool-pointer-to-true-in-struct-literal
+	Meta: &[]bool{false}[0],
 }
 
-var StaticWeapons = Weapons{XM4, C58, Mac10, Pistol}
+var StaticWeapons = Weapons{&XM4, &C58, &Mac10, &Pistol}

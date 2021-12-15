@@ -101,7 +101,7 @@ func (srv *server) GetLoadoutsByCategory() http.HandlerFunc {
 }
 
 // swagger:route GET /loadouts/weapon/{weapon_name} loadouts listLoadoutsByWeapon
-// Returns a list of all loadouts whose primary weapon's category matches the name parameter given.
+// Returns a list of all loadouts whose primary weapon's name matches the name parameter given.
 // responses:
 //	200: loadoutsResponse
 // schemes:
@@ -115,6 +115,30 @@ func (srv *server) GetLoadoutsByWeapon() http.HandlerFunc {
 		name := r.Context().Value(middleware.NameKey{}).(string)
 		srv.log.WithFields(logrus.Fields{"Caller": "GetLoadoutsByWeapon()", "Message": "Returning all loadouts with name: " + name}).Info()
 		loadouts := models.GetLoadoutsByName(name)
+		w.Header().Add("Content-Type", "application/json")
+		err := loadouts.ToJSON(w)
+		if err != nil {
+			srv.log.Error(errors.Wrap(err, "Unable to marshal JSON into loadouts struct"))
+			http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
+		}
+	}
+}
+
+// swagger:route GET /loadouts/weapon/{weapon_name} loadouts listLoadoutsByGame
+// Returns a list of all loadouts whose primary weapon's game matches the game parameter given.
+// responses:
+//	200: loadoutsResponse
+// schemes:
+//	http, https
+
+// GetLoadoutsByWeapon takes a name parameter and returns all loadouts
+// whose primary weapon is named as such.
+// The name parameter is required; if it is not given an http.StatusBadRequest is returned.
+func (srv *server) GetLoadoutsByGame() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		game := r.Context().Value(middleware.GameKey{}).(string)
+		srv.log.WithFields(logrus.Fields{"Caller": "GetLoadoutsByGame()", "Message": "Returning all loadouts with game: " + game}).Info()
+		loadouts := models.GetLoadoutsByGame(game)
 		w.Header().Add("Content-Type", "application/json")
 		err := loadouts.ToJSON(w)
 		if err != nil {

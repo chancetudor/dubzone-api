@@ -14,7 +14,21 @@ type noContent struct{}
 type loadoutsResponse struct {
 	// All loadouts in the database.
 	// in: body
-	Body []*models.Loadout
+	Body models.Loadouts
+}
+
+// swagger:response weaponsResponse
+type weaponsResponse struct {
+	// All loadouts in the database.
+	// in: body
+	Body models.Weapons
+}
+
+// swagger:response categoriesResponse
+type categoriesResponse struct {
+	// All categories in the database.
+	// in: body
+	Body models.Categories
 }
 
 // swagger:parameters listLoadoutsByCategory
@@ -47,4 +61,12 @@ type weaponsByNameParameter struct {
 	// in: path
 	// required: true
 	Name string `json:"weapon_name"`
+}
+
+// swagger:parameters listWeaponsByGame
+type weaponsByGameParameter struct {
+	// The name of the weapon by which to return weapon configurations.
+	// in: path
+	// required: true
+	Game string `json:"game"`
 }

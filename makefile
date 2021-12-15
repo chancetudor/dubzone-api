@@ -9,3 +9,6 @@ run:
 	
 swagger:
 	swagger generate spec -o ./openapi/swagger.yaml --scan-models
+	
+clean:
+	rm -r bin

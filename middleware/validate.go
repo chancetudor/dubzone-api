@@ -3,7 +3,6 @@ package middleware
 import (
 	"context"
 	"github.com/chancetudor/dubzone-api/internal/models"
-	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"mime"
@@ -54,6 +53,7 @@ func (mdl *Middleware) ValidateLoadout(next http.Handler) http.Handler {
 			http.Error(w, "Error validating product: "+err.Error(), http.StatusUnprocessableEntity)
 			return
 		}
+		// TODO loadout.Clean() --> ensure each field is ALL CAPS and strippedofspaces
 		// add the loadout to the request context for use in next handler
 		ctx := context.WithValue(r.Context(), LoadoutKey{}, loadout)
 		r = r.WithContext(ctx)
@@ -69,18 +69,19 @@ If parameter is valid, ValidateCategoryParam calls the HandlerFunc it was passed
 transformation) to the request context.
 
 If parameter is not valid, ValidateCategoryParam logs an error and returns http.StatusBadRequest to the caller.
+If parameter does not exist, http.StatusBadRequest is returned.
 */
 func (mdl *Middleware) ValidateCategoryParam(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		mdl.log.WithFields(logrus.Fields{"Caller": "ValidateCategoryParam()", "Message": "Validating category parameter"}).Info()
-		cat, found := mux.Vars(r)["category"]
-		if !found {
+		cat := r.FormValue("category")
+		if cat == "" {
 			err := errors.New("no category passed as a parameter")
 			mdl.log.Error(err)
 			http.Error(w, "Error validating parameter: no category parameter was passed", http.StatusBadRequest)
 			return
 		}
-		validCat, valid := models.ValidCategory(cat)
+		formattedCat, valid := models.ValidCategory(cat)
 		if !valid {
 			err := errors.New("category parameter: " + cat + " was not found")
 			mdl.log.Error(err)
@@ -89,33 +90,67 @@ func (mdl *Middleware) ValidateCategoryParam(next http.Handler) http.Handler {
 			return
 		}
 		// add the category to the request context for use in next handler
-		ctx := context.WithValue(r.Context(), CatKey{}, validCat)
+		ctx := context.WithValue(r.Context(), CatKey{}, formattedCat)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
 	})
 }
 
 /*
-ValidateNameParam is a middleware function to determine whether the weapon name parameter is valid.
+ValidateWeaponNameParam is a middleware function to determine whether the weapon name parameter is valid.
 
-If parameter is valid, ValidateNameParam calls the HandlerFunc it was passed, adding the category (after possible
+If parameter is valid, ValidateWeaponNameParam calls the HandlerFunc it was passed, adding the category (after possible
 transformation) to the request context.
 
-If parameter is not valid, ValidateNameParam logs an error and returns http.StatusBadRequest to the caller.
+If parameter is not valid, ValidateWeaponNameParam logs an error and returns http.StatusBadRequest to the caller.
+If parameter does not exist, http.StatusBadRequest is returned.
 */
-func (mdl *Middleware) ValidateNameParam(next http.Handler) http.Handler {
+func (mdl *Middleware) ValidateWeaponNameParam(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		mdl.log.WithFields(logrus.Fields{"Caller": "ValidateNameParam()", "Message": "Validating name parameter"}).Info()
-		name, found := mux.Vars(r)["weapon_name"]
-		mdl.log.WithFields(logrus.Fields{"Caller": "ValidateNameParam()", "NameParam": name}).Info()
-		if !found {
+		name := r.FormValue("name")
+		if name == "" {
 			err := errors.New("no name passed as a parameter")
 			mdl.log.Error(err)
-			http.Error(w, "Error validating parameter: no category parameter was passed", http.StatusBadRequest)
+			http.Error(w, "Error validating parameter: no name parameter was passed", http.StatusBadRequest)
+			return
+		}
+		mdl.log.WithFields(logrus.Fields{"Caller": "ValidateWeaponNameParam()", "NameParam": name}).Info()
+		// add the category to the request context for use in next handler
+		ctx := context.WithValue(r.Context(), NameKey{}, name)
+		r = r.WithContext(ctx)
+		next.ServeHTTP(w, r)
+	})
+}
+
+/*
+ValidateGameParam is a middleware function to determine whether the weapon name parameter is valid.
+
+If parameter is valid, ValidateGameParam calls the HandlerFunc it was passed, adding the category (after possible
+transformation) to the request context.
+
+If parameter is not valid, ValidateGameParam logs an error and returns http.StatusBadRequest to the caller.
+If parameter does not exist, http.StatusBadRequest is returned.
+*/
+func (mdl *Middleware) ValidateGameParam(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mdl.log.WithFields(logrus.Fields{"Caller": "ValidateGameParam()", "Message": "Validating game parameter"}).Info()
+		game := r.FormValue("game")
+		mdl.log.WithFields(logrus.Fields{"Caller": "ValidateGameParam()", "GameParam": game}).Info()
+		if game == "" {
+			err := errors.New("no game passed as a parameter")
+			mdl.log.Error(err)
+			http.Error(w, "Error validating parameter: no game parameter was passed", http.StatusBadRequest)
+			return
+		}
+		formattedGame, valid := models.ValidGame(game)
+		if !valid {
+			err := errors.New("game parameter: " + game + " was not found")
+			mdl.log.Error(err)
+			http.Error(w, "Error validating parameter: incorrect game parameter was passed.", http.StatusBadRequest)
 			return
 		}
 		// add the category to the request context for use in next handler
-		ctx := context.WithValue(r.Context(), NameKey{}, name)
+		ctx := context.WithValue(r.Context(), GameKey{}, formattedGame)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
 	})

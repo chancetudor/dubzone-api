@@ -57,10 +57,8 @@ type Loadout struct {
 	Meta *bool `json:"meta_loadout" validate:"required"`
 }
 
-// Loadouts describes a slice of type *Loadout
+// type Loadouts is a slice of type *Loadout
 type Loadouts []*Loadout
-
-var validCats map[string]bool = map[string]bool{"RANGE": true, "CLOSE": true, "CLOSE-MED": true, "SNIPER RANGED": true, "SNIPER SUPPORT": true}
 
 // TODO remove as we implement Google Cloud Datastore
 var StaticLoadouts = Loadouts{
@@ -126,6 +124,7 @@ func GetLoadoutsByCategory(cat string) Loadouts {
 	return CatLoadouts
 }
 
+// TODO remove as we get Google Cloud Datastore in operation
 func GetLoadoutsByName(name string) Loadouts {
 	loadouts := Loadouts{}
 	for _, l := range StaticLoadouts {
@@ -137,26 +136,14 @@ func GetLoadoutsByName(name string) Loadouts {
 	return loadouts
 }
 
-// ValidCategory is called in ValidateCategoryParam and returns a bool representing whether
-// the category parameter is valid or not. If the category passed is "snipersupport" or "sniperranged,"
-// the function transforms that string into "sniper support" and/or "sniper ranged," as these
-// are the correct values. The caller is not expected to know this.
-func ValidCategory(cat string) (string, bool) {
-	validCat := transformCategory(cat)
-	_, valid := validCats[strings.ToUpper(validCat)]
-	if valid {
-		return validCat, true
-	}
-	return "", false
-}
-
-func transformCategory(c string) string {
-	switch {
-	case strings.EqualFold(c, "snipersupport"):
-		return "sniper support"
-	case strings.EqualFold(c, "sniperranged"):
-		return "sniper ranged"
+// TODO remove as we get Google Cloud Datastore in operation
+func GetLoadoutsByGame(game string) Loadouts {
+	loadouts := Loadouts{}
+	for _, l := range StaticLoadouts {
+		if strings.EqualFold(l.Primary.Game, game) {
+			loadouts = append(loadouts, l)
+		}
 	}
 
-	return c
+	return loadouts
 }
